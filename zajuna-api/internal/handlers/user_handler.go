@@ -1,11 +1,11 @@
 package handlers
 
 import (
-	"encoding/json"
 	"net/http"
 	"strconv"
-	"zajunaApi/internal/models"
 	"zajunaApi/internal/services"
+
+	"github.com/gin-gonic/gin"
 )
 
 type UserHandler struct {
@@ -16,56 +16,30 @@ func NewUserHandler(service *services.UserService) *UserHandler {
 	return &UserHandler{service: service}
 }
 
-func (h *UserHandler) GetUsers(w http.ResponseWriter, r *http.Request) {
-	q := r.URL.Query()
-
-	page, _ := strconv.Atoi(q.Get("page"))
-	if page < 1 {
-		page = 1
-	}
-	pageSize := 30
-
-	// armar filtros
+func (h *UserHandler) GetUsers(c *gin.Context) {
+	// Extraer parámetros de la query
 	filters := map[string]string{
-		"id":        q.Get("id"),
-		"username":  q.Get("username"),
-		"firstname": q.Get("firstname"),
-		"lastname":  q.Get("lastname"),
-		"email":     q.Get("email"),
-		"idnumber":  q.Get("idnumber"),
-		"auth":      q.Get("auth"),
+		"firstname": c.Query("firstname"),
+		"lastname":  c.Query("lastname"),
+		"username":  c.Query("username"),
+		"email":     c.Query("email"),
 	}
 
-	users, total, err := h.service.GetUsers(filters, page, pageSize)
+	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
+	limit, _ := strconv.Atoi(c.DefaultQuery("limit", "15"))
+
+	users, total, err := h.service.GetUsers(filters, page, limit)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	var totalPages int
-	var hasNextPage, hasPreviousPage bool
-	currentPage := page
+	totalPages := (total + int64(limit) - 1) / int64(limit)
 
-	if filters["id"] != "" || filters["username"] != "" || filters["firstname"] != "" ||
-		filters["lastname"] != "" || filters["email"] != "" || filters["idnumber"] != "" || filters["auth"] != "" {
-		totalPages = 1
-		currentPage = 1
-	} else {
-		totalPages = (total + pageSize - 1) / pageSize
-		hasNextPage = page < totalPages
-		hasPreviousPage = page > 1
-	}
-
-	response := models.APIResponse{
-		Users:           users,
-		Total:           total,
-		CurrentPage:     currentPage,
-		PageSize:        pageSize,
-		TotalPages:      totalPages,
-		HasNextPage:     hasNextPage,
-		HasPreviousPage: hasPreviousPage,
-	}
-
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(response)
+	c.JSON(http.StatusOK, gin.H{
+		"users":       users,
+		"total":       total,
+		"page":        page,
+		"total_pages": totalPages,
+	})
 }

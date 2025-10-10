@@ -1,9 +1,10 @@
 package handlers
 
 import (
-	"encoding/json"
 	"net/http"
 	"zajunaApi/internal/services"
+
+	"github.com/gin-gonic/gin"
 )
 
 // CategoryHandler maneja las solicitudes relacionadas con categorías
@@ -17,13 +18,12 @@ func NewCategoryHandler(service *services.CategoryService) *CategoryHandler {
 }
 
 // GetCategories maneja GET /api/categories
-func (h *CategoryHandler) GetCategories(w http.ResponseWriter, r *http.Request) {
+func (h *CategoryHandler) GetCategories(c *gin.Context) {
 	categories, err := h.service.GetCategories()
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(categories)
+	c.JSON(http.StatusOK, categories)
 }

@@ -1,20 +1,21 @@
 package middleware
 
-import "net/http"
+import "github.com/gin-gonic/gin"
 
 // EnableCORS aplica las cabeceras CORS a todas las rutas
-func EnableCORS(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Access-Control-Allow-Origin", "http://localhost:5173")
-		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+func EnableCORS() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		// Permitir cualquier origen (menos seguro pero más flexible para desarrollo)
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+		// c.Writer.Header().Set("Access-Control-Allow-Origin", "http://localhost:5173")  // Versión restrictiva
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
 
-		// Manejo de preflight (OPTIONS)
-		if r.Method == http.MethodOptions {
-			w.WriteHeader(http.StatusNoContent)
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(204)
 			return
 		}
 
-		next.ServeHTTP(w, r)
-	})
+		c.Next()
+	}
 }

@@ -1,10 +1,12 @@
 package handlers
 
 import (
-	"encoding/json"
 	"net/http"
 	"strconv"
+
 	"zajunaApi/internal/services"
+
+	"github.com/gin-gonic/gin"
 )
 
 type CourseHandler struct {
@@ -15,31 +17,34 @@ func NewCourseHandler(service *services.CourseService) *CourseHandler {
 	return &CourseHandler{service: service}
 }
 
-// GET /api/courses?categoryId=3
-func (h *CourseHandler) GetCourses(w http.ResponseWriter, r *http.Request) {
-	// Obtener categoryId desde los parámetros de la URL
-	categoryIDStr := r.URL.Query().Get("categoryid")
-	if categoryIDStr == "" {
-		http.Error(w, "Falta el parámetro categoryid", http.StatusBadRequest)
+// GET /api/courses?categoryid=# (parámetro opcional)
+func (h *CourseHandler) GetCourses(c *gin.Context) {
+	categoryIDStr := c.Query("categoryid")
+
+	// Si se pasa categoryid, filtramos por categoría
+	if categoryIDStr != "" {
+		categoryID, err := strconv.Atoi(categoryIDStr)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "categoryid debe ser un número válido"})
+			return
+		}
+
+		courses, err := h.service.GetCoursesByCategory(uint(categoryID))
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error al obtener los cursos: " + err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"courses": courses})
 		return
 	}
 
-	categoryID, err := strconv.Atoi(categoryIDStr)
+	// Si no se pasa categoryid, devolvemos todos los cursos
+	courses, err := h.service.GetAllCourses()
 	if err != nil {
-		http.Error(w, "categoryId debe ser un número válido", http.StatusBadRequest)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error al obtener los cursos: " + err.Error()})
 		return
 	}
 
-	// Llamar al servicio
-	courses, err := h.service.GetCoursesByCategory(categoryID)
-	if err != nil {
-		http.Error(w, "Error al obtener los cursos: "+err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	// Respuesta en JSON
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(map[string]interface{}{
-		"courses": courses,
-	})
+	c.JSON(http.StatusOK, gin.H{"courses": courses})
 }

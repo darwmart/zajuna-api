@@ -1,16 +1,16 @@
 package middleware
 
 import (
+	"github.com/gin-gonic/gin"
 	"log"
-	"net/http"
 	"time"
 )
 
-// LoggingMiddleware registra cada request con método, URL y tiempo de ejecución
-func LoggingMiddleware(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+func LoggingMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
 		start := time.Now()
-		next.ServeHTTP(w, r)
-		log.Printf("[%s] %s %s %s", r.RemoteAddr, r.Method, r.URL.Path, time.Since(start))
-	})
+		c.Next()
+		duration := time.Since(start)
+		log.Printf("%s %s - %d (%v)", c.Request.Method, c.Request.URL.Path, c.Writer.Status(), duration)
+	}
 }

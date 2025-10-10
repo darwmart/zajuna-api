@@ -1,52 +1,25 @@
 package repository
 
 import (
-	"database/sql"
+	"gorm.io/gorm"
 	"zajunaApi/internal/models"
 )
 
 type CategoryRepository struct {
-	db *sql.DB
+	db *gorm.DB
 }
 
-func NewCategoryRepository(db *sql.DB) *CategoryRepository {
+func NewCategoryRepository(db *gorm.DB) *CategoryRepository {
 	return &CategoryRepository{db: db}
 }
 
 func (r *CategoryRepository) GetAllCategories() ([]models.Category, error) {
-	rows, err := r.db.Query(`
-		SELECT id, name, idnumber, description, descriptionformat, parent, 
-		       sortorder, coursecount, visible, depth, path, theme
-		FROM mdl_course_categories
-		ORDER BY sortorder
-	`)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-
 	var categories []models.Category
 
-	for rows.Next() {
-		var c models.Category
-		err := rows.Scan(
-			&c.ID,
-			&c.Name,
-			&c.IDNumber,
-			&c.Description,
-			&c.DescriptionFormat,
-			&c.Parent,
-			&c.SortOrder,
-			&c.CourseCount,
-			&c.Visible,
-			&c.Depth,
-			&c.Path,
-			&c.Theme, // 👈 ahora soporta NULL
-		)
-		if err != nil {
-			return nil, err
-		}
-		categories = append(categories, c)
+	if err := r.db.Table("mdl_course_categories").
+		Order("sortorder").
+		Find(&categories).Error; err != nil {
+		return nil, err
 	}
 
 	return categories, nil

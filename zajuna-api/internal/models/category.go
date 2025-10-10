@@ -1,16 +1,16 @@
 package models
 
 type Category struct {
-	ID                int     `json:"id"`
-	Name              string  `json:"name"`
-	IDNumber          *string `json:"idnumber,omitempty"`
-	Description       *string `json:"description,omitempty"`
-	DescriptionFormat int     `json:"descriptionformat,omitempty"`
-	Parent            int     `json:"parent"`
-	SortOrder         int     `json:"sortorder"`
-	CourseCount       int     `json:"coursecount"`
-	Visible           int     `json:"visible"`
-	Depth             int     `json:"depth"`
-	Path              string  `json:"path"`
-	Theme             *string `json:"theme,omitempty"`
+	ID                uint   `gorm:"column:id;primaryKey" json:"id"`
+	Name              string `gorm:"column:name" json:"name"`
+	IDNumber          string `gorm:"column:idnumber" json:"idnumber"`
+	Description       string `gorm:"column:description" json:"description"`
+	DescriptionFormat int    `gorm:"column:descriptionformat" json:"descriptionformat"`
+	Parent            int    `gorm:"column:parent" json:"parent"`
+	SortOrder         int    `gorm:"column:sortorder" json:"sortorder"`
+	CourseCount       int    `gorm:"column:coursecount" json:"coursecount"`
+	Visible           int    `gorm:"column:visible" json:"visible"`
+	Depth             int    `gorm:"column:depth" json:"depth"`
+	Path              string `gorm:"column:path" json:"path"`
+	Theme             string `gorm:"column:theme" json:"theme"`
 }
