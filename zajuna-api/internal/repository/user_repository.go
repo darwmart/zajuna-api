@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"errors"
 	"zajunaApi/internal/models"
 
 	"gorm.io/gorm"
@@ -45,4 +46,19 @@ func (r *UserRepository) FindByFilters(filters map[string]string, page, limit in
 	}
 
 	return users, total, nil
+}
+
+func (r *UserRepository) FindByUsername(username string) (*models.User, error) {
+
+	var user models.User
+	result := r.DB.First(&user, "username = ?", username)
+
+	if result.Error != nil {
+		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			return nil, nil // no es un error real, solo que no existe el usuario
+		}
+		return nil, result.Error // otro tipo de error (de conexión, SQL, etc.)
+	}
+
+	return &user, nil
 }

@@ -43,3 +43,34 @@ func (h *UserHandler) GetUsers(c *gin.Context) {
 		"total_pages": totalPages,
 	})
 }
+
+func (h *UserHandler) Login(c *gin.Context) {
+	var body struct {
+		Username string
+		Password string
+	}
+
+	if c.Bind(&body) != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Failed to read body",
+		})
+	}
+
+	token, err := h.service.Login(body.Username, body.Password)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Error getting user " + err.Error() + " " + body.Username,
+		})
+		return
+	}
+	if token == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Invalid username",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"token": token,
+	})
+}

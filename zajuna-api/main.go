@@ -14,7 +14,7 @@ import (
 
 func main() {
 	// --- Configuración de conexión a PostgreSQL ---
-	dsn := "host=localhost user=postgres password=12345 dbname=zajuna port=5432 sslmode=disable"
+	dsn := "host=localhost user=postgres password=12345 dbname=moodle port=5432 sslmode=disable"
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
@@ -51,6 +51,7 @@ func main() {
 		api.GET("/categories", categoryHandler.GetCategories)
 		api.GET("/courses", courseHandler.GetCourses)
 		api.GET("/users", userHandler.GetUsers)
+		api.POST("/login", userHandler.Login)
 	}
 
 	// --- Inicio del servidor ---
