@@ -20,3 +20,7 @@ func (s *CourseService) GetAllCourses() ([]models.Course, error) {
 func (s *CourseService) GetCoursesByCategory(categoryID uint) ([]models.Course, error) {
 	return s.repo.GetCoursesByCategory(categoryID)
 }
+
+func (s *CourseService) GetCourseRoles(courseID int) (map[string]int64, error) {
+	return s.repo.GetRoleAssignments(courseID)
+}

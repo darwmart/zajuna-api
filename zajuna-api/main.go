@@ -21,8 +21,6 @@ func main() {
 		log.Fatal("Error conectando a la BD:", err)
 	}
 
-	// GORM maneja internamente las conexiones, por lo que no se usa defer db.Close()
-
 	// --- Dependencias de Categorías ---
 	categoryRepo := repository.NewCategoryRepository(db)
 	categoryService := services.NewCategoryService(categoryRepo)
@@ -50,6 +48,7 @@ func main() {
 	{
 		api.GET("/categories", categoryHandler.GetCategories)
 		api.GET("/courses", courseHandler.GetCourses)
+		api.GET("/courses/:id/roles", courseHandler.GetCourseRoles)
 		api.GET("/users", userHandler.GetUsers)
 		api.POST("/login", userHandler.Login)
 	}
