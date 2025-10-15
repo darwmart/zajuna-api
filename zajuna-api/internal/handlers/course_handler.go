@@ -48,3 +48,20 @@ func (h *CourseHandler) GetCourses(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"courses": courses})
 }
+
+func (h *CourseHandler) GetCourseRoles(c *gin.Context) {
+	idParam := c.Param("id")
+	courseID, err := strconv.Atoi(idParam)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid course id"})
+		return
+	}
+
+	roles, err := h.service.GetCourseRoles(courseID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, roles)
+}
