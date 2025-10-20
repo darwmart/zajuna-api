@@ -5,7 +5,7 @@ import (
 	"zajunaApi/internal/repository"
 )
 
-// CategoryService maneja la lógica de negocio de categorías
+// CategoryService maneja la lógica de categorías
 type CategoryService struct {
 	repo *repository.CategoryRepository
 }

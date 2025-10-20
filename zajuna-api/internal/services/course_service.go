@@ -21,6 +21,9 @@ func (s *CourseService) GetCoursesByCategory(categoryID uint) ([]models.Course, 
 	return s.repo.GetCoursesByCategory(categoryID)
 }
 
-func (s *CourseService) GetCourseRoles(courseID int) (map[string]int64, error) {
-	return s.repo.GetRoleAssignments(courseID)
+//func (s *CourseService) GetCourseRoles(courseID int) (map[string]int64, error) {
+//return s.repo.GetRoleAssignments(courseID)}
+
+func (s *CourseService) GetCourseDetails(courseID int) (*repository.CourseDetails, error) {
+	return s.repo.GetCourseDetails(courseID)
 }

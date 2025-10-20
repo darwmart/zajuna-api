@@ -1,11 +1,11 @@
 package models
 
 type Course struct {
-	ID                uint   `gorm:"column:id;primaryKey" json:"id"`
-	Category          uint   `gorm:"column:category" json:"category"`
-	FullName          string `gorm:"column:fullname" json:"fullname"`
-	ShortName         string `gorm:"column:shortname" json:"shortname"`
-	IDNumber          string `gorm:"column:idnumber" json:"idnumber"`
+	ID                int    `gorm:"column:id" json:"id"`
+	Category          int    `gorm:"column:category" json:"category"`
+	FullName          string `gorm:"column:fullname" json:"fullName"`
+	ShortName         string `gorm:"column:shortname" json:"shortName"`
+	IDNumber          string `gorm:"column:idnumber" json:"idNumber"`
 	Summary           string `gorm:"column:summary" json:"summary"`
 	SummaryFormat     int    `gorm:"column:summaryformat" json:"summaryformat"`
 	Format            string `gorm:"column:format" json:"format"`

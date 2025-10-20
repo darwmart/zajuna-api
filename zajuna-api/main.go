@@ -8,6 +8,7 @@ import (
 	"gorm.io/gorm"
 
 	"zajunaApi/internal/handlers"
+	"zajunaApi/internal/middleware"
 	"zajunaApi/internal/repository"
 	"zajunaApi/internal/services"
 )
@@ -40,7 +41,7 @@ func main() {
 	router := gin.Default()
 
 	// --- Middlewares globales ---
-	// router.Use(middleware.EnableCORS())  // Comentado para permitir acceso desde cualquier origen
+	router.Use(middleware.EnableCORS()) // Comentado para permitir acceso desde cualquier origen
 	// router.Use(middleware.LoggingMiddleware())  // Comentado para deshabilitar logging
 
 	// --- Rutas API ---
@@ -48,7 +49,8 @@ func main() {
 	{
 		api.GET("/categories", categoryHandler.GetCategories)
 		api.GET("/courses", courseHandler.GetCourses)
-		api.GET("/courses/:id/roles", courseHandler.GetCourseRoles)
+		//api.GET("/courses/:id/roles", courseHandler.GetCourseRoles)
+		api.GET("/courses/:id/details", courseHandler.GetCourseDetails)
 		api.GET("/users", userHandler.GetUsers)
 	}
 

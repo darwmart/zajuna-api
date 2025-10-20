@@ -1,7 +1,6 @@
 package repository
 
 import (
-	"fmt"
 	"zajunaApi/internal/models"
 
 	"gorm.io/gorm"
@@ -13,6 +12,20 @@ type CourseRepository struct {
 
 func NewCourseRepository(db *gorm.DB) *CourseRepository {
 	return &CourseRepository{db: db}
+}
+
+type CourseDetails struct {
+	ID               int64            `json:"id"`
+	FullName         string           `json:"fullName"`
+	ShortName        string           `json:"shortName"`
+	IDNumber         string           `json:"idNumber"`
+	Format           string           `json:"format"`
+	Category         string           `json:"category"`
+	Groupings        int64            `json:"groupings"`
+	Groups           int64            `json:"groups"`
+	RoleAssignments  map[string]int64 `json:"roleAssignments" gorm:"-"`
+	EnrollmentMethod string           `json:"enrollmentMethod"`
+	Sections         []string         `json:"sections" gorm:"-"`
 }
 
 // Obtener todos los cursos
@@ -56,48 +69,72 @@ func (r *CourseRepository) GetCourseByID(id uint) (*models.Course, error) {
 }
 
 // GetRoleAssignments obtiene el número de usuarios por rol en un curso.
-func (r *CourseRepository) GetRoleAssignments(courseID int) (map[string]int64, error) {
-	type Result struct {
-		RoleName string
-		Total    int64
-	}
-
-	var results []Result
-
-	// Obtener el path del contexto del curso
-	var courseContext struct {
-		Path string
-	}
-
-	err := r.db.Table("mdl_context").
-		Select("path").
-		Where("instanceid = ? AND contextlevel = 50", courseID).
-		Scan(&courseContext).Error
-
-	if err != nil {
-		return nil, fmt.Errorf("error buscando contexto del curso: %v", err)
-	}
-	if courseContext.Path == "" {
-		return nil, fmt.Errorf("no se encontró el contexto del curso (id=%d)", courseID)
-	}
-
-	// Buscar todos los roles en ese contexto o en contextos “padres”
-	err = r.db.Table("mdl_role_assignments AS ra").
-		Select("r.shortname AS role_name, COUNT(ra.userid) AS total").
-		Joins("JOIN mdl_context ctx ON ctx.id = ra.contextid").
-		Joins("JOIN mdl_role r ON r.id = ra.roleid").
-		Where("ctx.path LIKE ?", courseContext.Path+"%").
-		Group("r.shortname").
-		Scan(&results).Error
-
+func (r *CourseRepository) GetCourseDetails(courseID int) (*CourseDetails, error) {
+	// 1️⃣ Reutilizamos GetCourseByID para obtener la información base
+	course, err := r.GetCourseByID(uint(courseID))
 	if err != nil {
 		return nil, err
 	}
 
-	roleCount := make(map[string]int64)
-	for _, r := range results {
-		roleCount[r.RoleName] = r.Total
+	// 2️⃣ Creamos el struct base de detalles
+	details := CourseDetails{
+		ID:        int64(course.ID),
+		FullName:  course.FullName,
+		ShortName: course.ShortName,
+		IDNumber:  course.IDNumber,
+		Format:    course.Format,
 	}
 
-	return roleCount, nil
+	// 3️⃣ Obtener categoría
+	r.db.Table("mdl_course_categories").
+		Select("name").
+		Where("id = ?", course.Category).
+		Scan(&details.Category)
+
+	// 4️⃣ Contar agrupamientos
+	r.db.Table("mdl_groupings").Where("courseid = ?", courseID).Count(&details.Groupings)
+
+	// 5️⃣ Contar grupos
+	r.db.Table("mdl_groups").Where("courseid = ?", courseID).Count(&details.Groups)
+
+	// 6️⃣ Asignaciones de roles
+	roleAssignments := map[string]int64{}
+	rows, _ := r.db.Table("mdl_role_assignments ra").
+		Select("r.shortname, COUNT(ra.id) as total").
+		Joins("JOIN mdl_context ctx ON ra.contextid = ctx.id").
+		Joins("JOIN mdl_role r ON r.id = ra.roleid").
+		Where("ctx.contextlevel = 50 AND ctx.instanceid = ?", courseID).
+		Group("r.shortname").
+		Rows()
+
+	defer rows.Close()
+	for rows.Next() {
+		var role string
+		var total int64
+		rows.Scan(&role, &total)
+		roleAssignments[role] = total
+	}
+	details.RoleAssignments = roleAssignments
+
+	// 7️⃣ Métodos de matriculación
+	var enrolMethods []string
+	r.db.Table("mdl_enrol").
+		Select("DISTINCT enrol").
+		Where("courseid = ?", courseID).
+		Scan(&enrolMethods)
+	if len(enrolMethods) == 0 {
+		enrolMethods = []string{"Matriculación manual"}
+	}
+	details.EnrollmentMethod = enrolMethods[0]
+
+	// 8️⃣ Secciones
+	var sectionNames []string
+	r.db.Table("mdl_course_sections").
+		Select("name").
+		Where("course = ? AND name IS NOT NULL AND name != ''", courseID).
+		Order("section ASC").
+		Scan(&sectionNames)
+	details.Sections = sectionNames
+
+	return &details, nil
 }
