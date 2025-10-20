@@ -59,7 +59,7 @@ func (h *UserHandler) Login(c *gin.Context) {
 	token, err := h.service.Login(body.Username, body.Password)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Error getting user " + err.Error() + " " + body.Username,
+			"error": err.Error(),
 		})
 		return
 	}
@@ -70,7 +70,8 @@ func (h *UserHandler) Login(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"token": token,
-	})
+	c.SetSameSite(http.SameSiteLaxMode)
+	c.SetCookie("Authorization", token, 3600*3, "", "", false, true)
+
+	c.JSON(http.StatusOK, gin.H{})
 }
