@@ -28,8 +28,8 @@ type User struct {
 	DescriptionFormat int               `gorm:"column:descriptionformat" json:"descriptionformat"`
 	City              string            `gorm:"column:city" json:"city"`
 	Country           string            `gorm:"column:country" json:"country"`
-	ProfileImageSmall string            `gorm:"-" json:"profileimageurlsmall"` // No existe en BD, se construye
-	ProfileImage      string            `gorm:"-" json:"profileimageurl"`      // Igual que arriba
+	ProfileImageSmall string            `gorm:"-" json:"profileimageurlsmall"`
+	ProfileImage      string            `gorm:"-" json:"profileimageurl"`
 	CustomFields      []UserCustomField `gorm:"-" json:"customfields,omitempty"`
 	Preferences       []UserPreference  `gorm:"-" json:"preferences,omitempty"`
 }

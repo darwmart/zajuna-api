@@ -70,13 +70,13 @@ func (r *CourseRepository) GetCourseByID(id uint) (*models.Course, error) {
 
 // GetRoleAssignments obtiene el número de usuarios por rol en un curso.
 func (r *CourseRepository) GetCourseDetails(courseID int) (*CourseDetails, error) {
-	// 1️⃣ Reutilizamos GetCourseByID para obtener la información base
+	// Reutilizamos GetCourseByID para obtener la información base
 	course, err := r.GetCourseByID(uint(courseID))
 	if err != nil {
 		return nil, err
 	}
 
-	// 2️⃣ Creamos el struct base de detalles
+	// Creamos el struct base de detalles
 	details := CourseDetails{
 		ID:        int64(course.ID),
 		FullName:  course.FullName,
@@ -85,19 +85,19 @@ func (r *CourseRepository) GetCourseDetails(courseID int) (*CourseDetails, error
 		Format:    course.Format,
 	}
 
-	// 3️⃣ Obtener categoría
+	// Obtener categoría
 	r.db.Table("mdl_course_categories").
 		Select("name").
 		Where("id = ?", course.Category).
 		Scan(&details.Category)
 
-	// 4️⃣ Contar agrupamientos
+	// Contar agrupamientos
 	r.db.Table("mdl_groupings").Where("courseid = ?", courseID).Count(&details.Groupings)
 
-	// 5️⃣ Contar grupos
+	// Contar grupos
 	r.db.Table("mdl_groups").Where("courseid = ?", courseID).Count(&details.Groups)
 
-	// 6️⃣ Asignaciones de roles
+	// Asignaciones de roles
 	roleAssignments := map[string]int64{}
 	rows, _ := r.db.Table("mdl_role_assignments ra").
 		Select("r.shortname, COUNT(ra.id) as total").
@@ -116,7 +116,7 @@ func (r *CourseRepository) GetCourseDetails(courseID int) (*CourseDetails, error
 	}
 	details.RoleAssignments = roleAssignments
 
-	// 7️⃣ Métodos de matriculación
+	// Métodos de matriculación
 	var enrolMethods []string
 	r.db.Table("mdl_enrol").
 		Select("DISTINCT enrol").
@@ -127,7 +127,7 @@ func (r *CourseRepository) GetCourseDetails(courseID int) (*CourseDetails, error
 	}
 	details.EnrollmentMethod = enrolMethods[0]
 
-	// 8️⃣ Secciones
+	// Secciones
 	var sectionNames []string
 	r.db.Table("mdl_course_sections").
 		Select("name").
