@@ -21,7 +21,7 @@ func NewCourseHandler(service *services.CourseService) *CourseHandler {
 func (h *CourseHandler) GetCourses(c *gin.Context) {
 	categoryIDStr := c.Query("categoryid")
 
-	// Si se pasa categoryid, filtramos por categoría
+	// filtramos por categoría
 	if categoryIDStr != "" {
 		categoryID, err := strconv.Atoi(categoryIDStr)
 		if err != nil {
@@ -39,7 +39,7 @@ func (h *CourseHandler) GetCourses(c *gin.Context) {
 		return
 	}
 
-	// Si no se pasa categoryid, devolvemos todos los cursos
+	// todos los cursos
 	courses, err := h.service.GetAllCourses()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error al obtener los cursos: " + err.Error()})
@@ -49,19 +49,34 @@ func (h *CourseHandler) GetCourses(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"courses": courses})
 }
 
-func (h *CourseHandler) GetCourseRoles(c *gin.Context) {
-	idParam := c.Param("id")
-	courseID, err := strconv.Atoi(idParam)
+/*func (h *CourseHandler) GetCourseRoles(c *gin.Context) {
+idParam := c.Param("id")
+courseID, err := strconv.Atoi(idParam)
+if err != nil {
+	c.JSON(http.StatusBadRequest, gin.H{"error": "invalid course id"})
+	return
+}
+
+roles, err := h.service.GetCourseRoles(courseID)
+if err != nil {
+	c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	return
+}
+
+c.JSON(http.StatusOK, roles)}*/
+
+func (h *CourseHandler) GetCourseDetails(c *gin.Context) {
+	courseID, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid course id"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "ID inválido"})
 		return
 	}
 
-	roles, err := h.service.GetCourseRoles(courseID)
+	details, err := h.service.GetCourseDetails(courseID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, roles)
+	c.JSON(http.StatusOK, details)
 }
