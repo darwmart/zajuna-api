@@ -138,3 +138,45 @@ func (r *CourseRepository) GetCourseDetails(courseID int) (*CourseDetails, error
 
 	return &details, nil
 }
+
+func (r *CourseRepository) DeleteCourses(courseIDs []int) ([]models.Warning, error) {
+	var warnings []models.Warning
+
+	// Validar si los cursos existen
+	var existingIDs []int
+	if err := r.db.Table("mdl_course").
+		Where("id IN ?", courseIDs).
+		Pluck("id", &existingIDs).Error; err != nil {
+		return nil, err
+	}
+
+	// Generar warnings para los IDs inexistentes
+	for _, id := range courseIDs {
+		found := false
+		for _, existing := range existingIDs {
+			if id == existing {
+				found = true
+				break
+			}
+		}
+		if !found {
+			warnings = append(warnings, models.Warning{
+				Item:        "course",
+				ItemID:      id,
+				WarningCode: "invalidcourseid",
+				Message:     "Course ID not found in the database",
+			})
+		}
+	}
+
+	// Eliminar físicamente los cursos válidos
+	if len(existingIDs) > 0 {
+		if err := r.db.Table("mdl_course").
+			Where("id IN ?", existingIDs).
+			Delete(nil).Error; err != nil {
+			return warnings, err
+		}
+	}
+
+	return warnings, nil
+}

@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"zajunaApi/internal/models"
 	"zajunaApi/internal/services"
 
 	"github.com/gin-gonic/gin"
@@ -79,4 +80,22 @@ func (h *CourseHandler) GetCourseDetails(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, details)
+}
+
+// DeleteCourses maneja la eliminación de cursos
+func (h *CourseHandler) DeleteCourses(c *gin.Context) {
+	var req models.DeleteCoursesRequest
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(400, gin.H{"error": "Invalid request", "details": err.Error()})
+		return
+	}
+
+	response, err := h.service.DeleteCourses(req.CourseIDs)
+	if err != nil {
+		c.JSON(500, gin.H{"error": "Error deleting courses", "details": err.Error()})
+		return
+	}
+
+	c.JSON(200, response)
 }

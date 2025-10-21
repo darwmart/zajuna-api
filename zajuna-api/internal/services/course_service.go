@@ -27,3 +27,11 @@ func (s *CourseService) GetCoursesByCategory(categoryID uint) ([]models.Course, 
 func (s *CourseService) GetCourseDetails(courseID int) (*repository.CourseDetails, error) {
 	return s.repo.GetCourseDetails(courseID)
 }
+
+func (s *CourseService) DeleteCourses(courseIDs []int) (*models.DeleteCoursesResponse, error) {
+	warnings, err := s.repo.DeleteCourses(courseIDs)
+	if err != nil {
+		return nil, err
+	}
+	return &models.DeleteCoursesResponse{Warnings: warnings}, nil
+}
