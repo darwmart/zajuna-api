@@ -16,3 +16,7 @@ func NewUserService(repo *repository.UserRepository) *UserService {
 func (s *UserService) GetUsers(filters map[string]string, page, limit int) ([]models.User, int64, error) {
 	return s.repo.FindByFilters(filters, page, limit)
 }
+
+func (s *UserService) DeleteUsers(userIDs []int) error {
+	return s.repo.DeleteUsers(userIDs)
+}

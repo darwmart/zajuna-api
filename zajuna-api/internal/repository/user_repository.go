@@ -46,3 +46,10 @@ func (r *UserRepository) FindByFilters(filters map[string]string, page, limit in
 
 	return users, total, nil
 }
+
+// DeleteUsers suspende usuarios por sus IDs
+func (r *UserRepository) DeleteUsers(userIDs []int) error {
+	return r.DB.Table("mdl_user").
+		Where("id IN ?", userIDs).
+		Update("suspended", 1).Error
+}

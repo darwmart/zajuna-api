@@ -32,4 +32,6 @@ func RegisterRoutes(router *gin.Engine, db *gorm.DB) {
 	api.GET("/courses", courseHandler.GetCourses)
 	api.GET("/courses/:id/details", courseHandler.GetCourseDetails)
 	api.GET("/users", userHandler.GetUsers)
+	api.DELETE("/users", userHandler.DeleteUsers)
+
 }

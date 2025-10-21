@@ -12,6 +12,10 @@ type UserHandler struct {
 	service *services.UserService
 }
 
+type DeleteUsersRequest struct {
+	UserIDs []int `json:"userids"`
+}
+
 func NewUserHandler(service *services.UserService) *UserHandler {
 	return &UserHandler{service: service}
 }
@@ -42,4 +46,29 @@ func (h *UserHandler) GetUsers(c *gin.Context) {
 		"page":        page,
 		"total_pages": totalPages,
 	})
+
+}
+
+// DELETE /api/users
+func (h *UserHandler) DeleteUsers(c *gin.Context) {
+	var req struct {
+		UserIDs []int `json:"userids"`
+	}
+
+	if err := c.BindJSON(&req); err != nil {
+		c.JSON(400, gin.H{"error": "JSON inválido"})
+		return
+	}
+
+	if len(req.UserIDs) == 0 {
+		c.JSON(400, gin.H{"error": "Debe proporcionar al menos un ID de usuario"})
+		return
+	}
+
+	if err := h.service.DeleteUsers(req.UserIDs); err != nil {
+		c.JSON(500, gin.H{"error": "Error eliminando usuarios", "details": err.Error()})
+		return
+	}
+
+	c.JSON(200, gin.H{"message": "Usuarios suspendidos correctamente"})
 }
