@@ -54,9 +54,10 @@ func (h *UserHandler) Login(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Failed to read body",
 		})
+		return
 	}
 
-	token, err := h.service.Login(body.Username, body.Password)
+	token, err := h.service.Login(c.Request, body.Username, body.Password)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
@@ -74,4 +75,26 @@ func (h *UserHandler) Login(c *gin.Context) {
 	c.SetCookie("Authorization", token, 3600*3, "", "", false, true)
 
 	c.JSON(http.StatusOK, gin.H{})
+}
+
+func (h *UserHandler) Logout(c *gin.Context) {
+
+	token, err := c.Cookie("Authorization")
+	if err != nil {
+		c.AbortWithStatus(http.StatusUnauthorized)
+		return
+	}
+
+	res, err := h.service.Logout(token)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	c.SetCookie("Authorization", "", -1, "", "", false, true)
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": res,
+	})
 }

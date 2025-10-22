@@ -15,9 +15,9 @@ type Config struct {
 
 // LoadConfig carga las variables desde .env
 func LoadConfig() *Config {
-	err := godotenv.Load("internal/config/.env")
+	err := godotenv.Load("../../internal/config/.env")
 	if err != nil {
-		log.Println("⚠️ No se encontró el archivo .env, usando variables del sistema")
+		log.Println("⚠️ No se encontró el archivo .env, usando variables del sistema " + err.Error())
 	}
 
 	dbHost := os.Getenv("DB_HOST")
