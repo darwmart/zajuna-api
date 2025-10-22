@@ -53,3 +53,25 @@ func (r *UserRepository) DeleteUsers(userIDs []int) error {
 		Where("id IN ?", userIDs).
 		Update("suspended", 1).Error
 }
+
+func (r *UserRepository) UpdateUsers(users []models.User) (int64, error) {
+	var total int64
+	for _, u := range users {
+		if err := r.DB.Model(&models.User{}).
+			Where("id = ?", u.ID).
+			Updates(map[string]interface{}{
+				"firstname": u.FirstName,
+				"lastname":  u.LastName,
+				"email":     u.Email,
+				"city":      u.City,
+				"country":   u.Country,
+				"lang":      u.Lang,
+				"timezone":  u.Timezone,
+				"phone1":    u.Phone1,
+			}).Error; err != nil {
+			return total, err
+		}
+		total++
+	}
+	return total, nil
+}

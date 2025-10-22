@@ -3,6 +3,7 @@ package handlers
 import (
 	"net/http"
 	"strconv"
+	"zajunaApi/internal/models"
 	"zajunaApi/internal/services"
 
 	"github.com/gin-gonic/gin"
@@ -71,4 +72,27 @@ func (h *UserHandler) DeleteUsers(c *gin.Context) {
 	}
 
 	c.JSON(200, gin.H{"message": "Usuarios suspendidos correctamente"})
+}
+
+func (h *UserHandler) UpdateUsers(c *gin.Context) {
+	var req struct {
+		Users []models.User `json:"users"`
+	}
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "JSON inválido"})
+		return
+	}
+
+	updated, err := h.service.UpdateUsers(req.Users)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error actualizando usuarios", "details": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message":  "Usuarios actualizados correctamente",
+		"updated":  updated,
+		"warnings": []string{},
+	})
 }
