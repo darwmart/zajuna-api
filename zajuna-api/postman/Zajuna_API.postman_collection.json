@@ -1,0 +1,440 @@
+{
+	"info": {
+		"_postman_id": "zajuna-api-collection",
+		"name": "Zajuna API - Users Module",
+		"description": "Colección de endpoints para el módulo de usuarios de Zajuna API con DTOs",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Get All Users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has data field\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('data');",
+									"});",
+									"",
+									"pm.test(\"Response has pagination metadata\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('pagination');",
+									"    pm.expect(jsonData.pagination).to.have.property('page');",
+									"    pm.expect(jsonData.pagination).to.have.property('limit');",
+									"    pm.expect(jsonData.pagination).to.have.property('total');",
+									"    pm.expect(jsonData.pagination).to.have.property('total_pages');",
+									"    pm.expect(jsonData.pagination).to.have.property('has_next');",
+									"    pm.expect(jsonData.pagination).to.have.property('has_previous');",
+									"});",
+									"",
+									"pm.test(\"Data is an array\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data).to.be.an('array');",
+									"});",
+									"",
+									"pm.test(\"Users have required fields\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    if (jsonData.data.length > 0) {",
+									"        var user = jsonData.data[0];",
+									"        pm.expect(user).to.have.property('id');",
+									"        pm.expect(user).to.have.property('username');",
+									"        pm.expect(user).to.have.property('firstname');",
+									"        pm.expect(user).to.have.property('lastname');",
+									"        pm.expect(user).to.have.property('email');",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/users?page=1&limit=15",
+							"host": ["{{base_url}}"],
+							"path": ["api", "users"],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"description": "Número de página"
+								},
+								{
+									"key": "limit",
+									"value": "15",
+									"description": "Usuarios por página"
+								}
+							]
+						},
+						"description": "Obtiene todos los usuarios con paginación"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Users with Filters",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response structure is correct\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('data');",
+									"    pm.expect(jsonData).to.have.property('pagination');",
+									"});",
+									"",
+									"pm.test(\"Filtered results returned\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.pagination.total).to.be.at.least(0);",
+									"});",
+									"",
+									"pm.test(\"Data is an array\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data).to.be.an('array');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/users?firstname=Admin&page=1&limit=10",
+							"host": ["{{base_url}}"],
+							"path": ["api", "users"],
+							"query": [
+								{
+									"key": "firstname",
+									"value": "Admin",
+									"description": "Filtrar por nombre"
+								},
+								{
+									"key": "lastname",
+									"value": "",
+									"description": "Filtrar por apellido",
+									"disabled": true
+								},
+								{
+									"key": "username",
+									"value": "",
+									"description": "Filtrar por username",
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": "",
+									"description": "Filtrar por email",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						},
+						"description": "Obtiene usuarios filtrados por nombre, apellido, username o email"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Single User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response confirms update\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('message');",
+									"    pm.expect(jsonData).to.have.property('updated');",
+									"    pm.expect(jsonData.updated).to.be.greaterThan(0);",
+									"});",
+									"",
+									"pm.test(\"No warnings present\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('warnings');",
+									"    pm.expect(jsonData.warnings).to.be.an('array');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"users\": [\n    {\n      \"id\": 3,\n      \"firstname\": \"Usuario\",\n      \"lastname\": \"Actualizado\",\n      \"email\": \"usuario@example.com\",\n      \"city\": \"Madrid\",\n      \"country\": \"ES\",\n      \"lang\": \"es\",\n      \"timezone\": \"Europe/Madrid\",\n      \"phone1\": \"+34123456789\"\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/users/update",
+							"host": ["{{base_url}}"],
+							"path": ["api", "users", "update"]
+						},
+						"description": "Actualiza la información de un usuario. NOTA: Cambia el ID por uno válido de tu base de datos."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Multiple Users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Multiple users updated\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.updated).to.equal(2);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"users\": [\n    {\n      \"id\": 3,\n      \"firstname\": \"Usuario\",\n      \"lastname\": \"Uno\",\n      \"email\": \"usuario1@example.com\",\n      \"city\": \"Madrid\",\n      \"country\": \"ES\",\n      \"lang\": \"es\",\n      \"timezone\": \"Europe/Madrid\",\n      \"phone1\": \"+34123456789\"\n    },\n    {\n      \"id\": 4,\n      \"firstname\": \"Usuario\",\n      \"lastname\": \"Dos\",\n      \"email\": \"usuario2@example.com\",\n      \"city\": \"Barcelona\",\n      \"country\": \"ES\",\n      \"lang\": \"es\",\n      \"timezone\": \"Europe/Madrid\",\n      \"phone1\": \"+34987654321\"\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/users/update",
+							"host": ["{{base_url}}"],
+							"path": ["api", "users", "update"]
+						},
+						"description": "Actualiza múltiples usuarios en una sola petición. NOTA: Cambia los IDs por unos válidos de tu BD."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Users (Suspend)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Users suspended successfully\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('message');",
+									"    pm.expect(jsonData).to.have.property('deleted');",
+									"    pm.expect(jsonData.deleted).to.be.greaterThan(0);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userids\": [100, 101]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/users",
+							"host": ["{{base_url}}"],
+							"path": ["api", "users"]
+						},
+						"description": "Suspende usuarios (soft delete) por sus IDs. NOTA: Usa IDs de usuarios de prueba que existan en tu BD."
+					},
+					"response": []
+				},
+				{
+					"name": "Validation Error - Invalid Email",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Error response structure\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('code');",
+									"    pm.expect(jsonData).to.have.property('message');",
+									"    pm.expect(jsonData).to.have.property('timestamp');",
+									"});",
+									"",
+									"pm.test(\"Error code is correct\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.code).to.equal('INVALID_JSON');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"users\": [\n    {\n      \"id\": 3,\n      \"firstname\": \"Juan\",\n      \"lastname\": \"Pérez\",\n      \"email\": \"email-invalido\",\n      \"city\": \"Madrid\",\n      \"country\": \"ES\"\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/users/update",
+							"host": ["{{base_url}}"],
+							"path": ["api", "users", "update"]
+						},
+						"description": "Prueba de validación con email inválido - debe retornar error 400"
+					},
+					"response": []
+				},
+				{
+					"name": "Validation Error - Duplicate IDs",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Duplicate error detected\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.code).to.equal('VALIDATION_ERROR');",
+									"});",
+									"",
+									"pm.test(\"Error message mentions duplicates\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.message.toLowerCase()).to.include('duplicado');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userids\": [3, 4, 3]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/users",
+							"host": ["{{base_url}}"],
+							"path": ["api", "users"]
+						},
+						"description": "Prueba de validación con IDs duplicados - debe retornar error 400"
+					},
+					"response": []
+				},
+				{
+					"name": "Validation Error - Empty Users Array",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Error response present\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('code');",
+									"    pm.expect(jsonData).to.have.property('message');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"users\": []\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/users/update",
+							"host": ["{{base_url}}"],
+							"path": ["api", "users", "update"]
+						},
+						"description": "Prueba con array vacío - debe retornar error 400"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints del módulo de usuarios con DTOs"
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8080",
+			"type": "string"
+		}
+	]
+}
