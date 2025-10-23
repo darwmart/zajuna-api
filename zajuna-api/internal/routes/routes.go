@@ -27,7 +27,7 @@ func RegisterRoutes(router *gin.Engine, db *gorm.DB) {
 
 	// --- Usuarios ---
 	userRepo := repository.NewUserRepository(db)
-	userService := services.NewUserService(userRepo, sessionRepo)
+	userService := services.NewUserService(userRepo, sessionRepo, courseRepo)
 	userHandler := handlers.NewUserHandler(userService)
 
 	// --- Rutas API ---

@@ -21,10 +21,11 @@ import (
 type UserService struct {
 	repo        *repository.UserRepository
 	sessionRepo *repository.SessionsRepository
+	courseRepo  *repository.CourseRepository
 }
 
-func NewUserService(repo *repository.UserRepository, sessionRepo *repository.SessionsRepository) *UserService {
-	return &UserService{repo: repo, sessionRepo: sessionRepo}
+func NewUserService(repo *repository.UserRepository, sessionRepo *repository.SessionsRepository, courseRepo *repository.CourseRepository) *UserService {
+	return &UserService{repo: repo, sessionRepo: sessionRepo, courseRepo: courseRepo}
 }
 
 func (s *UserService) GetUsers(filters map[string]string, page, limit int) ([]models.User, int64, error) {
@@ -52,6 +53,15 @@ func (s *UserService) Login(r *http.Request, username, password string) (string,
 	plugin, ok := auth.Get(user.Auth)
 	if !ok {
 		return "", errors.New("método de autenticación no encontrado")
+	}
+
+	//VALIDACION SI EL USUARIO TIENE CURSOS VINCULADOS
+	countCourses, err := s.courseRepo.CountUserCourses(int(user.ID))
+	if err != nil {
+		return "", errors.New("Error al buscar los cursos del usuario")
+	}
+	if countCourses == 0 {
+		return "", errors.New("El usuario no tiene cursos vinculados")
 	}
 
 	//VALIDACION DE PASSWORD CON SU HASH

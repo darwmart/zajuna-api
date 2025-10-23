@@ -1,8 +1,14 @@
 package repository
 
 import (
+	"fmt"
+	"math"
+	"os"
+	"strconv"
+	"time"
 	"zajunaApi/internal/models"
 
+	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )
 
@@ -137,4 +143,64 @@ func (r *CourseRepository) GetCourseDetails(courseID int) (*CourseDetails, error
 	details.Sections = sectionNames
 
 	return &details, nil
+}
+
+func (r *CourseRepository) CountUserCourses(userID int) (int, error) {
+	var count int64
+	var list []int
+	now := time.Now().Unix() // timestamp actual (segundos)
+	rounded := int64(math.Round(float64(now)/100) * 100)
+	active, err := strconv.Atoi(os.Getenv("ENROL_USER_ACTIVE"))
+
+	if err != nil {
+		fmt.Println("Error al convertir ENROL_USER_ACTIVE:", err)
+		return 0, err
+	}
+
+	contextCourse, err := strconv.Atoi(os.Getenv("CONTEXT_COURSE"))
+
+	if err != nil {
+		fmt.Println("Error al convertir CONTEXT_COURSE:", err)
+		return 0, err
+	}
+
+	enabled, err := strconv.Atoi(os.Getenv("ENROL_USER_ACTIVE"))
+
+	if err != nil {
+		fmt.Println("Error al convertir ENROL_INSTANCE_ENABLED:", err)
+		return 0, err
+	}
+
+	siteid, err := strconv.Atoi(os.Getenv("SITEID"))
+
+	if err != nil {
+		fmt.Println("Error al convertir SITEID:", err)
+		return 0, err
+	}
+
+	subquery := r.db.
+		Table("mdl_enrol e").
+		//Joins("JOIN mdl_user_enrolments ue on(ue.enrolid = e.id and ue.userid = 1)").
+		Joins("JOIN mdl_user_enrolments ue on(ue.enrolid = e.id and ue.userid = ?)", userID).
+		Where("ue.status = ? ", active).
+		Where("e.status =?", enabled).
+		Where("ue.timestart < ?", rounded).
+		Where(r.db.Where("ue.timeend = ?", 0).Or("ue.timeend > ?", rounded)).
+		Select("distinct(e.courseid)")
+
+	err = r.db.
+		Table("mdl_course c").
+		Joins("JOIN (?) en ON (en.courseid = c.id)", subquery).
+		Joins("LEFT JOIN mdl_context ctx ON (ctx.instanceid = c.id AND ctx.contextlevel = ?)", contextCourse).
+		Where("c.id <> ?", siteid).
+		Count(&count).
+		Error
+
+	if err != nil {
+		return 0, err
+	}
+
+	logrus.Info(list)
+
+	return int(count), nil
 }
