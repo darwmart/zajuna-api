@@ -2,9 +2,9 @@ package request
 
 // GetCoursesRequest representa los parámetros para listar cursos
 type GetCoursesRequest struct {
-	CategoryID int `form:"categoryid" binding:"omitempty,min=1"`
-	Page       int `form:"page" binding:"omitempty,min=1"`
-	Limit      int `form:"limit" binding:"omitempty,min=1,max=100"`
+	CategoryID int  `form:"categoryid" binding:"omitempty,min=1"`
+	Page       int  `form:"page" binding:"omitempty,min=1"`
+	Limit      int  `form:"limit" binding:"omitempty,min=1,max=100"`
 	Visible    *int `form:"visible" binding:"omitempty,oneof=0 1"`
 }
 
@@ -30,7 +30,7 @@ type GetCourseDetailsRequest struct {
 
 // DeleteCoursesRequest representa la solicitud de eliminación de cursos
 type DeleteCoursesRequest struct {
-	CourseIDs []int `json:"courseids" binding:"required,min=1,dive,min=1"`
+	CourseIDs []int `json:"courseid" binding:"required,min=1,dive,min=1"`
 }
 
 // Validate valida que los IDs sean únicos y no incluyan el curso site (ID=1)
@@ -40,15 +40,15 @@ func (r *DeleteCoursesRequest) Validate() error {
 		// Validar que no intenten eliminar el curso site (ID=1)
 		if id == 1 {
 			return &ValidationError{
-				Field:   "courseids",
-				Message: "No se puede eliminar el curso site (ID=1)",
+				Field:   "courseid",
+				Message: "No se puede eliminar el coursid",
 			}
 		}
 		// Validar duplicados
 		if seen[id] {
 			return &ValidationError{
-				Field:   "courseids",
-				Message: "IDs duplicados detectados",
+				Field:   "courseid",
+				Message: "id duplicado detectado",
 			}
 		}
 		seen[id] = true

@@ -5,7 +5,7 @@ type User struct {
 	Username          string            `gorm:"column:username" json:"username"`
 	FirstName         string            `gorm:"column:firstname" json:"firstname"`
 	LastName          string            `gorm:"column:lastname" json:"lastname"`
-	FullName          string            `gorm:"-" json:"fullname"` // Se calcula dinámicamente
+	FullName          string            `gorm:"-" json:"fullname"`
 	Email             string            `gorm:"column:email" json:"email"`
 	Address           string            `gorm:"column:address" json:"address"`
 	Phone1            string            `gorm:"column:phone1" json:"phone1"`
