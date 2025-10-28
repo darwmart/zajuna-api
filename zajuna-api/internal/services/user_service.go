@@ -155,3 +155,11 @@ func normalizeLoopback(ip string) string {
 	}
 	return ip
 }
+
+func (s *UserService) DeleteUsers(userIDs []int) error {
+	return s.repo.DeleteUsers(userIDs)
+}
+
+func (s *UserService) UpdateUsers(users []models.User) (int64, error) {
+	return s.repo.UpdateUsers(users)
+}

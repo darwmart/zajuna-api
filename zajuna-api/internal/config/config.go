@@ -9,15 +9,19 @@ import (
 )
 
 type Config struct {
+	AppEnv  string
 	AppPort string
 	DSN     string
 }
 
-// LoadConfig carga las variables desde .env
+// LoadConfig detecta el entorno y carga el .env correcto
 func LoadConfig() *Config {
-	err := godotenv.Load("../../internal/config/.env")
+	env := getEnv("APP_ENV", "development")
+
+	envFile := fmt.Sprintf("internal/config/.env.%s", env)
+	err := godotenv.Load(envFile)
 	if err != nil {
-		log.Println("⚠️ No se encontró el archivo .env, usando variables del sistema " + err.Error())
+		log.Printf("⚠️ No se encontró %s, usando variables del sistema", envFile)
 	}
 
 	dbHost := os.Getenv("DB_HOST")
@@ -33,16 +37,15 @@ func LoadConfig() *Config {
 	)
 
 	return &Config{
+		AppEnv:  env,
 		AppPort: getEnv("APP_PORT", "8080"),
 		DSN:     dsn,
 	}
 }
 
-// getEnv devuelve una variable o su valor por defecto
 func getEnv(key, defaultValue string) string {
-	value := os.Getenv(key)
-	if value == "" {
-		return defaultValue
+	if value := os.Getenv(key); value != "" {
+		return value
 	}
-	return value
+	return defaultValue
 }

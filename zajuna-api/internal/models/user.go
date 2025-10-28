@@ -6,7 +6,7 @@ type User struct {
 	Password          string            `gorm:"column:password" json:"password"`
 	FirstName         string            `gorm:"column:firstname" json:"firstname"`
 	LastName          string            `gorm:"column:lastname" json:"lastname"`
-	FullName          string            `gorm:"-" json:"fullname"` // Se calcula dinámicamente
+	FullName          string            `gorm:"-" json:"fullname"`
 	Email             string            `gorm:"column:email" json:"email"`
 	Address           string            `gorm:"column:address" json:"address"`
 	Phone1            string            `gorm:"column:phone1" json:"phone1"`
@@ -21,7 +21,6 @@ type User struct {
 	Suspended         int               `gorm:"column:suspended" json:"suspended"`
 	Confirmed         int               `gorm:"column:confirmed" json:"confirmed"`
 	Lang              string            `gorm:"column:lang" json:"lang"`
-	CalendarType      string            `gorm:"column:calendartype" json:"calendartype"`
 	Theme             string            `gorm:"column:theme" json:"theme"`
 	Timezone          string            `gorm:"column:timezone" json:"timezone"`
 	MailFormat        int               `gorm:"column:mailformat" json:"mailformat"`

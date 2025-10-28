@@ -35,7 +35,10 @@ func RegisterRoutes(router *gin.Engine, db *gorm.DB) {
 	api.GET("/categories", middleware.RequireAuth(sessionRepo), categoryHandler.GetCategories)
 	api.GET("/courses", courseHandler.GetCourses)
 	api.GET("/courses/:id/details", courseHandler.GetCourseDetails)
+	api.DELETE("/courses", courseHandler.DeleteCourses)
 	api.GET("/users", userHandler.GetUsers)
 	api.POST("/login", userHandler.Login)
 	api.POST("/logout", userHandler.Logout)
+	api.DELETE("/users", userHandler.DeleteUsers)
+	api.PUT("/users/update", userHandler.UpdateUsers)
 }
