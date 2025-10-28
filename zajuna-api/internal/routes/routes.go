@@ -5,6 +5,7 @@ import (
 	"gorm.io/gorm"
 
 	"zajunaApi/internal/handlers"
+	"zajunaApi/internal/middleware"
 	"zajunaApi/internal/repository"
 	"zajunaApi/internal/services"
 )
@@ -31,7 +32,7 @@ func RegisterRoutes(router *gin.Engine, db *gorm.DB) {
 	userHandler := handlers.NewUserHandler(userService)
 
 	// --- Rutas API ---
-	api.GET("/categories", categoryHandler.GetCategories)
+	api.GET("/categories", middleware.RequireAuth(sessionRepo), categoryHandler.GetCategories)
 	api.GET("/courses", courseHandler.GetCourses)
 	api.GET("/courses/:id/details", courseHandler.GetCourseDetails)
 	api.GET("/users", userHandler.GetUsers)

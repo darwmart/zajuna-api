@@ -3,6 +3,7 @@ package handlers
 import (
 	"net/http"
 	"strconv"
+	"time"
 	"zajunaApi/internal/services"
 
 	"github.com/gin-gonic/gin"
@@ -72,7 +73,16 @@ func (h *UserHandler) Login(c *gin.Context) {
 	}
 
 	c.SetSameSite(http.SameSiteLaxMode)
-	c.SetCookie("Authorization", token, 3600*3, "", "", false, true)
+	//c.SetCookie("Authorization", token, 3600*3, "", "", false, true)
+	http.SetCookie(c.Writer, &http.Cookie{
+		Name:     "Authorization",
+		Value:    token,
+		Expires:  time.Now().Add(3 * time.Hour),
+		HttpOnly: true,
+		Path:     "/",
+		Domain:   "",
+		Secure:   true,
+	})
 
 	c.JSON(http.StatusOK, gin.H{})
 }
@@ -92,7 +102,17 @@ func (h *UserHandler) Logout(c *gin.Context) {
 		})
 		return
 	}
-	c.SetCookie("Authorization", "", -1, "", "", false, true)
+	//c.SetCookie("Authorization", "", -1, "", "", false, true)
+	http.SetCookie(c.Writer, &http.Cookie{
+		Name:     "Authorization",
+		Value:    "",
+		Path:     "/", // o el path con el que se creó
+		Domain:   "",
+		MaxAge:   -1,
+		Expires:  time.Unix(0, 0),
+		HttpOnly: true,
+		Secure:   true, // debe coincidir con el original
+	})
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": res,

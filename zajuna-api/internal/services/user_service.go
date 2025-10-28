@@ -100,6 +100,7 @@ func (s *UserService) Login(r *http.Request, username, password string) (string,
 		FirstIp:      getRemoteAddr(r),
 		LastIp:       getRemoteAddr(r),
 	}
+	log.Info("TIEMPO EN SERVICE", time.Now().Add(time.Hour*3).Unix())
 	err = s.sessionRepo.InsertSession(session)
 	if err != nil {
 		// Hubo un error al insertar
