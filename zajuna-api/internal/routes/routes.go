@@ -31,14 +31,16 @@ func RegisterRoutes(router *gin.Engine, db *gorm.DB) {
 	userService := services.NewUserService(userRepo, sessionRepo, courseRepo)
 	userHandler := handlers.NewUserHandler(userService)
 
+	authMiddleware := middleware.RequireAuth(sessionRepo)
+
 	// --- Rutas API ---
-	api.GET("/categories", middleware.RequireAuth(sessionRepo), categoryHandler.GetCategories)
-	api.GET("/courses", courseHandler.GetCourses)
-	api.GET("/courses/:id/details", courseHandler.GetCourseDetails)
-	api.DELETE("/courses", courseHandler.DeleteCourses)
-	api.GET("/users", userHandler.GetUsers)
+	api.GET("/categories", authMiddleware, categoryHandler.GetCategories)
+	api.GET("/courses", authMiddleware, courseHandler.GetCourses)
+	api.GET("/courses/:id/details", authMiddleware, courseHandler.GetCourseDetails)
+	api.DELETE("/courses", authMiddleware, courseHandler.DeleteCourses)
+	api.GET("/users", authMiddleware, userHandler.GetUsers)
+	api.DELETE("/users", authMiddleware, userHandler.DeleteUsers)
+	api.PUT("/users/update", authMiddleware, userHandler.UpdateUsers)
 	api.POST("/login", userHandler.Login)
 	api.POST("/logout", userHandler.Logout)
-	api.DELETE("/users", userHandler.DeleteUsers)
-	api.PUT("/users/update", userHandler.UpdateUsers)
 }

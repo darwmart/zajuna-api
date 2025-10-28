@@ -18,7 +18,7 @@ type Config struct {
 func LoadConfig() *Config {
 	env := getEnv("APP_ENV", "development")
 
-	envFile := fmt.Sprintf("internal/config/.env.%s", env)
+	envFile := fmt.Sprintf("../../internal/config/.env.%s", env)
 	err := godotenv.Load(envFile)
 	if err != nil {
 		log.Printf("⚠️ No se encontró %s, usando variables del sistema", envFile)
