@@ -12,10 +12,10 @@ import (
 )
 
 type UserHandler struct {
-	service *services.UserService
+	service services.UserServiceInterface
 }
 
-func NewUserHandler(service *services.UserService) *UserHandler {
+func NewUserHandler(service services.UserServiceInterface) *UserHandler {
 	return &UserHandler{service: service}
 }
 
@@ -104,17 +104,7 @@ func (h *UserHandler) UpdateUsers(c *gin.Context) {
 		return
 	}
 
-	// 2. Validar que haya al menos un usuario
-	if len(req.Users) == 0 {
-		c.JSON(http.StatusBadRequest, response.NewErrorResponse(
-			"EMPTY_REQUEST",
-			"Debe proporcionar al menos un usuario para actualizar",
-			nil,
-		))
-		return
-	}
-
-	// 3. Convertir DTOs a modelos
+	// 2. Convertir DTOs a modelos
 	usersToUpdate := make([]models.User, len(req.Users))
 	for i, userReq := range req.Users {
 		usersToUpdate[i] = models.User{
@@ -130,7 +120,7 @@ func (h *UserHandler) UpdateUsers(c *gin.Context) {
 		}
 	}
 
-	// 4. Llamar al servicio
+	// 3. Llamar al servicio
 	updated, err := h.service.UpdateUsers(usersToUpdate)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, response.NewErrorResponse(
@@ -141,7 +131,7 @@ func (h *UserHandler) UpdateUsers(c *gin.Context) {
 		return
 	}
 
-	// 5. Responder
+	// 4. Responder
 	c.JSON(http.StatusOK, response.UpdateUserResponse{
 		Message:  "Usuarios actualizados correctamente",
 		Updated:  updated,

@@ -7,11 +7,11 @@ import (
 
 // CategoryService maneja la lógica de categorías
 type CategoryService struct {
-	repo *repository.CategoryRepository
+	repo repository.CategoryRepositoryInterface
 }
 
 // NewCategoryService crea un nuevo servicio de categorías
-func NewCategoryService(repo *repository.CategoryRepository) *CategoryService {
+func NewCategoryService(repo repository.CategoryRepositoryInterface) *CategoryService {
 	return &CategoryService{repo: repo}
 }
 

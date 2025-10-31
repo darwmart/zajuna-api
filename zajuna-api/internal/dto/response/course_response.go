@@ -77,3 +77,49 @@ type UpdateCourseResponse struct {
 	Updated bool     `json:"updated"`
 	Errors  []string `json:"errors,omitempty"`
 }
+
+// UpdateCoursesResponse representa la respuesta de actualización múltiple (Moodle format)
+type UpdateCoursesResponse struct {
+	Warnings []Warning `json:"warnings,omitempty"`
+	//WarningsCount int       `json:"warningscount"`
+}
+
+/*
+1
+1
+1
+1
+1
+1
+11
+11
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+*/
+const (
+	// CourseFormatWeeks representa el formato de curso "weeks"
+	CourseFormatWeeks = "weeks"
+	// CourseFormatTopics representa el formato de curso "topics"
+	CourseFormatTopics = "topics"
+	// CourseFormatSocial representa el formato de curso "social"
+	CourseFormatSocial = "social"
+)

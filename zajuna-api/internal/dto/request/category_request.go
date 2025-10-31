@@ -41,14 +41,14 @@ type CreateCategoryRequest struct {
 
 // UpdateCategoryRequest representa la solicitud de actualización de una categoría
 type UpdateCategoryRequest struct {
-	ID                int     `json:"id" binding:"required,min=1"`
-	Name              string  `json:"name" binding:"omitempty,min=1,max=255"`
-	Parent            *int    `json:"parent" binding:"omitempty,min=0"`
-	IDNumber          string  `json:"idnumber" binding:"omitempty,max=100"`
-	Description       string  `json:"description" binding:"omitempty"`
-	DescriptionFormat *int    `json:"descriptionformat" binding:"omitempty,oneof=0 1 2 4"`
-	Visible           *int    `json:"visible" binding:"omitempty,oneof=0 1"`
-	Theme             string  `json:"theme" binding:"omitempty,max=50"`
+	ID                int    `json:"id" binding:"required,min=1"`
+	Name              string `json:"name" binding:"omitempty,min=1,max=255"`
+	Parent            *int   `json:"parent" binding:"omitempty,min=0"`
+	IDNumber          string `json:"idnumber" binding:"omitempty,max=100"`
+	Description       string `json:"description" binding:"omitempty"`
+	DescriptionFormat *int   `json:"descriptionformat" binding:"omitempty,oneof=0 1 2 4"`
+	Visible           *int   `json:"visible" binding:"omitempty,oneof=0 1"`
+	Theme             string `json:"theme" binding:"omitempty,max=50"`
 }
 
 // DeleteCategoriesRequest representa la solicitud de eliminación de categorías

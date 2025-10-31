@@ -12,10 +12,10 @@ import (
 )
 
 type CourseHandler struct {
-	service *services.CourseService
+	service services.CourseServiceInterface
 }
 
-func NewCourseHandler(service *services.CourseService) *CourseHandler {
+func NewCourseHandler(service services.CourseServiceInterface) *CourseHandler {
 	return &CourseHandler{service: service}
 }
 
@@ -175,6 +175,60 @@ func (h *CourseHandler) DeleteCourses(c *gin.Context) {
 	c.JSON(http.StatusOK, response.DeleteCoursesResponse{
 		Message:  "Operación completada",
 		Deleted:  deleted,
+		Warnings: warningsResponse,
+	})
+}
+
+// UpdateCourses actualiza múltiples cursos
+// @Summary      Actualizar cursos
+// @Description  Actualiza uno o más cursos con los datos proporcionados
+// @Tags         courses
+// @Accept       json
+// @Produce      json
+// @Param        request body request.UpdateCoursesRequest true "Cursos a actualizar"
+// @Success      200 {object} response.UpdateCoursesResponse
+// @Failure      400 {object} response.ErrorResponse
+// @Failure      500 {object} response.ErrorResponse
+// @Router       /courses [put]
+func (h *CourseHandler) UpdateCourses(c *gin.Context) {
+	// 1. Parsear request
+	var req request.UpdateCoursesRequest
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, response.NewErrorResponse(
+			"INVALID_JSON",
+			"JSON inválido o campos requeridos faltantes",
+			err.Error(),
+		))
+		return
+	}
+
+	// 2. Validación adicional personalizada
+	if err := req.Validate(); err != nil {
+		c.JSON(http.StatusBadRequest, response.NewErrorResponse(
+			"VALIDATION_ERROR",
+			err.Error(),
+			nil,
+		))
+		return
+	}
+
+	// 3. Llamar al servicio
+	serviceResponse, err := h.service.UpdateCourses(req.Courses)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, response.NewErrorResponse(
+			"UPDATE_FAILED",
+			"Error al actualizar cursos",
+			err.Error(),
+		))
+		return
+	}
+
+	// 4. Convertir warnings a DTO
+	warningsResponse := mapper.UpdateCoursesWarningsToResponse(serviceResponse.Warnings)
+
+	// 5. Responder
+	c.JSON(http.StatusOK, response.UpdateCoursesResponse{
 		Warnings: warningsResponse,
 	})
 }
