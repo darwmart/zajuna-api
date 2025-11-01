@@ -13,6 +13,12 @@ import (
 func RegisterRoutes(router *gin.Engine, db *gorm.DB) {
 	api := router.Group("/api")
 
+	// --- Config ---
+	configRepo := repository.NewConfigRepository(db)
+
+	// --- RoleCapability ---
+	roleCapabilityRepo := repository.NewRoleCapabilityRepository(db)
+
 	// --- Categorías ---
 	categoryRepo := repository.NewCategoryRepository(db)
 	categoryService := services.NewCategoryService(categoryRepo)
@@ -34,7 +40,7 @@ func RegisterRoutes(router *gin.Engine, db *gorm.DB) {
 	authMiddleware := middleware.RequireAuth(sessionRepo)
 
 	// --- Rutas API ---
-	api.GET("/categories", authMiddleware, categoryHandler.GetCategories)
+	api.GET("/categories", authMiddleware, middleware.HasCapability(configRepo, sessionRepo, roleCapabilityRepo, "moodle/site:readallmessages"), categoryHandler.GetCategories)
 	api.GET("/courses", authMiddleware, courseHandler.GetCourses)
 	api.GET("/courses/:id/details", authMiddleware, courseHandler.GetCourseDetails)
 	api.DELETE("/courses", authMiddleware, courseHandler.DeleteCourses)

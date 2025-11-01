@@ -9,7 +9,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-func RequireAuth(sessionRepo *repository.SessionsRepository) gin.HandlerFunc {
+func RequireAuth(sessionRepo repository.SessionsRepositoryInterface) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		log.Info("En el Middleware")
 
@@ -19,11 +19,13 @@ func RequireAuth(sessionRepo *repository.SessionsRepository) gin.HandlerFunc {
 		if err != nil {
 			log.Error(err)
 			c.AbortWithStatus(http.StatusUnauthorized)
+			return
 		}
 		log.Info(token)
 		session, err := sessionRepo.FindBySID(token)
 		if err != nil {
 			c.AbortWithError(405, err)
+			return
 		}
 		if session == nil {
 			http.SetCookie(c.Writer, &http.Cookie{
@@ -37,6 +39,7 @@ func RequireAuth(sessionRepo *repository.SessionsRepository) gin.HandlerFunc {
 				Secure:   true, // debe coincidir con el original
 			})
 			c.AbortWithStatus(http.StatusUnauthorized)
+			return
 		}
 
 		c.Next()

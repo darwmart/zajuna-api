@@ -145,6 +145,7 @@ func (r *CourseRepository) GetCourseDetails(courseID int) (*CourseDetails, error
 	return &details, nil
 }
 
+// CountUserCourses Obtiene la cantidad de cursos que tiene el usuario vinculados
 func (r *CourseRepository) CountUserCourses(userID int) (int, error) {
 	var count int64
 	var list []int
