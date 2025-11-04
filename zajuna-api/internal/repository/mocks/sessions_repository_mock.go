@@ -17,3 +17,12 @@ func (m *MockSessionsRepository) FindBySID(sid string) (*models.Sessions, error)
 	}
 	return nil, args.Error(1)
 }
+func (m *MockSessionsRepository) InsertSession(session *models.Sessions) error {
+	args := m.Called(session)
+	return args.Error(0)
+}
+
+func (m *MockSessionsRepository) DeleteSession(sid string) error {
+	args := m.Called(sid)
+	return args.Error(0)
+}

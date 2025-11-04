@@ -16,9 +16,9 @@ const (
 )
 
 func HasCapability(
-	configRepo *repository.ConfigRepository,
-	sessionRepo *repository.SessionsRepository,
-	roleCapabilityRepository *repository.RoleCapabilityRepository,
+	configRepo repository.ConfigRepositoryInterface,
+	sessionRepo repository.SessionsRepositoryInterface,
+	roleCapabilityRepository repository.RoleCapabilityRepositoryInterface,
 	capability string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 
@@ -29,17 +29,18 @@ func HasCapability(
 		defaultUserRoleID, err := configRepo.FindByName("defaultuserroleid")
 
 		if err != nil {
-			c.AbortWithError(405, err)
+			c.AbortWithError(500, err)
+			return
 		}
 		if defaultUserRoleID != nil {
 			roles = append(roles, defaultUserRoleID.Value)
 		}
 
 		defaultFrontPageRoleID, err := configRepo.FindByName("defaultfrontpageroleid")
-		log.Info(defaultUserRoleID.Value)
 
 		if err != nil {
-			c.AbortWithError(405, err)
+			c.AbortWithError(500, err)
+			return
 		}
 		if defaultFrontPageRoleID != nil {
 			roles = append(roles, defaultFrontPageRoleID.Value)
@@ -51,21 +52,20 @@ func HasCapability(
 		if err != nil {
 			log.Error(err)
 			c.AbortWithStatus(http.StatusUnauthorized)
+			return
 		}
-		log.Info(token)
 		session, err := sessionRepo.FindBySID(token)
 		if err != nil {
-			c.AbortWithError(405, err)
+			c.AbortWithError(500, err)
+			return
 		}
-		//log.Info(session)
 
 		capabilities, err := roleCapabilityRepository.FindByUserID(int64(session.UserID), roles, capability)
 
 		if err != nil {
-			c.AbortWithError(405, err)
+			c.AbortWithError(500, err)
+			return
 		}
-
-		log.Info(capabilities)
 
 		for _, capability := range *capabilities {
 			switch capability.Permission {
@@ -84,6 +84,3 @@ func HasCapability(
 
 	}
 }
-
-// HasCapability revisa si un usuario tiene una capability específica
-// basándose solo en los roles del usuario (sin contextos ni config global).

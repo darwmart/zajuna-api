@@ -1,0 +1,2834 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>server: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">zajunaApi/cmd/server/main.go (0.0%)</option>
+				
+				<option value="file1">zajunaApi/internal/config/config.go (0.0%)</option>
+				
+				<option value="file2">zajunaApi/internal/db/db.go (0.0%)</option>
+				
+				<option value="file3">zajunaApi/internal/dto/mapper/category_mapper.go (0.0%)</option>
+				
+				<option value="file4">zajunaApi/internal/dto/mapper/course_mapper.go (0.0%)</option>
+				
+				<option value="file5">zajunaApi/internal/dto/mapper/user_mapper.go (0.0%)</option>
+				
+				<option value="file6">zajunaApi/internal/dto/request/category_request.go (0.0%)</option>
+				
+				<option value="file7">zajunaApi/internal/dto/request/course_request.go (0.0%)</option>
+				
+				<option value="file8">zajunaApi/internal/dto/request/user_request.go (0.0%)</option>
+				
+				<option value="file9">zajunaApi/internal/dto/response/common.go (0.0%)</option>
+				
+				<option value="file10">zajunaApi/internal/handlers/category_handler.go (0.0%)</option>
+				
+				<option value="file11">zajunaApi/internal/handlers/course_handler.go (0.0%)</option>
+				
+				<option value="file12">zajunaApi/internal/handlers/user_handler.go (0.0%)</option>
+				
+				<option value="file13">zajunaApi/internal/middleware/cors.go (0.0%)</option>
+				
+				<option value="file14">zajunaApi/internal/middleware/has_capability.go (100.0%)</option>
+				
+				<option value="file15">zajunaApi/internal/middleware/logging.go (0.0%)</option>
+				
+				<option value="file16">zajunaApi/internal/middleware/require_auth.go (100.0%)</option>
+				
+				<option value="file17">zajunaApi/internal/models/config.go (0.0%)</option>
+				
+				<option value="file18">zajunaApi/internal/models/context.go (0.0%)</option>
+				
+				<option value="file19">zajunaApi/internal/models/role.go (0.0%)</option>
+				
+				<option value="file20">zajunaApi/internal/models/role_assignment.go (0.0%)</option>
+				
+				<option value="file21">zajunaApi/internal/models/role_capability.go (0.0%)</option>
+				
+				<option value="file22">zajunaApi/internal/models/sessions.go (0.0%)</option>
+				
+				<option value="file23">zajunaApi/internal/models/user.go (0.0%)</option>
+				
+				<option value="file24">zajunaApi/internal/repository/category_repository.go (0.0%)</option>
+				
+				<option value="file25">zajunaApi/internal/repository/config_repository.go (0.0%)</option>
+				
+				<option value="file26">zajunaApi/internal/repository/course_repository.go (0.0%)</option>
+				
+				<option value="file27">zajunaApi/internal/repository/mocks/config_repository_mock.go (0.0%)</option>
+				
+				<option value="file28">zajunaApi/internal/repository/mocks/role_capability_repository_mock.go (0.0%)</option>
+				
+				<option value="file29">zajunaApi/internal/repository/mocks/sessions_repository_mock.go (0.0%)</option>
+				
+				<option value="file30">zajunaApi/internal/repository/role_capability_repository.go (0.0%)</option>
+				
+				<option value="file31">zajunaApi/internal/repository/sessions_repository.go (0.0%)</option>
+				
+				<option value="file32">zajunaApi/internal/repository/user_repository.go (0.0%)</option>
+				
+				<option value="file33">zajunaApi/internal/routes/routes.go (0.0%)</option>
+				
+				<option value="file34">zajunaApi/internal/server/server.go (0.0%)</option>
+				
+				<option value="file35">zajunaApi/internal/services/auth/auth.go (0.0%)</option>
+				
+				<option value="file36">zajunaApi/internal/services/auth/cas_auth.go (0.0%)</option>
+				
+				<option value="file37">zajunaApi/internal/services/auth/manual_auth.go (0.0%)</option>
+				
+				<option value="file38">zajunaApi/internal/services/category_service.go (0.0%)</option>
+				
+				<option value="file39">zajunaApi/internal/services/course_service.go (0.0%)</option>
+				
+				<option value="file40">zajunaApi/internal/services/user_service.go (0.0%)</option>
+				
+				<option value="file41">zajunaApi/internal/validator/validator.go (0.0%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">not covered</span>
+				<span class="cov8">covered</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">package main
+
+import (
+        "log"
+        "zajunaApi/internal/server"
+)
+
+func main() <span class="cov0" title="0">{
+        srv := server.New()
+        if err := srv.Run(); err != nil </span><span class="cov0" title="0">{
+                log.Fatal("Error iniciando el servidor:", err)
+        }</span>
+}
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">package config
+
+import (
+        "fmt"
+        "log"
+        "os"
+
+        "github.com/joho/godotenv"
+)
+
+type Config struct {
+        AppEnv  string
+        AppPort string
+        DSN     string
+}
+
+// LoadConfig detecta el entorno y carga el .env correcto
+func LoadConfig() *Config <span class="cov0" title="0">{
+        env := getEnv("APP_ENV", "development")
+
+        envFile := fmt.Sprintf("../../internal/config/.env.%s", env)
+        err := godotenv.Load(envFile)
+        if err != nil </span><span class="cov0" title="0">{
+                log.Printf("⚠️ No se encontró %s, usando variables del sistema", envFile)
+        }</span>
+
+        <span class="cov0" title="0">dbHost := os.Getenv("DB_HOST")
+        dbPort := os.Getenv("DB_PORT")
+        dbUser := os.Getenv("DB_USER")
+        dbPass := os.Getenv("DB_PASSWORD")
+        dbName := os.Getenv("DB_NAME")
+        sslMode := os.Getenv("SSL_MODE")
+
+        dsn := fmt.Sprintf(
+                "host=%s user=%s password=%s dbname=%s port=%s sslmode=%s",
+                dbHost, dbUser, dbPass, dbName, dbPort, sslMode,
+        )
+
+        return &amp;Config{
+                AppEnv:  env,
+                AppPort: getEnv("APP_PORT", "8080"),
+                DSN:     dsn,
+        }</span>
+}
+
+func getEnv(key, defaultValue string) string <span class="cov0" title="0">{
+        if value := os.Getenv(key); value != "" </span><span class="cov0" title="0">{
+                return value
+        }</span>
+        <span class="cov0" title="0">return defaultValue</span>
+}
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">package db
+
+import (
+        "database/sql"
+        "fmt"
+
+        _ "github.com/lib/pq"
+)
+
+const (
+        host     = "localhost"
+        port     = 5432
+        user     = "postgres"
+        password = "12345"
+        dbname   = "moodle"
+)
+
+func Connect() (*sql.DB, error) <span class="cov0" title="0">{
+        psqlInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
+                host, port, user, password, dbname)
+
+        db, err := sql.Open("postgres", psqlInfo)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">err = db.Ping()
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">fmt.Println("✅ Conectado a PostgreSQL")
+        return db, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file3" style="display: none">package mapper
+
+import (
+        "zajunaApi/internal/dto/response"
+        "zajunaApi/internal/models"
+)
+
+// CategoryToResponse convierte un modelo Category a CategoryResponse
+func CategoryToResponse(category *models.Category) *response.CategoryResponse <span class="cov0" title="0">{
+        if category == nil </span><span class="cov0" title="0">{
+                return nil
+        }</span>
+
+        <span class="cov0" title="0">return &amp;response.CategoryResponse{
+                ID:                category.ID,
+                Name:              category.Name,
+                IDNumber:          category.IDNumber,
+                Description:       category.Description,
+                DescriptionFormat: category.DescriptionFormat,
+                Parent:            category.Parent,
+                SortOrder:         category.SortOrder,
+                CourseCount:       category.CourseCount,
+                Visible:           category.Visible,
+                Depth:             category.Depth,
+                Path:              category.Path,
+                Theme:             category.Theme,
+        }</span>
+}
+
+// CategoriesToResponse convierte un slice de Categories a slice de CategoryResponse
+func CategoriesToResponse(categories []models.Category) []response.CategoryResponse <span class="cov0" title="0">{
+        responses := make([]response.CategoryResponse, len(categories))
+        for i, category := range categories </span><span class="cov0" title="0">{
+                resp := CategoryToResponse(&amp;category)
+                if resp != nil </span><span class="cov0" title="0">{
+                        responses[i] = *resp
+                }</span>
+        }
+        <span class="cov0" title="0">return responses</span>
+}
+</pre>
+		
+		<pre class="file" id="file4" style="display: none">package mapper
+
+import (
+        "zajunaApi/internal/dto/response"
+        "zajunaApi/internal/models"
+        "zajunaApi/internal/repository"
+)
+
+// CourseToResponse convierte un modelo Course a CourseResponse
+func CourseToResponse(course *models.Course) *response.CourseResponse <span class="cov0" title="0">{
+        if course == nil </span><span class="cov0" title="0">{
+                return nil
+        }</span>
+
+        <span class="cov0" title="0">return &amp;response.CourseResponse{
+                ID:                course.ID,
+                Category:          course.Category,
+                FullName:          course.FullName,
+                ShortName:         course.ShortName,
+                IDNumber:          course.IDNumber,
+                Summary:           course.Summary,
+                SummaryFormat:     course.SummaryFormat,
+                Format:            course.Format,
+                ShowGrades:        course.ShowGrades,
+                NewsItems:         course.NewsItems,
+                StartDate:         course.StartDate,
+                EndDate:           course.EndDate,
+                Visible:           course.Visible,
+                GroupMode:         course.GroupMode,
+                GroupModeForce:    course.GroupModeForce,
+                DefaultGroupingID: course.DefaultGroupingID,
+                SortOrder:         course.SortOrder,
+                TimeCreated:       course.TimeCreated,
+                TimeModified:      course.TimeModified,
+        }</span>
+}
+
+// CoursesToResponse convierte un slice de Courses a slice de CourseResponse
+func CoursesToResponse(courses []models.Course) []response.CourseResponse <span class="cov0" title="0">{
+        responses := make([]response.CourseResponse, len(courses))
+        for i, course := range courses </span><span class="cov0" title="0">{
+                resp := CourseToResponse(&amp;course)
+                if resp != nil </span><span class="cov0" title="0">{
+                        responses[i] = *resp
+                }</span>
+        }
+        <span class="cov0" title="0">return responses</span>
+}
+
+// CourseDetailsToResponse convierte CourseDetails a CourseDetailResponse
+func CourseDetailsToResponse(details *repository.CourseDetails) *response.CourseDetailResponse <span class="cov0" title="0">{
+        if details == nil </span><span class="cov0" title="0">{
+                return nil
+        }</span>
+
+        <span class="cov0" title="0">return &amp;response.CourseDetailResponse{
+                ID:               details.ID,
+                FullName:         details.FullName,
+                ShortName:        details.ShortName,
+                IDNumber:         details.IDNumber,
+                Format:           details.Format,
+                Category:         details.Category,
+                Groupings:        details.Groupings,
+                Groups:           details.Groups,
+                RoleAssignments:  details.RoleAssignments,
+                EnrollmentMethod: details.EnrollmentMethod,
+                Sections:         details.Sections,
+        }</span>
+}
+
+// DeleteCoursesWarningsToResponse convierte warnings del modelo al DTO
+func DeleteCoursesWarningsToResponse(warnings []models.Warning) []response.Warning <span class="cov0" title="0">{
+        if warnings == nil </span><span class="cov0" title="0">{
+                return nil
+        }</span>
+
+        <span class="cov0" title="0">result := make([]response.Warning, len(warnings))
+        for i, warning := range warnings </span><span class="cov0" title="0">{
+                result[i] = response.Warning{
+                        Item:        warning.Item,
+                        ItemID:      warning.ItemID,
+                        WarningCode: warning.WarningCode,
+                        Message:     warning.Message,
+                }
+        }</span>
+        <span class="cov0" title="0">return result</span>
+}
+</pre>
+		
+		<pre class="file" id="file5" style="display: none">package mapper
+
+import (
+        "fmt"
+        "zajunaApi/internal/dto/response"
+        "zajunaApi/internal/models"
+)
+
+// UserToResponse convierte un modelo User a UserResponse
+func UserToResponse(user *models.User) *response.UserResponse <span class="cov0" title="0">{
+        if user == nil </span><span class="cov0" title="0">{
+                return nil
+        }</span>
+
+        <span class="cov0" title="0">fullName := fmt.Sprintf("%s %s", user.FirstName, user.LastName)
+
+        return &amp;response.UserResponse{
+                ID:                user.ID,
+                Username:          user.Username,
+                FirstName:         user.FirstName,
+                LastName:          user.LastName,
+                FullName:          fullName,
+                Email:             user.Email,
+                Address:           user.Address,
+                Phone1:            user.Phone1,
+                Phone2:            user.Phone2,
+                Department:        user.Department,
+                Institution:       user.Institution,
+                IDNumber:          user.IDNumber,
+                Interests:         user.Interests,
+                FirstAccess:       user.FirstAccess,
+                LastAccess:        user.LastAccess,
+                Auth:              user.Auth,
+                Suspended:         user.Suspended,
+                Confirmed:         user.Confirmed,
+                Lang:              user.Lang,
+                Theme:             user.Theme,
+                Timezone:          user.Timezone,
+                MailFormat:        user.MailFormat,
+                Description:       user.Description,
+                DescriptionFormat: user.DescriptionFormat,
+                City:              user.City,
+                Country:           user.Country,
+                ProfileImageSmall: user.ProfileImageSmall,
+                ProfileImage:      user.ProfileImage,
+                CustomFields:      mapUserCustomFields(user.CustomFields),
+                Preferences:       mapUserPreferences(user.Preferences),
+        }</span>
+}
+
+// UsersToResponse convierte un slice de Users a slice de UserResponse
+func UsersToResponse(users []models.User) []response.UserResponse <span class="cov0" title="0">{
+        responses := make([]response.UserResponse, len(users))
+        for i, user := range users </span><span class="cov0" title="0">{
+                resp := UserToResponse(&amp;user)
+                if resp != nil </span><span class="cov0" title="0">{
+                        responses[i] = *resp
+                }</span>
+        }
+        <span class="cov0" title="0">return responses</span>
+}
+
+// mapUserCustomFields convierte custom fields del modelo al DTO
+func mapUserCustomFields(fields []models.UserCustomField) []response.UserCustomField <span class="cov0" title="0">{
+        if fields == nil </span><span class="cov0" title="0">{
+                return nil
+        }</span>
+
+        <span class="cov0" title="0">result := make([]response.UserCustomField, len(fields))
+        for i, field := range fields </span><span class="cov0" title="0">{
+                result[i] = response.UserCustomField{
+                        Type:         field.Type,
+                        Value:        field.Value,
+                        DisplayValue: field.DisplayValue,
+                        Name:         field.Name,
+                        ShortName:    field.ShortName,
+                }
+        }</span>
+        <span class="cov0" title="0">return result</span>
+}
+
+// mapUserPreferences convierte preferencias del modelo al DTO
+func mapUserPreferences(prefs []models.UserPreference) []response.UserPreference <span class="cov0" title="0">{
+        if prefs == nil </span><span class="cov0" title="0">{
+                return nil
+        }</span>
+
+        <span class="cov0" title="0">result := make([]response.UserPreference, len(prefs))
+        for i, pref := range prefs </span><span class="cov0" title="0">{
+                result[i] = response.UserPreference{
+                        Name:  pref.Name,
+                        Value: pref.Value,
+                }
+        }</span>
+        <span class="cov0" title="0">return result</span>
+}
+</pre>
+		
+		<pre class="file" id="file6" style="display: none">package request
+
+// GetCategoriesRequest representa los parámetros para listar categorías
+type GetCategoriesRequest struct {
+        Parent  *int `form:"parent" binding:"omitempty,min=0"`
+        Visible *int `form:"visible" binding:"omitempty,oneof=0 1"`
+        Page    int  `form:"page" binding:"omitempty,min=1"`
+        Limit   int  `form:"limit" binding:"omitempty,min=1,max=100"`
+}
+
+// SetDefaults establece valores por defecto
+func (r *GetCategoriesRequest) SetDefaults() <span class="cov0" title="0">{
+        if r.Page == 0 </span><span class="cov0" title="0">{
+                r.Page = 1
+        }</span>
+        <span class="cov0" title="0">if r.Limit == 0 </span><span class="cov0" title="0">{
+                r.Limit = 50
+        }</span>
+}
+
+// HasParentFilter verifica si hay filtro de categoría padre
+func (r *GetCategoriesRequest) HasParentFilter() bool <span class="cov0" title="0">{
+        return r.Parent != nil
+}</span>
+
+// GetCategoryDetailsRequest representa los parámetros para obtener detalles de una categoría
+type GetCategoryDetailsRequest struct {
+        ID int `uri:"id" binding:"required,min=1"`
+}
+
+// CreateCategoryRequest representa la solicitud de creación de una categoría
+type CreateCategoryRequest struct {
+        Name              string `json:"name" binding:"required,min=1,max=255"`
+        Parent            int    `json:"parent" binding:"omitempty,min=0"`
+        IDNumber          string `json:"idnumber" binding:"omitempty,max=100"`
+        Description       string `json:"description" binding:"omitempty"`
+        DescriptionFormat int    `json:"descriptionformat" binding:"omitempty,oneof=0 1 2 4"`
+        Visible           int    `json:"visible" binding:"omitempty,oneof=0 1"`
+        Theme             string `json:"theme" binding:"omitempty,max=50"`
+}
+
+// UpdateCategoryRequest representa la solicitud de actualización de una categoría
+type UpdateCategoryRequest struct {
+        ID                int     `json:"id" binding:"required,min=1"`
+        Name              string  `json:"name" binding:"omitempty,min=1,max=255"`
+        Parent            *int    `json:"parent" binding:"omitempty,min=0"`
+        IDNumber          string  `json:"idnumber" binding:"omitempty,max=100"`
+        Description       string  `json:"description" binding:"omitempty"`
+        DescriptionFormat *int    `json:"descriptionformat" binding:"omitempty,oneof=0 1 2 4"`
+        Visible           *int    `json:"visible" binding:"omitempty,oneof=0 1"`
+        Theme             string  `json:"theme" binding:"omitempty,max=50"`
+}
+
+// DeleteCategoriesRequest representa la solicitud de eliminación de categorías
+type DeleteCategoriesRequest struct {
+        CategoryIDs []int `json:"categoryids" binding:"required,min=1,dive,min=1"`
+        MoveToID    *int  `json:"movetoid" binding:"omitempty,min=1"`
+}
+
+// Validate valida que los IDs sean únicos
+func (r *DeleteCategoriesRequest) Validate() error <span class="cov0" title="0">{
+        seen := make(map[int]bool)
+        for _, id := range r.CategoryIDs </span><span class="cov0" title="0">{
+                if seen[id] </span><span class="cov0" title="0">{
+                        return &amp;ValidationError{
+                                Field:   "categoryids",
+                                Message: "IDs duplicados detectados",
+                        }
+                }</span>
+                <span class="cov0" title="0">seen[id] = true</span>
+        }
+
+        // Validar que movetoid no esté en la lista de eliminación
+        <span class="cov0" title="0">if r.MoveToID != nil </span><span class="cov0" title="0">{
+                if seen[*r.MoveToID] </span><span class="cov0" title="0">{
+                        return &amp;ValidationError{
+                                Field:   "movetoid",
+                                Message: "No se puede mover los cursos a una categoría que está siendo eliminada",
+                        }
+                }</span>
+        }
+
+        <span class="cov0" title="0">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file7" style="display: none">package request
+
+// GetCoursesRequest representa los parámetros para listar cursos
+type GetCoursesRequest struct {
+        CategoryID int  `form:"categoryid" binding:"omitempty,min=1"`
+        Page       int  `form:"page" binding:"omitempty,min=1"`
+        Limit      int  `form:"limit" binding:"omitempty,min=1,max=100"`
+        Visible    *int `form:"visible" binding:"omitempty,oneof=0 1"`
+}
+
+// SetDefaults establece valores por defecto
+func (r *GetCoursesRequest) SetDefaults() <span class="cov0" title="0">{
+        if r.Page == 0 </span><span class="cov0" title="0">{
+                r.Page = 1
+        }</span>
+        <span class="cov0" title="0">if r.Limit == 0 </span><span class="cov0" title="0">{
+                r.Limit = 20
+        }</span>
+}
+
+// HasCategoryFilter verifica si hay filtro de categoría
+func (r *GetCoursesRequest) HasCategoryFilter() bool <span class="cov0" title="0">{
+        return r.CategoryID &gt; 0
+}</span>
+
+// GetCourseDetailsRequest representa los parámetros para obtener detalles de un curso
+type GetCourseDetailsRequest struct {
+        ID int `uri:"id" binding:"required,min=1"`
+}
+
+// DeleteCoursesRequest representa la solicitud de eliminación de cursos
+type DeleteCoursesRequest struct {
+        CourseIDs []int `json:"courseid" binding:"required,min=1,dive,min=1"`
+}
+
+// Validate valida que los IDs sean únicos y no incluyan el curso site (ID=1)
+func (r *DeleteCoursesRequest) Validate() error <span class="cov0" title="0">{
+        seen := make(map[int]bool)
+        for _, id := range r.CourseIDs </span><span class="cov0" title="0">{
+                // Validar que no intenten eliminar el curso site (ID=1)
+                if id == 1 </span><span class="cov0" title="0">{
+                        return &amp;ValidationError{
+                                Field:   "courseid",
+                                Message: "No se puede eliminar el coursid",
+                        }
+                }</span>
+                // Validar duplicados
+                <span class="cov0" title="0">if seen[id] </span><span class="cov0" title="0">{
+                        return &amp;ValidationError{
+                                Field:   "courseid",
+                                Message: "id duplicado detectado",
+                        }
+                }</span>
+                <span class="cov0" title="0">seen[id] = true</span>
+        }
+        <span class="cov0" title="0">return nil</span>
+}
+
+// CreateCourseRequest representa la solicitud de creación de un curso
+type CreateCourseRequest struct {
+        CategoryID    int    `json:"category" binding:"required,min=1"`
+        FullName      string `json:"fullname" binding:"required,min=3,max=254"`
+        ShortName     string `json:"shortname" binding:"required,min=1,max=100"`
+        IDNumber      string `json:"idnumber" binding:"omitempty,max=100"`
+        Summary       string `json:"summary" binding:"omitempty"`
+        SummaryFormat int    `json:"summaryformat" binding:"omitempty,oneof=0 1 2 4"`
+        Format        string `json:"format" binding:"omitempty,oneof=weeks topics social"`
+        StartDate     int64  `json:"startdate" binding:"omitempty,min=0"`
+        EndDate       int64  `json:"enddate" binding:"omitempty,min=0"`
+        Visible       int    `json:"visible" binding:"omitempty,oneof=0 1"`
+}
+
+// Validate valida reglas de negocio adicionales
+func (r *CreateCourseRequest) Validate() error <span class="cov0" title="0">{
+        // Validar que enddate sea mayor que startdate
+        if r.EndDate &gt; 0 &amp;&amp; r.StartDate &gt; 0 &amp;&amp; r.EndDate &lt;= r.StartDate </span><span class="cov0" title="0">{
+                return &amp;ValidationError{
+                        Field:   "enddate",
+                        Message: "La fecha de fin debe ser posterior a la fecha de inicio",
+                }
+        }</span>
+        <span class="cov0" title="0">return nil</span>
+}
+
+// UpdateCourseRequest representa la solicitud de actualización de un curso
+type UpdateCourseRequest struct {
+        ID            int    `json:"id" binding:"required,min=1"`
+        CategoryID    *int   `json:"category" binding:"omitempty,min=1"`
+        FullName      string `json:"fullname" binding:"omitempty,min=3,max=254"`
+        ShortName     string `json:"shortname" binding:"omitempty,min=1,max=100"`
+        IDNumber      string `json:"idnumber" binding:"omitempty,max=100"`
+        Summary       string `json:"summary" binding:"omitempty"`
+        SummaryFormat *int   `json:"summaryformat" binding:"omitempty,oneof=0 1 2 4"`
+        Format        string `json:"format" binding:"omitempty,oneof=weeks topics social"`
+        StartDate     *int64 `json:"startdate" binding:"omitempty,min=0"`
+        EndDate       *int64 `json:"enddate" binding:"omitempty,min=0"`
+        Visible       *int   `json:"visible" binding:"omitempty,oneof=0 1"`
+}
+</pre>
+		
+		<pre class="file" id="file8" style="display: none">package request
+
+// GetUsersRequest representa los parámetros de búsqueda de usuarios
+type GetUsersRequest struct {
+        Firstname string `form:"firstname" binding:"omitempty,min=2,max=100"`
+        Lastname  string `form:"lastname" binding:"omitempty,min=2,max=100"`
+        Username  string `form:"username" binding:"omitempty,min=2,max=100"`
+        Email     string `form:"email" binding:"omitempty,email"`
+        Page      int    `form:"page" binding:"omitempty,min=1"`
+        Limit     int    `form:"limit" binding:"omitempty,min=1,max=100"`
+}
+
+// SetDefaults establece valores por defecto para la paginación
+func (r *GetUsersRequest) SetDefaults() <span class="cov0" title="0">{
+        if r.Page == 0 </span><span class="cov0" title="0">{
+                r.Page = 1
+        }</span>
+        <span class="cov0" title="0">if r.Limit == 0 </span><span class="cov0" title="0">{
+                r.Limit = 15
+        }</span>
+}
+
+// ToFilterMap convierte la request a un mapa de filtros
+func (r *GetUsersRequest) ToFilterMap() map[string]string <span class="cov0" title="0">{
+        filters := make(map[string]string)
+
+        if r.Firstname != "" </span><span class="cov0" title="0">{
+                filters["firstname"] = r.Firstname
+        }</span>
+        <span class="cov0" title="0">if r.Lastname != "" </span><span class="cov0" title="0">{
+                filters["lastname"] = r.Lastname
+        }</span>
+        <span class="cov0" title="0">if r.Username != "" </span><span class="cov0" title="0">{
+                filters["username"] = r.Username
+        }</span>
+        <span class="cov0" title="0">if r.Email != "" </span><span class="cov0" title="0">{
+                filters["email"] = r.Email
+        }</span>
+
+        <span class="cov0" title="0">return filters</span>
+}
+
+// UpdateUserRequest representa la solicitud de actualización de un usuario
+type UpdateUserRequest struct {
+        ID        uint   `json:"id" binding:"required,min=1"`
+        FirstName string `json:"firstname" binding:"required,min=2,max=100"`
+        LastName  string `json:"lastname" binding:"required,min=2,max=100"`
+        Email     string `json:"email" binding:"required,email"`
+        City      string `json:"city" binding:"omitempty,max=120"`
+        Country   string `json:"country" binding:"omitempty,len=2"`
+        Lang      string `json:"lang" binding:"omitempty,min=2,max=30"`
+        Timezone  string `json:"timezone" binding:"omitempty,max=100"`
+        Phone1    string `json:"phone1" binding:"omitempty,max=20"`
+}
+
+// UpdateUsersRequest representa la solicitud de actualización de múltiples usuarios
+type UpdateUsersRequest struct {
+        Users []UpdateUserRequest `json:"users" binding:"required,min=1,dive"`
+}
+
+// DeleteUsersRequest representa la solicitud de eliminación de usuarios
+type DeleteUsersRequest struct {
+        UserIDs []int `json:"userids" binding:"required,min=1,dive,min=1"`
+}
+
+// Validate valida que los IDs sean únicos
+func (r *DeleteUsersRequest) Validate() error <span class="cov0" title="0">{
+        seen := make(map[int]bool)
+        for _, id := range r.UserIDs </span><span class="cov0" title="0">{
+                if seen[id] </span><span class="cov0" title="0">{
+                        return ErrDuplicateIDs
+                }</span>
+                <span class="cov0" title="0">seen[id] = true</span>
+        }
+        <span class="cov0" title="0">return nil</span>
+}
+
+// Errores personalizados para validación
+var (
+        ErrDuplicateIDs = &amp;ValidationError{Field: "userids", Message: "IDs duplicados detectados"}
+)
+
+// ValidationError representa un error de validación
+type ValidationError struct {
+        Field   string
+        Message string
+}
+
+func (e *ValidationError) Error() string <span class="cov0" title="0">{
+        return e.Message
+}</span>
+</pre>
+		
+		<pre class="file" id="file9" style="display: none">package response
+
+import "time"
+
+// ErrorResponse representa una respuesta de error estandarizada
+type ErrorResponse struct {
+        Code      string      `json:"code"`
+        Message   string      `json:"message"`
+        Details   interface{} `json:"details,omitempty"`
+        Timestamp time.Time   `json:"timestamp"`
+}
+
+// SuccessResponse representa una respuesta exitosa genérica
+type SuccessResponse struct {
+        Message string      `json:"message"`
+        Data    interface{} `json:"data,omitempty"`
+}
+
+// PaginationMeta contiene la metadata de paginación
+type PaginationMeta struct {
+        Page        int   `json:"page"`
+        Limit       int   `json:"limit"`
+        Total       int64 `json:"total"`
+        TotalPages  int   `json:"total_pages"`
+        HasNext     bool  `json:"has_next"`
+        HasPrevious bool  `json:"has_previous"`
+}
+
+// PaginatedResponse representa una respuesta paginada genérica
+type PaginatedResponse struct {
+        Data       interface{}    `json:"data"`
+        Pagination PaginationMeta `json:"pagination"`
+}
+
+// NewPaginatedResponse crea una nueva respuesta paginada
+func NewPaginatedResponse(data interface{}, page, limit int, total int64) *PaginatedResponse <span class="cov0" title="0">{
+        totalPages := int((total + int64(limit) - 1) / int64(limit))
+
+        return &amp;PaginatedResponse{
+                Data: data,
+                Pagination: PaginationMeta{
+                        Page:        page,
+                        Limit:       limit,
+                        Total:       total,
+                        TotalPages:  totalPages,
+                        HasNext:     page &lt; totalPages,
+                        HasPrevious: page &gt; 1,
+                },
+        }
+}</span>
+
+// NewErrorResponse crea una nueva respuesta de error
+func NewErrorResponse(code, message string, details interface{}) *ErrorResponse <span class="cov0" title="0">{
+        return &amp;ErrorResponse{
+                Code:      code,
+                Message:   message,
+                Details:   details,
+                Timestamp: time.Now(),
+        }
+}</span>
+
+// NewSuccessResponse crea una nueva respuesta exitosa
+func NewSuccessResponse(message string, data interface{}) *SuccessResponse <span class="cov0" title="0">{
+        return &amp;SuccessResponse{
+                Message: message,
+                Data:    data,
+        }
+}</span>
+</pre>
+		
+		<pre class="file" id="file10" style="display: none">package handlers
+
+import (
+        "net/http"
+        "zajunaApi/internal/dto/mapper"
+        "zajunaApi/internal/dto/response"
+        "zajunaApi/internal/services"
+
+        "github.com/gin-gonic/gin"
+)
+
+// CategoryHandler maneja las solicitudes relacionadas con categorías
+type CategoryHandler struct {
+        service *services.CategoryService
+}
+
+// NewCategoryHandler constructor para inyectar el servicio
+func NewCategoryHandler(service *services.CategoryService) *CategoryHandler <span class="cov0" title="0">{
+        return &amp;CategoryHandler{service: service}
+}</span>
+
+// GetCategories obtiene la lista de categorías
+// @Summary      Listar categorías
+// @Description  Obtiene todas las categorías de cursos disponibles
+// @Tags         categories
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  response.CategoryListResponse
+// @Failure      500  {object}  response.ErrorResponse
+// @Router       /categories [get]
+func (h *CategoryHandler) GetCategories(c *gin.Context) <span class="cov0" title="0">{
+        // 1. Llamar al servicio
+        categories, err := h.service.GetCategories()
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusInternalServerError, response.NewErrorResponse(
+                        "FETCH_ERROR",
+                        "Error al obtener las categorías",
+                        err.Error(),
+                ))
+                return
+        }</span>
+
+        // 2. Convertir modelos a DTOs
+        <span class="cov0" title="0">categoriesResponse := mapper.CategoriesToResponse(categories)
+
+        // 3. Crear respuesta
+        listResponse := response.CategoryListResponse{
+                Categories: categoriesResponse,
+        }
+
+        // 4. Responder
+        c.JSON(http.StatusOK, listResponse)</span>
+}
+</pre>
+		
+		<pre class="file" id="file11" style="display: none">package handlers
+
+import (
+        "net/http"
+        "zajunaApi/internal/dto/mapper"
+        "zajunaApi/internal/dto/request"
+        "zajunaApi/internal/dto/response"
+        "zajunaApi/internal/models"
+        "zajunaApi/internal/services"
+
+        "github.com/gin-gonic/gin"
+)
+
+type CourseHandler struct {
+        service *services.CourseService
+}
+
+func NewCourseHandler(service *services.CourseService) *CourseHandler <span class="cov0" title="0">{
+        return &amp;CourseHandler{service: service}
+}</span>
+
+// GetCourses obtiene la lista de cursos con filtros opcionales
+// @Summary      Listar cursos
+// @Description  Obtiene cursos con filtros opcionales por categoría
+// @Tags         courses
+// @Accept       json
+// @Produce      json
+// @Param        categoryid  query     int  false  "Filtrar por ID de categoría"
+// @Success      200         {object}  response.CourseListResponse
+// @Failure      400         {object}  response.ErrorResponse
+// @Failure      500         {object}  response.ErrorResponse
+// @Router       /courses [get]
+func (h *CourseHandler) GetCourses(c *gin.Context) <span class="cov0" title="0">{
+        // 1. Parsear y validar request
+        var req request.GetCoursesRequest
+
+        if err := c.ShouldBindQuery(&amp;req); err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, response.NewErrorResponse(
+                        "INVALID_PARAMS",
+                        "Parámetros de consulta inválidos",
+                        err.Error(),
+                ))
+                return
+        }</span>
+
+        // 2. Establecer valores por defecto
+        <span class="cov0" title="0">req.SetDefaults()
+
+        var courses []models.Course
+        var err error
+
+        // 3. Obtener cursos según filtros
+        if req.HasCategoryFilter() </span><span class="cov0" title="0">{
+                courses, err = h.service.GetCoursesByCategory(uint(req.CategoryID))
+        }</span> else<span class="cov0" title="0"> {
+                courses, err = h.service.GetAllCourses()
+        }</span>
+
+        <span class="cov0" title="0">if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusInternalServerError, response.NewErrorResponse(
+                        "FETCH_ERROR",
+                        "Error al obtener los cursos",
+                        err.Error(),
+                ))
+                return
+        }</span>
+
+        // 4. Convertir modelos a DTOs
+        <span class="cov0" title="0">coursesResponse := mapper.CoursesToResponse(courses)
+
+        // 5. Crear respuesta
+        listResponse := response.CourseListResponse{
+                Courses: coursesResponse,
+        }
+
+        // 6. Responder
+        c.JSON(http.StatusOK, listResponse)</span>
+}
+
+// GetCourseDetails obtiene los detalles completos de un curso
+// @Summary      Obtener detalles de curso
+// @Description  Obtiene información detallada de un curso incluyendo roles, grupos y secciones
+// @Tags         courses
+// @Accept       json
+// @Produce      json
+// @Param        id   path      int  true  "ID del curso"
+// @Success      200  {object}  response.CourseDetailResponse
+// @Failure      400  {object}  response.ErrorResponse
+// @Failure      404  {object}  response.ErrorResponse
+// @Failure      500  {object}  response.ErrorResponse
+// @Router       /courses/{id}/details [get]
+func (h *CourseHandler) GetCourseDetails(c *gin.Context) <span class="cov0" title="0">{
+        // 1. Parsear y validar ID del parámetro URI
+        var req request.GetCourseDetailsRequest
+
+        if err := c.ShouldBindUri(&amp;req); err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, response.NewErrorResponse(
+                        "INVALID_ID",
+                        "ID de curso inválido",
+                        err.Error(),
+                ))
+                return
+        }</span>
+
+        // 2. Llamar al servicio
+        <span class="cov0" title="0">details, err := h.service.GetCourseDetails(req.ID)
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusNotFound, response.NewErrorResponse(
+                        "NOT_FOUND",
+                        "Curso no encontrado",
+                        err.Error(),
+                ))
+                return
+        }</span>
+
+        // 3. Convertir a DTO
+        <span class="cov0" title="0">detailsResponse := mapper.CourseDetailsToResponse(details)
+
+        // 4. Responder
+        c.JSON(http.StatusOK, detailsResponse)</span>
+}
+
+// DeleteCourses elimina múltiples cursos
+// @Summary      Eliminar cursos
+// @Description  Elimina uno o más cursos por sus IDs
+// @Tags         courses
+// @Accept       json
+// @Produce      json
+// @Param        request body request.DeleteCoursesRequest true "IDs de cursos a eliminar"
+// @Success      200 {object} response.DeleteCoursesResponse
+// @Failure      400 {object} response.ErrorResponse
+// @Failure      500 {object} response.ErrorResponse
+// @Router       /courses [delete]
+func (h *CourseHandler) DeleteCourses(c *gin.Context) <span class="cov0" title="0">{
+        // 1. Parsear request
+        var req request.DeleteCoursesRequest
+
+        if err := c.ShouldBindJSON(&amp;req); err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, response.NewErrorResponse(
+                        "INVALID_JSON",
+                        "JSON inválido o campos requeridos faltantes",
+                        err.Error(),
+                ))
+                return
+        }</span>
+
+        // 2. Validación adicional personalizada
+        <span class="cov0" title="0">if err := req.Validate(); err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, response.NewErrorResponse(
+                        "VALIDATION_ERROR",
+                        err.Error(),
+                        nil,
+                ))
+                return
+        }</span>
+
+        // 3. Llamar al servicio
+        <span class="cov0" title="0">serviceResponse, err := h.service.DeleteCourses(req.CourseIDs)
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusInternalServerError, response.NewErrorResponse(
+                        "DELETE_FAILED",
+                        "Error al eliminar cursos",
+                        err.Error(),
+                ))
+                return
+        }</span>
+
+        // 4. Convertir warnings a DTO
+        <span class="cov0" title="0">warningsResponse := mapper.DeleteCoursesWarningsToResponse(serviceResponse.Warnings)
+
+        // 5. Calcular número de cursos eliminados exitosamente
+        deleted := len(req.CourseIDs) - len(serviceResponse.Warnings)
+
+        // 6. Responder
+        c.JSON(http.StatusOK, response.DeleteCoursesResponse{
+                Message:  "Operación completada",
+                Deleted:  deleted,
+                Warnings: warningsResponse,
+        })</span>
+}
+</pre>
+		
+		<pre class="file" id="file12" style="display: none">package handlers
+
+import (
+        "net/http"
+        "time"
+        "zajunaApi/internal/dto/mapper"
+        "zajunaApi/internal/dto/request"
+        "zajunaApi/internal/dto/response"
+        "zajunaApi/internal/models"
+        "zajunaApi/internal/services"
+
+        "github.com/gin-gonic/gin"
+)
+
+type UserHandler struct {
+        service *services.UserService
+}
+
+func NewUserHandler(service *services.UserService) *UserHandler <span class="cov0" title="0">{
+        return &amp;UserHandler{service: service}
+}</span>
+
+// GetUsers obtiene la lista de usuarios con filtros y paginación
+// @Summary      Listar usuarios
+// @Description  Obtiene usuarios con filtros opcionales y paginación
+// @Tags         users
+// @Accept       json
+// @Produce      json
+// @Param        firstname  query     string  false  "Filtrar por nombre"
+// @Param        lastname   query     string  false  "Filtrar por apellido"
+// @Param        username   query     string  false  "Filtrar por username"
+// @Param        email      query     string  false  "Filtrar por email"
+// @Param        page       query     int     false  "Número de página"  default(1)
+// @Param        limit      query     int     false  "Elementos por página"  default(15)
+// @Success      200        {object}  response.PaginatedResponse
+// @Failure      400        {object}  response.ErrorResponse
+// @Failure      500        {object}  response.ErrorResponse
+// @Router       /users [get]
+func (h *UserHandler) GetUsers(c *gin.Context) <span class="cov0" title="0">{
+        // 1. Parsear y validar request
+        var req request.GetUsersRequest
+
+        if err := c.ShouldBindQuery(&amp;req); err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, response.NewErrorResponse(
+                        "INVALID_PARAMS",
+                        "Parámetros de consulta inválidos",
+                        err.Error(),
+                ))
+                return
+        }</span>
+
+        // 2. Establecer valores por defecto
+        <span class="cov0" title="0">req.SetDefaults()
+
+        // 3. Convertir a filtros para el servicio
+        filters := req.ToFilterMap()
+
+        // 4. Llamar al servicio
+        users, total, err := h.service.GetUsers(filters, req.Page, req.Limit)
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusInternalServerError, response.NewErrorResponse(
+                        "FETCH_ERROR",
+                        "Error al obtener usuarios",
+                        err.Error(),
+                ))
+                return
+        }</span>
+
+        // 5. Convertir modelos a DTOs
+        <span class="cov0" title="0">usersResponse := mapper.UsersToResponse(users)
+
+        // 6. Crear respuesta paginada
+        paginatedResponse := response.NewPaginatedResponse(
+                usersResponse,
+                req.Page,
+                req.Limit,
+                total,
+        )
+
+        // 7. Responder
+        c.JSON(http.StatusOK, paginatedResponse)</span>
+}
+
+// UpdateUsers actualiza múltiples usuarios
+// @Summary      Actualizar usuarios
+// @Description  Actualiza la información de uno o más usuarios
+// @Tags         users
+// @Accept       json
+// @Produce      json
+// @Param        request body request.UpdateUsersRequest true "Lista de usuarios a actualizar"
+// @Success      200 {object} response.UpdateUserResponse
+// @Failure      400 {object} response.ErrorResponse
+// @Failure      500 {object} response.ErrorResponse
+// @Router       /users/update [put]
+func (h *UserHandler) UpdateUsers(c *gin.Context) <span class="cov0" title="0">{
+        // 1. Parsear y validar request
+        var req request.UpdateUsersRequest
+
+        if err := c.ShouldBindJSON(&amp;req); err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, response.NewErrorResponse(
+                        "INVALID_JSON",
+                        "JSON inválido o campos requeridos faltantes",
+                        err.Error(),
+                ))
+                return
+        }</span>
+
+        // 2. Validar que haya al menos un usuario
+        <span class="cov0" title="0">if len(req.Users) == 0 </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, response.NewErrorResponse(
+                        "EMPTY_REQUEST",
+                        "Debe proporcionar al menos un usuario para actualizar",
+                        nil,
+                ))
+                return
+        }</span>
+
+        // 3. Convertir DTOs a modelos
+        <span class="cov0" title="0">usersToUpdate := make([]models.User, len(req.Users))
+        for i, userReq := range req.Users </span><span class="cov0" title="0">{
+                usersToUpdate[i] = models.User{
+                        ID:        userReq.ID,
+                        FirstName: userReq.FirstName,
+                        LastName:  userReq.LastName,
+                        Email:     userReq.Email,
+                        City:      userReq.City,
+                        Country:   userReq.Country,
+                        Lang:      userReq.Lang,
+                        Timezone:  userReq.Timezone,
+                        Phone1:    userReq.Phone1,
+                }
+        }</span>
+
+        // 4. Llamar al servicio
+        <span class="cov0" title="0">updated, err := h.service.UpdateUsers(usersToUpdate)
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusInternalServerError, response.NewErrorResponse(
+                        "UPDATE_FAILED",
+                        "Error al actualizar usuarios",
+                        err.Error(),
+                ))
+                return
+        }</span>
+
+        // 5. Responder
+        <span class="cov0" title="0">c.JSON(http.StatusOK, response.UpdateUserResponse{
+                Message:  "Usuarios actualizados correctamente",
+                Updated:  updated,
+                Warnings: []string{},
+        })</span>
+}
+
+// DeleteUsers suspende múltiples usuarios (soft delete)
+// @Summary      Eliminar usuarios
+// @Description  Suspende usuarios (soft delete) por sus IDs
+// @Tags         users
+// @Accept       json
+// @Produce      json
+// @Param        request body request.DeleteUsersRequest true "IDs de usuarios a eliminar"
+// @Success      200 {object} response.DeleteUserResponse
+// @Failure      400 {object} response.ErrorResponse
+// @Failure      500 {object} response.ErrorResponse
+// @Router       /users [delete]
+func (h *UserHandler) DeleteUsers(c *gin.Context) <span class="cov0" title="0">{
+        // 1. Parsear request
+        var req request.DeleteUsersRequest
+
+        if err := c.ShouldBindJSON(&amp;req); err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, response.NewErrorResponse(
+                        "INVALID_JSON",
+                        "JSON inválido o campos requeridos faltantes",
+                        err.Error(),
+                ))
+                return
+        }</span>
+
+        // 2. Validación adicional personalizada
+        <span class="cov0" title="0">if err := req.Validate(); err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, response.NewErrorResponse(
+                        "VALIDATION_ERROR",
+                        err.Error(),
+                        nil,
+                ))
+                return
+        }</span>
+
+        // 3. Llamar al servicio
+        <span class="cov0" title="0">if err := h.service.DeleteUsers(req.UserIDs); err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusInternalServerError, response.NewErrorResponse(
+                        "DELETE_FAILED",
+                        "Error al suspender usuarios",
+                        err.Error(),
+                ))
+                return
+        }</span>
+
+        // 4. Responder
+        <span class="cov0" title="0">c.JSON(http.StatusOK, response.DeleteUserResponse{
+                Message: "Usuarios suspendidos correctamente",
+                Deleted: len(req.UserIDs),
+                Errors:  []string{},
+        })</span>
+}
+
+func (h *UserHandler) Login(c *gin.Context) <span class="cov0" title="0">{
+        var body struct {
+                Username string
+                Password string
+        }
+
+        if c.Bind(&amp;body) != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, gin.H{
+                        "error": "Failed to read body",
+                })
+                return
+        }</span>
+
+        <span class="cov0" title="0">token, err := h.service.Login(c.Request, body.Username, body.Password)
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, gin.H{
+                        "error": err.Error(),
+                })
+                return
+        }</span>
+        <span class="cov0" title="0">if token == "" </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, gin.H{
+                        "error": "Invalid username",
+                })
+                return
+        }</span>
+
+        <span class="cov0" title="0">c.SetSameSite(http.SameSiteLaxMode)
+        //c.SetCookie("Authorization", token, 3600*3, "", "", false, true)
+        http.SetCookie(c.Writer, &amp;http.Cookie{
+                Name:     "Authorization",
+                Value:    token,
+                Expires:  time.Now().Add(3 * time.Hour),
+                HttpOnly: true,
+                Path:     "/",
+                Domain:   "",
+                Secure:   true,
+        })
+
+        c.JSON(http.StatusOK, gin.H{})</span>
+}
+
+func (h *UserHandler) Logout(c *gin.Context) <span class="cov0" title="0">{
+
+        token, err := c.Cookie("Authorization")
+        if err != nil </span><span class="cov0" title="0">{
+                c.AbortWithStatus(http.StatusUnauthorized)
+                return
+        }</span>
+
+        <span class="cov0" title="0">res, err := h.service.Logout(token)
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, gin.H{
+                        "error": err.Error(),
+                })
+                return
+        }</span>
+        //c.SetCookie("Authorization", "", -1, "", "", false, true)
+        <span class="cov0" title="0">http.SetCookie(c.Writer, &amp;http.Cookie{
+                Name:     "Authorization",
+                Value:    "",
+                Path:     "/", // o el path con el que se creó
+                Domain:   "",
+                MaxAge:   -1,
+                Expires:  time.Unix(0, 0),
+                HttpOnly: true,
+                Secure:   true, // debe coincidir con el original
+        })
+
+        c.JSON(http.StatusOK, gin.H{
+                "message": res,
+        })</span>
+}
+</pre>
+		
+		<pre class="file" id="file13" style="display: none">package middleware
+
+import "github.com/gin-gonic/gin"
+
+// EnableCORS aplica las cabeceras CORS a todas las rutas
+func EnableCORS() gin.HandlerFunc <span class="cov0" title="0">{
+        return func(c *gin.Context) </span><span class="cov0" title="0">{
+                origin := c.Request.Header.Get("Origin")
+
+                // Permitir solo el front local durante desarrollo
+                if origin == "http://localhost:5173" </span><span class="cov0" title="0">{
+                        c.Writer.Header().Set("Access-Control-Allow-Origin", origin)
+                        c.Writer.Header().Set("Vary", "Origin")
+                }</span>
+
+                <span class="cov0" title="0">c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+                c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With")
+                c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
+
+                if c.Request.Method == "OPTIONS" </span><span class="cov0" title="0">{
+                        c.AbortWithStatus(204)
+                        return
+                }</span>
+
+                <span class="cov0" title="0">c.Next()</span>
+        }
+}
+</pre>
+		
+		<pre class="file" id="file14" style="display: none">package middleware
+
+import (
+        "net/http"
+        "zajunaApi/internal/repository"
+
+        "github.com/gin-gonic/gin"
+        log "github.com/sirupsen/logrus"
+)
+
+const (
+        CAP_INHERIT  = 0
+        CAP_ALLOW    = 1
+        CAP_PREVENT  = -1
+        CAP_PROHIBIT = -1000
+)
+
+func HasCapability(
+        configRepo repository.ConfigRepositoryInterface,
+        sessionRepo repository.SessionsRepositoryInterface,
+        roleCapabilityRepository repository.RoleCapabilityRepositoryInterface,
+        capability string) gin.HandlerFunc <span class="cov8" title="1">{
+        return func(c *gin.Context) </span><span class="cov8" title="1">{
+
+                roles := []string{}
+                allowed := false
+
+                //Obtener ids por defecto desde configs
+                defaultUserRoleID, err := configRepo.FindByName("defaultuserroleid")
+
+                if err != nil </span><span class="cov8" title="1">{
+                        c.AbortWithError(500, err)
+                        return
+                }</span>
+                <span class="cov8" title="1">if defaultUserRoleID != nil </span><span class="cov8" title="1">{
+                        roles = append(roles, defaultUserRoleID.Value)
+                }</span>
+
+                <span class="cov8" title="1">defaultFrontPageRoleID, err := configRepo.FindByName("defaultfrontpageroleid")
+
+                if err != nil </span><span class="cov8" title="1">{
+                        c.AbortWithError(500, err)
+                        return
+                }</span>
+                <span class="cov8" title="1">if defaultFrontPageRoleID != nil </span><span class="cov8" title="1">{
+                        roles = append(roles, defaultFrontPageRoleID.Value)
+                }</span>
+
+                //Obtener el token de la cookie para tomar el userID de la BD
+                <span class="cov8" title="1">token, err := c.Cookie("Authorization")
+
+                if err != nil </span><span class="cov8" title="1">{
+                        log.Error(err)
+                        c.AbortWithStatus(http.StatusUnauthorized)
+                        return
+                }</span>
+                <span class="cov8" title="1">session, err := sessionRepo.FindBySID(token)
+                if err != nil </span><span class="cov8" title="1">{
+                        c.AbortWithError(500, err)
+                        return
+                }</span>
+
+                <span class="cov8" title="1">capabilities, err := roleCapabilityRepository.FindByUserID(int64(session.UserID), roles, capability)
+
+                if err != nil </span><span class="cov8" title="1">{
+                        c.AbortWithError(500, err)
+                        return
+                }</span>
+
+                <span class="cov8" title="1">for _, capability := range *capabilities </span><span class="cov8" title="1">{
+                        switch capability.Permission </span>{
+                        case CAP_PROHIBIT:<span class="cov8" title="1">
+                                // Si algún rol prohíbe, no hay permiso
+                                c.AbortWithStatus(http.StatusUnauthorized)</span>
+                        case CAP_ALLOW:<span class="cov8" title="1">
+                                // Si al menos uno permite, lo marcamos
+                                allowed = true</span>
+                        }
+                }
+
+                <span class="cov8" title="1">if !allowed </span><span class="cov8" title="1">{
+                        c.AbortWithStatus(http.StatusUnauthorized)
+                }</span>
+
+        }
+}
+</pre>
+		
+		<pre class="file" id="file15" style="display: none">package middleware
+
+import (
+        "github.com/gin-gonic/gin"
+        "log"
+        "time"
+)
+
+func LoggingMiddleware() gin.HandlerFunc <span class="cov0" title="0">{
+        return func(c *gin.Context) </span><span class="cov0" title="0">{
+                start := time.Now()
+                c.Next()
+                duration := time.Since(start)
+                log.Printf("%s %s - %d (%v)", c.Request.Method, c.Request.URL.Path, c.Writer.Status(), duration)
+        }</span>
+}
+</pre>
+		
+		<pre class="file" id="file16" style="display: none">package middleware
+
+import (
+        "net/http"
+        "time"
+        "zajunaApi/internal/repository"
+
+        "github.com/gin-gonic/gin"
+        log "github.com/sirupsen/logrus"
+)
+
+func RequireAuth(sessionRepo repository.SessionsRepositoryInterface) gin.HandlerFunc <span class="cov8" title="1">{
+        return func(c *gin.Context) </span><span class="cov8" title="1">{
+                log.Info("En el Middleware")
+
+                //Obtener el token
+                token, err := c.Cookie("Authorization")
+
+                if err != nil </span><span class="cov8" title="1">{
+                        log.Error(err)
+                        c.AbortWithStatus(http.StatusUnauthorized)
+                        return
+                }</span>
+                <span class="cov8" title="1">log.Info(token)
+                session, err := sessionRepo.FindBySID(token)
+                if err != nil </span><span class="cov8" title="1">{
+                        c.AbortWithError(500, err)
+                        return
+                }</span>
+                <span class="cov8" title="1">if session == nil </span><span class="cov8" title="1">{
+                        http.SetCookie(c.Writer, &amp;http.Cookie{
+                                Name:     "Authorization",
+                                Value:    "",
+                                Path:     "/", // o el path con el que se creó
+                                Domain:   "",
+                                MaxAge:   -1,
+                                Expires:  time.Unix(0, 0),
+                                HttpOnly: true,
+                                Secure:   true, // debe coincidir con el original
+                        })
+                        c.AbortWithStatus(http.StatusUnauthorized)
+                        return
+                }</span>
+
+                <span class="cov8" title="1">c.Next()</span>
+        }
+}
+</pre>
+		
+		<pre class="file" id="file17" style="display: none">package models
+
+type Config struct {
+        ID    int64  `gorm:"column:id;primaryKey"`
+        Name  string `gorm:"column:name"`
+        Value string `gorm:"column:value"`
+}
+
+func (Config) TableName() string <span class="cov0" title="0">{
+        return "mdl_config"
+}</span>
+</pre>
+		
+		<pre class="file" id="file18" style="display: none">package models
+
+type Context struct {
+        ID           int `gorm:"column:id;primaryKey"`
+        ContextLevel int `gorm:"column:contextlevel"`
+        InstanceID   int `gorm:"column:instanceid"`
+}
+
+func (Context) TableName() string <span class="cov0" title="0">{
+        return "mdl_context"
+}</span>
+</pre>
+		
+		<pre class="file" id="file19" style="display: none">package models
+
+type Role struct {
+        ID        int    `gorm:"column:id;primaryKey"`
+        ShortName string `gorm:"column:shortname"`
+        Name      string `gorm:"column:name"`
+}
+
+func (Role) TableName() string <span class="cov0" title="0">{
+        return "mdl_role"
+}</span>
+</pre>
+		
+		<pre class="file" id="file20" style="display: none">package models
+
+type RoleAssignment struct {
+        ID        int `gorm:"column:id;primaryKey"`
+        RoleID    int `gorm:"column:roleid"`
+        UserID    int `gorm:"column:userid"`
+        ContextID int `gorm:"column:contextid"`
+}
+
+func (RoleAssignment) TableName() string <span class="cov0" title="0">{
+        return "mdl_role_assignments"
+}</span>
+</pre>
+		
+		<pre class="file" id="file21" style="display: none">package models
+
+type RoleCapability struct {
+        ID           int    `gorm:"column:id;primaryKey"`
+        ContextID    int64  `gorm:"column:contextid"`
+        RoleID       int64  `gorm:"column:roleid"`
+        Capability   string `gorm:"column:capability"`
+        Permission   int64  `gorm:"column:permission"`
+        TimeModified int64  `gorm:"column:timemodified"`
+        ModifierID   int64  `gorm:"column:modifierid"`
+}
+
+func (RoleCapability) TableName() string <span class="cov0" title="0">{
+        return "mdl_role_capabilities"
+}</span>
+</pre>
+		
+		<pre class="file" id="file22" style="display: none">package models
+
+type Sessions struct {
+        ID           uint    `gorm:"column:id;primaryKey" json:"id"`
+        State        int64   `gorm:"column:state" json:"state"`
+        SID          string  `gorm:"column:sid" json:"sid"`
+        UserID       uint    `gorm:"column:userid" json:"userid"`
+        SessData     *string `gorm:"column:sessdata" json:"sessdata"`
+        TimeCreated  int64   `gorm:"column:timecreated" json:"timecreated"`
+        TimeModified int64   `gorm:"column:timemodified" json:"timemodified"`
+        FirstIp      string  `gorm:"column:firstip" json:"firstip"`
+        LastIp       string  `gorm:"column:lastip" json:"lastip"`
+}
+
+func (Sessions) TableName() string <span class="cov0" title="0">{
+        return "mdl_sessions"
+}</span>
+</pre>
+		
+		<pre class="file" id="file23" style="display: none">package models
+
+type User struct {
+        ID                uint              `gorm:"column:id;primaryKey" json:"id"`
+        Username          string            `gorm:"column:username" json:"username"`
+        Password          string            `gorm:"column:password" json:"password"`
+        FirstName         string            `gorm:"column:firstname" json:"firstname"`
+        LastName          string            `gorm:"column:lastname" json:"lastname"`
+        FullName          string            `gorm:"-" json:"fullname"`
+        Email             string            `gorm:"column:email" json:"email"`
+        Address           string            `gorm:"column:address" json:"address"`
+        Phone1            string            `gorm:"column:phone1" json:"phone1"`
+        Phone2            string            `gorm:"column:phone2" json:"phone2"`
+        Department        string            `gorm:"column:department" json:"department"`
+        Institution       string            `gorm:"column:institution" json:"institution"`
+        IDNumber          string            `gorm:"column:idnumber" json:"idnumber"`
+        Interests         string            `gorm:"column:interests" json:"interests"`
+        FirstAccess       int64             `gorm:"column:firstaccess" json:"firstaccess"`
+        LastAccess        int64             `gorm:"column:lastaccess" json:"lastaccess"`
+        Auth              string            `gorm:"column:auth" json:"auth"`
+        Suspended         int               `gorm:"column:suspended" json:"suspended"`
+        Confirmed         int               `gorm:"column:confirmed" json:"confirmed"`
+        Lang              string            `gorm:"column:lang" json:"lang"`
+        Theme             string            `gorm:"column:theme" json:"theme"`
+        Timezone          string            `gorm:"column:timezone" json:"timezone"`
+        MailFormat        int               `gorm:"column:mailformat" json:"mailformat"`
+        Description       string            `gorm:"column:description" json:"description"`
+        DescriptionFormat int               `gorm:"column:descriptionformat" json:"descriptionformat"`
+        City              string            `gorm:"column:city" json:"city"`
+        Country           string            `gorm:"column:country" json:"country"`
+        ProfileImageSmall string            `gorm:"-" json:"profileimageurlsmall"`
+        ProfileImage      string            `gorm:"-" json:"profileimageurl"`
+        CustomFields      []UserCustomField `gorm:"-" json:"customfields,omitempty"`
+        Preferences       []UserPreference  `gorm:"-" json:"preferences,omitempty"`
+}
+
+// Nombre de la tabla real en Moodle
+func (User) TableName() string <span class="cov0" title="0">{
+        return "mdl_user"
+}</span>
+
+// Campos adicionales del usuario (no pertenecen directamente a mdl_user)
+type UserCustomField struct {
+        Type         string `json:"type"`
+        Value        string `json:"value"`
+        DisplayValue string `json:"displayvalue,omitempty"`
+        Name         string `json:"name"`
+        ShortName    string `json:"shortname"`
+}
+
+type UserPreference struct {
+        Name  string `json:"name"`
+        Value string `json:"value"`
+}
+
+type APIResponse struct {
+        Users       []User `json:"users"`
+        Total       int    `json:"total"`
+        Page        int    `json:"page"`
+        PageSize    int    `json:"pageSize"`
+        TotalPages  int    `json:"totalPages"`
+        HasNext     bool   `json:"hasNext"`
+        HasPrevious bool   `json:"hasPrevious"`
+}
+</pre>
+		
+		<pre class="file" id="file24" style="display: none">package repository
+
+import (
+        "gorm.io/gorm"
+        "zajunaApi/internal/models"
+)
+
+type CategoryRepository struct {
+        db *gorm.DB
+}
+
+func NewCategoryRepository(db *gorm.DB) *CategoryRepository <span class="cov0" title="0">{
+        return &amp;CategoryRepository{db: db}
+}</span>
+
+func (r *CategoryRepository) GetAllCategories() ([]models.Category, error) <span class="cov0" title="0">{
+        var categories []models.Category
+
+        if err := r.db.Table("mdl_course_categories").
+                Order("sortorder").
+                Find(&amp;categories).Error; err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">return categories, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file25" style="display: none">package repository
+
+import (
+        "errors"
+        "zajunaApi/internal/models"
+
+        "gorm.io/gorm"
+)
+
+type ConfigRepository struct {
+        DB *gorm.DB
+}
+
+func NewConfigRepository(db *gorm.DB) *ConfigRepository <span class="cov0" title="0">{
+        return &amp;ConfigRepository{DB: db}
+}</span>
+
+func (r *ConfigRepository) FindByName(name string) (*models.Config, error) <span class="cov0" title="0">{
+
+        var config models.Config
+        result := r.DB.First(&amp;config, "name = ?", name)
+        if result.Error != nil </span><span class="cov0" title="0">{
+                if errors.Is(result.Error, gorm.ErrRecordNotFound) </span><span class="cov0" title="0">{
+                        return nil, nil // no es un error real, solo que no existe el dato
+                }</span>
+                <span class="cov0" title="0">return nil, result.Error</span> // otro tipo de error (de conexión, SQL, etc.)
+        }
+
+        <span class="cov0" title="0">return &amp;config, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file26" style="display: none">package repository
+
+import (
+        "fmt"
+        "math"
+        "os"
+        "strconv"
+        "time"
+        "zajunaApi/internal/models"
+
+        "github.com/sirupsen/logrus"
+        "gorm.io/gorm"
+)
+
+type CourseRepository struct {
+        db *gorm.DB
+}
+
+func NewCourseRepository(db *gorm.DB) *CourseRepository <span class="cov0" title="0">{
+        return &amp;CourseRepository{db: db}
+}</span>
+
+type CourseDetails struct {
+        ID               int64            `json:"id"`
+        FullName         string           `json:"fullName"`
+        ShortName        string           `json:"shortName"`
+        IDNumber         string           `json:"idNumber"`
+        Format           string           `json:"format"`
+        Category         string           `json:"category"`
+        Groupings        int64            `json:"groupings"`
+        Groups           int64            `json:"groups"`
+        RoleAssignments  map[string]int64 `json:"roleAssignments" gorm:"-"`
+        EnrollmentMethod string           `json:"enrollmentMethod"`
+        Sections         []string         `json:"sections" gorm:"-"`
+}
+
+// Obtener todos los cursos
+func (r *CourseRepository) GetAllCourses() ([]models.Course, error) <span class="cov0" title="0">{
+        var courses []models.Course
+
+        if err := r.db.Table("mdl_course").
+                Order("fullname").
+                Find(&amp;courses).Error; err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">return courses, nil</span>
+}
+
+// Obtener cursos por categoría (útil para filtrar)
+func (r *CourseRepository) GetCoursesByCategory(categoryID uint) ([]models.Course, error) <span class="cov0" title="0">{
+        var courses []models.Course
+
+        if err := r.db.Table("mdl_course").
+                Where("category = ?", categoryID).
+                Order("fullname").
+                Find(&amp;courses).Error; err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">return courses, nil</span>
+}
+
+// Obtener un curso por ID
+func (r *CourseRepository) GetCourseByID(id uint) (*models.Course, error) <span class="cov0" title="0">{
+        var course models.Course
+
+        if err := r.db.Table("mdl_course").
+                Where("id = ?", id).
+                First(&amp;course).Error; err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">return &amp;course, nil</span>
+}
+
+// GetRoleAssignments obtiene el número de usuarios por rol en un curso.
+func (r *CourseRepository) GetCourseDetails(courseID int) (*CourseDetails, error) <span class="cov0" title="0">{
+        // Reutilizamos GetCourseByID para obtener la información base
+        course, err := r.GetCourseByID(uint(courseID))
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        // Creamos el struct base de detalles
+        <span class="cov0" title="0">details := CourseDetails{
+                ID:        int64(course.ID),
+                FullName:  course.FullName,
+                ShortName: course.ShortName,
+                IDNumber:  course.IDNumber,
+                Format:    course.Format,
+        }
+
+        // Obtener categoría
+        r.db.Table("mdl_course_categories").
+                Select("name").
+                Where("id = ?", course.Category).
+                Scan(&amp;details.Category)
+
+        // Contar agrupamientos
+        r.db.Table("mdl_groupings").Where("courseid = ?", courseID).Count(&amp;details.Groupings)
+
+        // Contar grupos
+        r.db.Table("mdl_groups").Where("courseid = ?", courseID).Count(&amp;details.Groups)
+
+        // Asignaciones de roles
+        roleAssignments := map[string]int64{}
+        rows, _ := r.db.Table("mdl_role_assignments ra").
+                Select("r.shortname, COUNT(ra.id) as total").
+                Joins("JOIN mdl_context ctx ON ra.contextid = ctx.id").
+                Joins("JOIN mdl_role r ON r.id = ra.roleid").
+                Where("ctx.contextlevel = 50 AND ctx.instanceid = ?", courseID).
+                Group("r.shortname").
+                Rows()
+
+        defer rows.Close()
+        for rows.Next() </span><span class="cov0" title="0">{
+                var role string
+                var total int64
+                rows.Scan(&amp;role, &amp;total)
+                roleAssignments[role] = total
+        }</span>
+        <span class="cov0" title="0">details.RoleAssignments = roleAssignments
+
+        // Métodos de matriculación
+        var enrolMethods []string
+        r.db.Table("mdl_enrol").
+                Select("DISTINCT enrol").
+                Where("courseid = ?", courseID).
+                Scan(&amp;enrolMethods)
+        if len(enrolMethods) == 0 </span><span class="cov0" title="0">{
+                enrolMethods = []string{"Matriculación manual"}
+        }</span>
+        <span class="cov0" title="0">details.EnrollmentMethod = enrolMethods[0]
+
+        // Secciones
+        var sectionNames []string
+        r.db.Table("mdl_course_sections").
+                Select("name").
+                Where("course = ? AND name IS NOT NULL AND name != ''", courseID).
+                Order("section ASC").
+                Scan(&amp;sectionNames)
+        details.Sections = sectionNames
+
+        return &amp;details, nil</span>
+}
+
+// CountUserCourses Obtiene la cantidad de cursos que tiene el usuario vinculados
+func (r *CourseRepository) CountUserCourses(userID int) (int, error) <span class="cov0" title="0">{
+        var count int64
+        var list []int
+        now := time.Now().Unix() // timestamp actual (segundos)
+        rounded := int64(math.Round(float64(now)/100) * 100)
+        active, err := strconv.Atoi(os.Getenv("ENROL_USER_ACTIVE"))
+
+        if err != nil </span><span class="cov0" title="0">{
+                fmt.Println("Error al convertir ENROL_USER_ACTIVE:", err)
+                return 0, err
+        }</span>
+
+        <span class="cov0" title="0">contextCourse, err := strconv.Atoi(os.Getenv("CONTEXT_COURSE"))
+
+        if err != nil </span><span class="cov0" title="0">{
+                fmt.Println("Error al convertir CONTEXT_COURSE:", err)
+                return 0, err
+        }</span>
+
+        <span class="cov0" title="0">enabled, err := strconv.Atoi(os.Getenv("ENROL_USER_ACTIVE"))
+
+        if err != nil </span><span class="cov0" title="0">{
+                fmt.Println("Error al convertir ENROL_INSTANCE_ENABLED:", err)
+                return 0, err
+        }</span>
+
+        <span class="cov0" title="0">siteid, err := strconv.Atoi(os.Getenv("SITEID"))
+
+        if err != nil </span><span class="cov0" title="0">{
+                fmt.Println("Error al convertir SITEID:", err)
+                return 0, err
+        }</span>
+
+        <span class="cov0" title="0">subquery := r.db.
+                Table("mdl_enrol e").
+                //Joins("JOIN mdl_user_enrolments ue on(ue.enrolid = e.id and ue.userid = 1)").
+                Joins("JOIN mdl_user_enrolments ue on(ue.enrolid = e.id and ue.userid = ?)", userID).
+                Where("ue.status = ? ", active).
+                Where("e.status =?", enabled).
+                Where("ue.timestart &lt; ?", rounded).
+                Where(r.db.Where("ue.timeend = ?", 0).Or("ue.timeend &gt; ?", rounded)).
+                Select("distinct(e.courseid)")
+
+        err = r.db.
+                Table("mdl_course c").
+                Joins("JOIN (?) en ON (en.courseid = c.id)", subquery).
+                Joins("LEFT JOIN mdl_context ctx ON (ctx.instanceid = c.id AND ctx.contextlevel = ?)", contextCourse).
+                Where("c.id &lt;&gt; ?", siteid).
+                Count(&amp;count).
+                Error
+
+        if err != nil </span><span class="cov0" title="0">{
+                return 0, err
+        }</span>
+
+        <span class="cov0" title="0">logrus.Info(list)
+
+        return int(count), nil</span>
+}
+
+func (r *CourseRepository) DeleteCourses(courseIDs []int) ([]models.Warning, error) <span class="cov0" title="0">{
+        var warnings []models.Warning
+
+        // Validar si los cursos existen
+        var existingIDs []int
+        if err := r.db.Table("mdl_course").
+                Where("id IN ?", courseIDs).
+                Pluck("id", &amp;existingIDs).Error; err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        // Generar warnings para los IDs inexistentes
+        <span class="cov0" title="0">for _, id := range courseIDs </span><span class="cov0" title="0">{
+                found := false
+                for _, existing := range existingIDs </span><span class="cov0" title="0">{
+                        if id == existing </span><span class="cov0" title="0">{
+                                found = true
+                                break</span>
+                        }
+                }
+                <span class="cov0" title="0">if !found </span><span class="cov0" title="0">{
+                        warnings = append(warnings, models.Warning{
+                                Item:        "course",
+                                ItemID:      id,
+                                WarningCode: "invalidcourseid",
+                                Message:     "Course ID not found in the database",
+                        })
+                }</span>
+        }
+
+        // Eliminar físicamente los cursos válidos
+        <span class="cov0" title="0">if len(existingIDs) &gt; 0 </span><span class="cov0" title="0">{
+                if err := r.db.Table("mdl_course").
+                        Where("id IN ?", existingIDs).
+                        Delete(nil).Error; err != nil </span><span class="cov0" title="0">{
+                        return warnings, err
+                }</span>
+        }
+
+        <span class="cov0" title="0">return warnings, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file27" style="display: none">package mocks
+
+import (
+        "zajunaApi/internal/models"
+
+        "github.com/stretchr/testify/mock"
+)
+
+// MockConfigRepository simula el comportamiento del repositorio de configuración.
+type MockConfigRepository struct {
+        mock.Mock
+}
+
+func (m *MockConfigRepository) FindByName(name string) (*models.Config, error) <span class="cov0" title="0">{
+        args := m.Called(name)
+        if config, ok := args.Get(0).(*models.Config); ok </span><span class="cov0" title="0">{
+                return config, args.Error(1)
+        }</span>
+        <span class="cov0" title="0">return nil, args.Error(1)</span>
+}
+</pre>
+		
+		<pre class="file" id="file28" style="display: none">package mocks
+
+import (
+        "zajunaApi/internal/models"
+
+        "github.com/stretchr/testify/mock"
+)
+
+// MockRoleCapabilityRepository simula el comportamiento del repositorio de roles y capacidades.
+type MockRoleCapabilityRepository struct {
+        mock.Mock
+}
+
+func (m *MockRoleCapabilityRepository) FindByUserID(userID int64, roles []string, capability string) (*[]models.RoleCapability, error) <span class="cov0" title="0">{
+        args := m.Called(userID, roles, capability)
+        if rc, ok := args.Get(0).(*[]models.RoleCapability); ok </span><span class="cov0" title="0">{
+                return rc, args.Error(1)
+        }</span>
+        <span class="cov0" title="0">return nil, args.Error(1)</span>
+}
+</pre>
+		
+		<pre class="file" id="file29" style="display: none">package mocks
+
+import (
+        "zajunaApi/internal/models"
+
+        "github.com/stretchr/testify/mock"
+)
+
+type MockSessionsRepository struct {
+        mock.Mock
+}
+
+func (m *MockSessionsRepository) FindBySID(sid string) (*models.Sessions, error) <span class="cov0" title="0">{
+        args := m.Called(sid)
+        if session, ok := args.Get(0).(*models.Sessions); ok </span><span class="cov0" title="0">{
+                return session, args.Error(1)
+        }</span>
+        <span class="cov0" title="0">return nil, args.Error(1)</span>
+}
+func (m *MockSessionsRepository) InsertSession(session *models.Sessions) error <span class="cov0" title="0">{
+        args := m.Called(session)
+        return args.Error(0)
+}</span>
+
+func (m *MockSessionsRepository) DeleteSession(sid string) error <span class="cov0" title="0">{
+        args := m.Called(sid)
+        return args.Error(0)
+}</span>
+</pre>
+		
+		<pre class="file" id="file30" style="display: none">package repository
+
+import (
+        "errors"
+        "zajunaApi/internal/models"
+
+        "gorm.io/gorm"
+)
+
+type RoleCapabilityRepository struct {
+        DB *gorm.DB
+}
+
+func NewRoleCapabilityRepository(db *gorm.DB) *RoleCapabilityRepository <span class="cov0" title="0">{
+        return &amp;RoleCapabilityRepository{DB: db}
+}</span>
+
+func (r *RoleCapabilityRepository) FindByUserID(userID int64, roles []string, capability string) (*[]models.RoleCapability, error) <span class="cov0" title="0">{
+
+        var roleCapability []models.RoleCapability
+
+        subquery := r.DB.Table("mdl_role_assignments").
+                Select("DISTINCT roleid").
+                Where("userid = ?", userID).Or("roleid IN(?)", roles)
+
+        result := r.DB.Debug().Table("mdl_role_capabilities").
+                Where("roleid IN (?)", subquery).
+                Where("capability = ?", capability).
+                Find(&amp;roleCapability)
+        if result.Error != nil </span><span class="cov0" title="0">{
+                if errors.Is(result.Error, gorm.ErrRecordNotFound) </span><span class="cov0" title="0">{
+                        return nil, nil // no es un error real, solo que no existe el usuario
+                }</span>
+                <span class="cov0" title="0">return nil, result.Error</span> // otro tipo de error (de conexión, SQL, etc.)
+        }
+
+        <span class="cov0" title="0">return &amp;roleCapability, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file31" style="display: none">package repository
+
+import (
+        "errors"
+        "zajunaApi/internal/models"
+
+        "gorm.io/gorm"
+)
+
+type SessionsRepository struct {
+        DB *gorm.DB
+}
+
+func NewSessionsRepository(db *gorm.DB) *SessionsRepository <span class="cov0" title="0">{
+        return &amp;SessionsRepository{DB: db}
+}</span>
+
+func (r *SessionsRepository) InsertSession(session *models.Sessions) error <span class="cov0" title="0">{
+
+        result := r.DB.Create(session)
+
+        return result.Error
+}</span>
+
+func (r *SessionsRepository) DeleteSession(sid string) error <span class="cov0" title="0">{
+        result := r.DB.Unscoped().Where("sid = ?", sid).Delete(&amp;models.Sessions{})
+        return result.Error
+}</span>
+
+func (r *SessionsRepository) FindBySID(sid string) (*models.Sessions, error) <span class="cov0" title="0">{
+
+        var session models.Sessions
+        result := r.DB.First(&amp;session, "sid = ?", sid)
+        if result.Error != nil </span><span class="cov0" title="0">{
+                if errors.Is(result.Error, gorm.ErrRecordNotFound) </span><span class="cov0" title="0">{
+                        return nil, nil // no es un error real, solo que no existe el usuario
+                }</span>
+                <span class="cov0" title="0">return nil, result.Error</span> // otro tipo de error (de conexión, SQL, etc.)
+        }
+
+        <span class="cov0" title="0">return &amp;session, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file32" style="display: none">package repository
+
+import (
+        "errors"
+        "zajunaApi/internal/models"
+
+        "gorm.io/gorm"
+)
+
+type UserRepository struct {
+        DB *gorm.DB
+}
+
+func NewUserRepository(db *gorm.DB) *UserRepository <span class="cov0" title="0">{
+        return &amp;UserRepository{DB: db}
+}</span>
+
+// FindByFilters busca usuarios con filtros dinámicos
+func (r *UserRepository) FindByFilters(filters map[string]string, page, limit int) ([]models.User, int64, error) <span class="cov0" title="0">{
+        var users []models.User
+        var total int64
+
+        query := r.DB.Model(&amp;models.User{})
+
+        // Aplicar filtros solo si vienen con datos
+        if firstname := filters["firstname"]; firstname != "" </span><span class="cov0" title="0">{
+                query = query.Where("firstname ILIKE ?", "%"+firstname+"%")
+        }</span>
+        <span class="cov0" title="0">if lastname := filters["lastname"]; lastname != "" </span><span class="cov0" title="0">{
+                query = query.Where("lastname ILIKE ?", "%"+lastname+"%")
+        }</span>
+        <span class="cov0" title="0">if username := filters["username"]; username != "" </span><span class="cov0" title="0">{
+                query = query.Where("username ILIKE ?", "%"+username+"%")
+        }</span>
+        <span class="cov0" title="0">if email := filters["email"]; email != "" </span><span class="cov0" title="0">{
+                query = query.Where("email ILIKE ?", "%"+email+"%")
+        }</span>
+
+        // Contar total antes de paginar
+        <span class="cov0" title="0">query.Count(&amp;total)
+
+        // Aplicar paginación
+        offset := (page - 1) * limit
+        if err := query.Offset(offset).Limit(limit).Find(&amp;users).Error; err != nil </span><span class="cov0" title="0">{
+                return nil, 0, err
+        }</span>
+
+        <span class="cov0" title="0">return users, total, nil</span>
+}
+
+// DeleteUsers suspende usuarios por sus IDs
+func (r *UserRepository) DeleteUsers(userIDs []int) error <span class="cov0" title="0">{
+        return r.DB.Table("mdl_user").
+                Where("id IN ?", userIDs).
+                Update("suspended", 1).Error
+}</span>
+
+func (r *UserRepository) UpdateUsers(users []models.User) (int64, error) <span class="cov0" title="0">{
+        var total int64
+        for _, u := range users </span><span class="cov0" title="0">{
+                if err := r.DB.Model(&amp;models.User{}).
+                        Where("id = ?", u.ID).
+                        Updates(map[string]interface{}{
+                                "firstname": u.FirstName,
+                                "lastname":  u.LastName,
+                                "email":     u.Email,
+                                "city":      u.City,
+                                "country":   u.Country,
+                                "lang":      u.Lang,
+                                "timezone":  u.Timezone,
+                                "phone1":    u.Phone1,
+                        }).Error; err != nil </span><span class="cov0" title="0">{
+                        return total, err
+                }</span>
+                <span class="cov0" title="0">total++</span>
+        }
+        <span class="cov0" title="0">return total, nil</span>
+}
+
+func (r *UserRepository) FindByUsername(username string) (*models.User, error) <span class="cov0" title="0">{
+
+        var user models.User
+        result := r.DB.First(&amp;user, "username = ?", username)
+
+        if result.Error != nil </span><span class="cov0" title="0">{
+                if errors.Is(result.Error, gorm.ErrRecordNotFound) </span><span class="cov0" title="0">{
+                        return nil, nil // no es un error real, solo que no existe el usuario
+                }</span>
+                <span class="cov0" title="0">return nil, result.Error</span> // otro tipo de error (de conexión, SQL, etc.)
+        }
+
+        <span class="cov0" title="0">return &amp;user, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file33" style="display: none">package routes
+
+import (
+        "github.com/gin-gonic/gin"
+        "gorm.io/gorm"
+
+        "zajunaApi/internal/handlers"
+        "zajunaApi/internal/middleware"
+        "zajunaApi/internal/repository"
+        "zajunaApi/internal/services"
+)
+
+func RegisterRoutes(router *gin.Engine, db *gorm.DB) <span class="cov0" title="0">{
+        api := router.Group("/api")
+
+        // --- Config ---
+        configRepo := repository.NewConfigRepository(db)
+
+        // --- RoleCapability ---
+        roleCapabilityRepo := repository.NewRoleCapabilityRepository(db)
+
+        // --- Categorías ---
+        categoryRepo := repository.NewCategoryRepository(db)
+        categoryService := services.NewCategoryService(categoryRepo)
+        categoryHandler := handlers.NewCategoryHandler(categoryService)
+
+        // --- Cursos ---
+        courseRepo := repository.NewCourseRepository(db)
+        courseService := services.NewCourseService(courseRepo)
+        courseHandler := handlers.NewCourseHandler(courseService)
+
+        // --- Sessions ---
+        sessionRepo := repository.NewSessionsRepository(db)
+
+        // --- Usuarios ---
+        userRepo := repository.NewUserRepository(db)
+        userService := services.NewUserService(userRepo, sessionRepo, courseRepo)
+        userHandler := handlers.NewUserHandler(userService)
+
+        authMiddleware := middleware.RequireAuth(sessionRepo)
+
+        // --- Rutas API ---
+        api.GET("/categories", authMiddleware, middleware.HasCapability(configRepo, sessionRepo, roleCapabilityRepo, "moodle/site:readallmessages"), categoryHandler.GetCategories)
+        api.GET("/courses", authMiddleware, courseHandler.GetCourses)
+        api.GET("/courses/:id/details", authMiddleware, courseHandler.GetCourseDetails)
+        api.DELETE("/courses", authMiddleware, courseHandler.DeleteCourses)
+        api.GET("/users", authMiddleware, userHandler.GetUsers)
+        api.DELETE("/users", authMiddleware, userHandler.DeleteUsers)
+        api.PUT("/users/update", authMiddleware, userHandler.UpdateUsers)
+        api.POST("/login", userHandler.Login)
+        api.POST("/logout", userHandler.Logout)
+}</span>
+</pre>
+		
+		<pre class="file" id="file34" style="display: none">package server
+
+import (
+        "fmt"
+        "log"
+
+        "github.com/gin-gonic/gin"
+        "gorm.io/driver/postgres"
+        "gorm.io/gorm"
+
+        "zajunaApi/internal/config"
+        "zajunaApi/internal/middleware"
+        "zajunaApi/internal/routes"
+)
+
+type Server struct {
+        router *gin.Engine
+        db     *gorm.DB
+        cfg    *config.Config
+}
+
+func New() *Server <span class="cov0" title="0">{
+        cfg := config.LoadConfig()
+
+        // Conectar BD
+        db, err := gorm.Open(postgres.Open(cfg.DSN), &amp;gorm.Config{})
+        if err != nil </span><span class="cov0" title="0">{
+                log.Fatalf("Error conectando a la BD: %v", err)
+        }</span>
+        <span class="cov0" title="0">log.Println("Conexión a la base de datos exitosa")
+
+        // Inicializar Gin
+        router := gin.Default()
+        router.Use(middleware.EnableCORS())
+
+        // Registrar rutas
+        routes.RegisterRoutes(router, db)
+
+        return &amp;Server{
+                router: router,
+                db:     db,
+                cfg:    cfg,
+        }</span>
+}
+
+func (s *Server) Run() error <span class="cov0" title="0">{
+        addr := fmt.Sprintf(":%s", s.cfg.AppPort)
+        log.Printf("Servidor corriendo en http://localhost%s", addr)
+        return s.router.Run(addr)
+}</span>
+</pre>
+		
+		<pre class="file" id="file35" style="display: none">package auth
+
+// Interfaz común para los plugins de autenticación
+type AuthPlugin interface {
+        PreventLocalPasswords() bool
+        Login(username, password string) (bool, error)
+}
+
+// Registro global de plugins disponibles
+var registry = map[string]AuthPlugin{}
+
+// Registrar un nuevo plugin
+func Register(name string, plugin AuthPlugin) <span class="cov0" title="0">{
+        registry[name] = plugin
+}</span>
+
+// Obtener un plugin por nombre
+func Get(name string) (AuthPlugin, bool) <span class="cov0" title="0">{
+        p, ok := registry[name]
+        return p, ok
+}</span>
+</pre>
+		
+		<pre class="file" id="file36" style="display: none">package auth
+
+import (
+        log "github.com/sirupsen/logrus"
+)
+
+type LdapAuth struct{}
+
+func (l LdapAuth) PreventLocalPasswords() bool <span class="cov0" title="0">{
+        return true
+}</span>
+
+func (l LdapAuth) Login(username, password string) (bool, error) <span class="cov0" title="0">{
+        log.Info("Verificando usuario CAS:", username)
+        // Aquí iría la lógica real de autenticación LDAP
+        return true, nil
+}</span>
+
+func init() <span class="cov0" title="0">{
+        Register("cas", LdapAuth{})
+}</span>
+</pre>
+		
+		<pre class="file" id="file37" style="display: none">package auth
+
+import (
+        log "github.com/sirupsen/logrus"
+)
+
+type ManualAuth struct{}
+
+func (m ManualAuth) PreventLocalPasswords() bool <span class="cov0" title="0">{ return false }</span>
+
+func (m ManualAuth) Login(username, password string) (bool, error) <span class="cov0" title="0">{
+        log.Info("Verificando usuario manual:", username)
+        // Aquí podrías validar usuario y contraseña contra la BD
+        return true, nil
+}</span>
+
+func init() <span class="cov0" title="0">{
+        Register("manual", ManualAuth{})
+}</span>
+</pre>
+		
+		<pre class="file" id="file38" style="display: none">package services
+
+import (
+        "zajunaApi/internal/models"
+        "zajunaApi/internal/repository"
+)
+
+// CategoryService maneja la lógica de categorías
+type CategoryService struct {
+        repo *repository.CategoryRepository
+}
+
+// NewCategoryService crea un nuevo servicio de categorías
+func NewCategoryService(repo *repository.CategoryRepository) *CategoryService <span class="cov0" title="0">{
+        return &amp;CategoryService{repo: repo}
+}</span>
+
+// GetCategories devuelve todas las categorías
+func (s *CategoryService) GetCategories() ([]models.Category, error) <span class="cov0" title="0">{
+        return s.repo.GetAllCategories()
+}</span>
+</pre>
+		
+		<pre class="file" id="file39" style="display: none">package services
+
+import (
+        "zajunaApi/internal/models"
+        "zajunaApi/internal/repository"
+)
+
+type CourseService struct {
+        repo *repository.CourseRepository
+}
+
+func NewCourseService(repo *repository.CourseRepository) *CourseService <span class="cov0" title="0">{
+        return &amp;CourseService{repo: repo}
+}</span>
+
+func (s *CourseService) GetAllCourses() ([]models.Course, error) <span class="cov0" title="0">{
+        return s.repo.GetAllCourses()
+}</span>
+
+func (s *CourseService) GetCoursesByCategory(categoryID uint) ([]models.Course, error) <span class="cov0" title="0">{
+        return s.repo.GetCoursesByCategory(categoryID)
+}</span>
+
+//func (s *CourseService) GetCourseRoles(courseID int) (map[string]int64, error) {
+//return s.repo.GetRoleAssignments(courseID)}
+
+func (s *CourseService) GetCourseDetails(courseID int) (*repository.CourseDetails, error) <span class="cov0" title="0">{
+        return s.repo.GetCourseDetails(courseID)
+}</span>
+
+func (s *CourseService) DeleteCourses(courseIDs []int) (*models.DeleteCoursesResponse, error) <span class="cov0" title="0">{
+        warnings, err := s.repo.DeleteCourses(courseIDs)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return &amp;models.DeleteCoursesResponse{Warnings: warnings}, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file40" style="display: none">package services
+
+import (
+        "errors"
+        "fmt"
+        "net"
+        "net/http"
+        "os"
+        "strings"
+        "time"
+        "zajunaApi/internal/models"
+        "zajunaApi/internal/repository"
+        "zajunaApi/internal/services/auth"
+
+        "github.com/golang-jwt/jwt/v5"
+
+        "github.com/amoghe/go-crypt"
+        log "github.com/sirupsen/logrus"
+)
+
+type UserService struct {
+        repo        *repository.UserRepository
+        sessionRepo *repository.SessionsRepository
+        courseRepo  *repository.CourseRepository
+}
+
+func NewUserService(repo *repository.UserRepository, sessionRepo *repository.SessionsRepository, courseRepo *repository.CourseRepository) *UserService <span class="cov0" title="0">{
+        return &amp;UserService{repo: repo, sessionRepo: sessionRepo, courseRepo: courseRepo}
+}</span>
+
+func (s *UserService) GetUsers(filters map[string]string, page, limit int) ([]models.User, int64, error) <span class="cov0" title="0">{
+        return s.repo.FindByFilters(filters, page, limit)
+}</span>
+
+func (s *UserService) Login(r *http.Request, username, password string) (string, error) <span class="cov0" title="0">{
+
+        username = strings.TrimSpace(strings.ToLower(username))
+
+        //VALIDACION SI EL USUARIO EXISTE EN BD
+        user, err := s.repo.FindByUsername(username)
+        if err != nil </span><span class="cov0" title="0">{
+                return "", err
+        }</span>
+        <span class="cov0" title="0">if user == nil </span><span class="cov0" title="0">{
+                return "", fmt.Errorf("usuario no encontrado")
+        }</span>
+
+        //VALIDACION SI EL USUARIO ESTA SUSPENDIDO
+        <span class="cov0" title="0">if user.Suspended == 1 </span><span class="cov0" title="0">{
+                return "", fmt.Errorf("%s", "Suspended Login: "+username)
+        }</span>
+
+        <span class="cov0" title="0">plugin, ok := auth.Get(user.Auth)
+        if !ok </span><span class="cov0" title="0">{
+                return "", errors.New("método de autenticación no encontrado")
+        }</span>
+
+        //VALIDACION SI EL USUARIO TIENE CURSOS VINCULADOS
+        <span class="cov0" title="0">countCourses, err := s.courseRepo.CountUserCourses(int(user.ID))
+        if err != nil </span><span class="cov0" title="0">{
+                return "", errors.New("Error al buscar los cursos del usuario")
+        }</span>
+        <span class="cov0" title="0">if countCourses == 0 </span><span class="cov0" title="0">{
+                return "", errors.New("El usuario no tiene cursos vinculados")
+        }</span>
+
+        //VALIDACION DE PASSWORD CON SU HASH
+        <span class="cov0" title="0">if PasswordVerify(password, user.Password) </span><span class="cov0" title="0">{
+                log.Info("Contraseña válida")
+        }</span> else<span class="cov0" title="0"> {
+                log.Error("Contraseña incorrecta")
+                return "", errors.New("credenciales inválidas")
+        }</span>
+        <span class="cov0" title="0">success, err := plugin.Login(username, password)
+        if err != nil || !success </span><span class="cov0" title="0">{
+                return "", errors.New("credenciales inválidas")
+        }</span>
+        <span class="cov0" title="0">log.Info("Autenticación exitosa con método:", user.Auth)
+
+        // GENERAR Y FIRMAR EL TOKEN
+        token := jwt.NewWithClaims(jwt.SigningMethodHS512, jwt.MapClaims{
+                //"user": username,
+                //"exp":  time.Now().Add(time.Hour * 3).Unix(),
+        })
+
+        tokenString, err := token.SignedString([]byte(os.Getenv("SECRET")))
+
+        if err != nil </span><span class="cov0" title="0">{
+                return "", errors.New("Error al firmar token: " + err.Error())
+        }</span>
+
+        //GUARDAR TOKEN EN DB
+        <span class="cov0" title="0">session := &amp;models.Sessions{
+                State:        0,
+                SID:          tokenString,
+                UserID:       user.ID,
+                SessData:     nil,
+                TimeCreated:  time.Now().Unix(),
+                TimeModified: time.Now().Unix(),
+                FirstIp:      getRemoteAddr(r),
+                LastIp:       getRemoteAddr(r),
+        }
+        log.Info("TIEMPO EN SERVICE", time.Now().Add(time.Hour*3).Unix())
+        err = s.sessionRepo.InsertSession(session)
+        if err != nil </span><span class="cov0" title="0">{
+                // Hubo un error al insertar
+                return "", err
+        }</span>
+
+        <span class="cov0" title="0">return tokenString, nil</span>
+}
+
+func (s *UserService) Logout(sid string) (string, error) <span class="cov0" title="0">{
+        err := s.sessionRepo.DeleteSession(sid)
+        if err != nil </span><span class="cov0" title="0">{
+                return "", err
+        }</span>
+        <span class="cov0" title="0">return "Sesion deleted", nil</span>
+}
+
+func PasswordVerify(password string, hash string) bool <span class="cov0" title="0">{
+        // crypt.Crypt() generará un hash con la misma configuración ($6$, rounds, salt)
+        generated, err := crypt.Crypt(password, hash)
+        if err != nil </span><span class="cov0" title="0">{
+                return false
+        }</span>
+        // Si el hash generado es exactamente igual, la contraseña es válida
+        <span class="cov0" title="0">return generated == hash</span>
+}
+
+// getRemoteAddr devuelve la IP del cliente remoto.
+// Si no se puede determinar, devuelve "0.0.0.0".
+func getRemoteAddr(r *http.Request) string <span class="cov0" title="0">{
+        // Revisa la cabecera X-Forwarded-For
+        if xff := r.Header.Get("X-Forwarded-For"); xff != "" </span><span class="cov0" title="0">{
+                parts := strings.Split(xff, ",")
+                ip := strings.TrimSpace(parts[0])
+                if net.ParseIP(ip) != nil </span><span class="cov0" title="0">{
+                        return normalizeLoopback(ip)
+                }</span>
+        }
+
+        // Usa la IP de la conexión TCP
+        <span class="cov0" title="0">ip, _, err := net.SplitHostPort(r.RemoteAddr)
+        if err == nil &amp;&amp; net.ParseIP(ip) != nil </span><span class="cov0" title="0">{
+                return normalizeLoopback(ip)
+        }</span>
+
+        <span class="cov0" title="0">return "0.0.0.0"</span>
+}
+
+func normalizeLoopback(ip string) string <span class="cov0" title="0">{
+        if ip == "::1" </span><span class="cov0" title="0">{
+                return "127.0.0.1"
+        }</span>
+        <span class="cov0" title="0">return ip</span>
+}
+
+func (s *UserService) DeleteUsers(userIDs []int) error <span class="cov0" title="0">{
+        return s.repo.DeleteUsers(userIDs)
+}</span>
+
+func (s *UserService) UpdateUsers(users []models.User) (int64, error) <span class="cov0" title="0">{
+        return s.repo.UpdateUsers(users)
+}</span>
+</pre>
+		
+		<pre class="file" id="file41" style="display: none">package validator
+
+import (
+        "fmt"
+        "reflect"
+        "strings"
+
+        "github.com/go-playground/validator/v10"
+)
+
+var validate *validator.Validate
+
+// Init inicializa el validador con validaciones personalizadas
+func Init() <span class="cov0" title="0">{
+        validate = validator.New()
+
+        // Usar el nombre del tag json como nombre del campo en los errores
+        validate.RegisterTagNameFunc(func(fld reflect.StructField) string </span><span class="cov0" title="0">{
+                name := strings.SplitN(fld.Tag.Get("json"), ",", 2)[0]
+                if name == "-" </span><span class="cov0" title="0">{
+                        return ""
+                }</span>
+                <span class="cov0" title="0">return name</span>
+        })
+
+        // Registrar validaciones personalizadas
+        <span class="cov0" title="0">validate.RegisterValidation("moodle_username", validateMoodleUsername)
+        validate.RegisterValidation("moodle_shortname", validateMoodleShortname)</span>
+}
+
+// Validate valida una estructura
+func Validate(s interface{}) error <span class="cov0" title="0">{
+        if validate == nil </span><span class="cov0" title="0">{
+                Init()
+        }</span>
+
+        <span class="cov0" title="0">err := validate.Struct(s)
+        if err != nil </span><span class="cov0" title="0">{
+                return FormatValidationErrors(err)
+        }</span>
+        <span class="cov0" title="0">return nil</span>
+}
+
+// ValidateVar valida una variable individual
+func ValidateVar(field interface{}, tag string) error <span class="cov0" title="0">{
+        if validate == nil </span><span class="cov0" title="0">{
+                Init()
+        }</span>
+
+        <span class="cov0" title="0">err := validate.Var(field, tag)
+        if err != nil </span><span class="cov0" title="0">{
+                return FormatValidationErrors(err)
+        }</span>
+        <span class="cov0" title="0">return nil</span>
+}
+
+// FormatValidationErrors formatea los errores de validación
+func FormatValidationErrors(err error) error <span class="cov0" title="0">{
+        if err == nil </span><span class="cov0" title="0">{
+                return nil
+        }</span>
+
+        <span class="cov0" title="0">validationErrors, ok := err.(validator.ValidationErrors)
+        if !ok </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov0" title="0">var messages []string
+        for _, e := range validationErrors </span><span class="cov0" title="0">{
+                messages = append(messages, formatFieldError(e))
+        }</span>
+
+        <span class="cov0" title="0">return &amp;ValidationError{
+                Errors: messages,
+        }</span>
+}
+
+// formatFieldError formatea un error de campo individual
+func formatFieldError(e validator.FieldError) string <span class="cov0" title="0">{
+        field := e.Field()
+
+        switch e.Tag() </span>{
+        case "required":<span class="cov0" title="0">
+                return fmt.Sprintf("El campo '%s' es requerido", field)</span>
+        case "email":<span class="cov0" title="0">
+                return fmt.Sprintf("El campo '%s' debe ser un email válido", field)</span>
+        case "min":<span class="cov0" title="0">
+                return fmt.Sprintf("El campo '%s' debe tener al menos %s caracteres", field, e.Param())</span>
+        case "max":<span class="cov0" title="0">
+                return fmt.Sprintf("El campo '%s' no debe exceder %s caracteres", field, e.Param())</span>
+        case "len":<span class="cov0" title="0">
+                return fmt.Sprintf("El campo '%s' debe tener exactamente %s caracteres", field, e.Param())</span>
+        case "oneof":<span class="cov0" title="0">
+                return fmt.Sprintf("El campo '%s' debe ser uno de: %s", field, e.Param())</span>
+        case "moodle_username":<span class="cov0" title="0">
+                return fmt.Sprintf("El campo '%s' contiene caracteres no válidos", field)</span>
+        case "moodle_shortname":<span class="cov0" title="0">
+                return fmt.Sprintf("El campo '%s' debe ser un nombre corto válido de Moodle", field)</span>
+        default:<span class="cov0" title="0">
+                return fmt.Sprintf("El campo '%s' es inválido", field)</span>
+        }
+}
+
+// validateMoodleUsername valida un username
+// Solo permite alfanuméricos, guiones, underscores, puntos y @
+func validateMoodleUsername(fl validator.FieldLevel) bool <span class="cov0" title="0">{
+        username := fl.Field().String()
+        if len(username) &lt; 2 || len(username) &gt; 100 </span><span class="cov0" title="0">{
+                return false
+        }</span>
+
+        // Moodle username: alfanuméricos, -, _, ., @
+        <span class="cov0" title="0">for _, char := range username </span><span class="cov0" title="0">{
+                if !isValidMoodleUsernameChar(char) </span><span class="cov0" title="0">{
+                        return false
+                }</span>
+        }
+        <span class="cov0" title="0">return true</span>
+}
+
+// validateMoodleShortname valida un shortname
+func validateMoodleShortname(fl validator.FieldLevel) bool <span class="cov0" title="0">{
+        shortname := fl.Field().String()
+        if len(shortname) &lt; 1 || len(shortname) &gt; 100 </span><span class="cov0" title="0">{
+                return false
+        }</span>
+        // No debe contener espacios
+        <span class="cov0" title="0">return !strings.Contains(shortname, " ")</span>
+}
+
+// isValidMoodleUsernameChar verifica si un carácter es válido para username
+func isValidMoodleUsernameChar(char rune) bool <span class="cov0" title="0">{
+        return (char &gt;= 'a' &amp;&amp; char &lt;= 'z') ||
+                (char &gt;= 'A' &amp;&amp; char &lt;= 'Z') ||
+                (char &gt;= '0' &amp;&amp; char &lt;= '9') ||
+                char == '-' || char == '_' || char == '.' || char == '@'
+}</span>
+
+// ValidationError representa un error de validación
+type ValidationError struct {
+        Errors []string
+}
+
+func (e *ValidationError) Error() string <span class="cov0" title="0">{
+        return strings.Join(e.Errors, "; ")
+}</span>
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>

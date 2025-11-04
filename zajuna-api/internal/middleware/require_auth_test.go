@@ -66,12 +66,12 @@ func TestRequireAuth_NoCookie(t *testing.T) {
 	mockRepo.AssertNotCalled(t, "FindBySID")
 }
 
-func TestRequireAuth_InvalidToken(t *testing.T) {
+func TestRequireAuth_DBError(t *testing.T) {
 	// Arrange
 	gin.SetMode(gin.TestMode)
 
 	mockRepo := new(mocks.MockSessionsRepository)
-	mockRepo.On("FindBySID", "invalid-token").Return(nil, errors.New("not found"))
+	mockRepo.On("FindBySID", "valid-token").Return(nil, errors.New("error in db"))
 
 	router := gin.New()
 	router.Use(RequireAuth(mockRepo))
@@ -80,13 +80,35 @@ func TestRequireAuth_InvalidToken(t *testing.T) {
 	})
 
 	req, _ := http.NewRequest(http.MethodGet, "/protected", nil)
-	req.AddCookie(&http.Cookie{Name: "Authorization", Value: "invalid-token"})
+	req.AddCookie(&http.Cookie{Name: "Authorization", Value: "valid-token"})
 	w := httptest.NewRecorder()
 
 	// Act
 	router.ServeHTTP(w, req)
 
 	// Assert
-	assert.Equal(t, http.StatusMethodNotAllowed, w.Code)
+	assert.Equal(t, http.StatusInternalServerError, w.Code)
+	mockRepo.AssertExpectations(t)
+}
+
+func TestRequireAuth_NoSession(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	r := gin.New()
+
+	mockRepo := new(mocks.MockSessionsRepository)
+	mockRepo.On("FindBySID", "invalid-token").Return(nil, nil)
+
+	r.Use(RequireAuth(mockRepo))
+	r.GET("/protected", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{"message": "ok"})
+	})
+
+	req, _ := http.NewRequest("GET", "/protected", nil)
+	req.AddCookie(&http.Cookie{Name: "Authorization", Value: "invalid-token"})
+
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusUnauthorized, w.Code)
 	mockRepo.AssertExpectations(t)
 }

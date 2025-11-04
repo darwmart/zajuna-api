@@ -24,7 +24,7 @@ func RequireAuth(sessionRepo repository.SessionsRepositoryInterface) gin.Handler
 		log.Info(token)
 		session, err := sessionRepo.FindBySID(token)
 		if err != nil {
-			c.AbortWithError(405, err)
+			c.AbortWithError(500, err)
 			return
 		}
 		if session == nil {
