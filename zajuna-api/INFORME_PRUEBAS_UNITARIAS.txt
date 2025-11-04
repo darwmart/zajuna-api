@@ -1,0 +1,483 @@
+================================================================================
+                    INFORME DE PRUEBAS UNITARIAS
+                         CourseService - Zajuna API
+================================================================================
+
+Fecha: 29 de Octubre de 2025
+Desarrollado por: Claude Code
+Servicio testeado: CourseService
+
+================================================================================
+1. RESUMEN EJECUTIVO
+================================================================================
+
+Se implementaron pruebas unitarias completas para el servicio CourseService,
+logrando una cobertura del 100% en todos sus métodos. Se crearon 14 casos de
+prueba que cubren tanto escenarios exitosos como casos de error.
+
+RESULTADO: TODOS LOS TESTS PASANDO (14/14)
+COBERTURA: 100% del CourseService
+
+
+
+================================================================================
+2. ARCHIVOS CREADOS
+================================================================================
+
+1. internal/repository/course_repository_interface.go
+   - Interfaz que define el contrato del CourseRepository
+   - Permite la inyección de dependencias y el mocking para tests
+   - Métodos definidos:
+     * GetAllCourses() ([]models.Course, error)
+     * GetCoursesByCategory(categoryID uint) ([]models.Course, error)
+     * GetCourseByID(id uint) (*models.Course, error)
+     * GetCourseDetails(courseID int) (*CourseDetails, error)
+     * DeleteCourses(courseIDs []int) ([]models.Warning, error)
+     * UpdateCourse(id int, updates map[string]interface{}) error
+
+2. internal/repository/mocks/course_repository_mock.go
+   - Mock del CourseRepository utilizando testify/mock
+   - Implementa todos los métodos de CourseRepositoryInterface
+   - Permite simular comportamientos del repository en los tests
+
+3. internal/services/course_service_test.go
+   - Archivo principal de tests (395 líneas)
+   - Contiene 14 casos de prueba
+   - Utiliza el patrón AAA (Arrange, Act, Assert)
+
+
+================================================================================
+3. MODIFICACIONES REALIZADAS
+================================================================================
+
+Archivo: internal/services/course_service.go
+Cambios:
+  - Se modificó el campo 'repo' para usar la interfaz en lugar del tipo concreto
+  - Antes: repo *repository.CourseRepository
+  - Ahora:  repo repository.CourseRepositoryInterface
+
+  - Se actualizó el constructor NewCourseService
+  - Esto permite inyectar mocks para testing sin afectar el código de producción
+
+
+================================================================================
+4. DEPENDENCIAS INSTALADAS
+================================================================================
+
+1. github.com/stretchr/testify (v1.9.0)
+   - Librería de assertions y mocking
+   - Proporciona assert.Equal, assert.NoError, etc.
+   - Incluye testify/mock para crear mocks
+
+2. github.com/DATA-DOG/go-sqlmock (v1.5.2)
+   - Mock de base de datos SQL
+   - Útil para futuros tests de repository
+
+
+================================================================================
+5. CASOS DE PRUEBA IMPLEMENTADOS
+================================================================================
+
+A. GetAllCourses (2 tests)
+   ✓ TestGetAllCourses_Success
+     - Verifica que se retorna la lista completa de cursos
+     - Valida que los datos sean correctos
+
+   ✓ TestGetAllCourses_Error
+     - Simula un error de base de datos
+     - Verifica que el error se propague correctamente
+
+B. GetCoursesByCategory (2 tests)
+   ✓ TestGetCoursesByCategory_Success
+     - Valida el filtrado por categoría
+     - Verifica que solo se retornen cursos de la categoría solicitada
+
+   ✓ TestGetCoursesByCategory_Error
+     - Maneja errores durante la búsqueda por categoría
+
+C. GetCourseDetails (2 tests)
+   ✓ TestGetCourseDetails_Success
+     - Verifica que se retornen todos los detalles del curso
+     - Valida campos: ID, FullName, ShortName, Groups, RoleAssignments, etc.
+
+   ✓ TestGetCourseDetails_Error
+     - Maneja el caso de curso no encontrado
+
+D. DeleteCourses (3 tests)
+   ✓ TestDeleteCourses_Success_NoWarnings
+     - Eliminación exitosa sin advertencias
+     - Todos los IDs son válidos
+
+   ✓ TestDeleteCourses_Success_WithWarnings
+     - Algunos IDs no existen en la BD
+     - Genera warnings apropiados (warningcode: "invalidcourseid")
+
+   ✓ TestDeleteCourses_Error
+     - Fallo completo en la operación de eliminación
+     - Verifica manejo de errores críticos
+
+E. UpdateCourses (5 tests)
+   ✓ TestUpdateCourses_Success_NoWarnings
+     - Actualización exitosa de cursos
+     - Campos: FullName, ShortName, CategoryID
+
+   ✓ TestUpdateCourses_NoFieldsToUpdate
+     - Request sin campos para actualizar
+     - Genera warning: "nofieldstouptate"
+
+   ✓ TestUpdateCourses_UpdateFailed
+     - El curso no existe (ID inválido)
+     - Genera warning: "updatefailed"
+
+   ✓ TestUpdateCourses_MultipleCourses_MixedResults
+     - Batch de múltiples cursos
+     - Mezcla de éxitos y fallos
+     - Verifica que se generen los warnings apropiados
+
+   ✓ TestUpdateCourses_AllFieldsUpdate
+     - Prueba actualización de todos los campos disponibles
+     - Campos: FullName, ShortName, CategoryID, IDNumber, Summary,
+              SummaryFormat, Format, StartDate, EndDate, Visible
+
+
+================================================================================
+6. COBERTURA DE CÓDIGO
+================================================================================
+
+RESUMEN GENERAL:
+- Cobertura total del paquete: 86.4%
+- Cobertura de CourseService: 100%
+
+DETALLE POR FUNCIÓN (CourseService):
+┌──────────────────────┬──────────┐
+│ Función              │ Cobertura│
+├──────────────────────┼──────────┤
+│ NewCourseService     │  100.0%  │
+│ GetAllCourses        │  100.0%  │
+│ GetCoursesByCategory │  100.0%  │
+│ GetCourseDetails     │  100.0%  │
+│ DeleteCourses        │  100.0%  │
+│ UpdateCourses        │  100.0%  │
+└──────────────────────┴──────────┘
+
+NOTA: La cobertura del 86.4% del paquete completo se debe a que otros
+servicios (CategoryService, UserService) no tienen tests implementados.
+
+
+================================================================================
+7. PASOS PARA EJECUTAR LAS PRUEBAS
+================================================================================
+
+REQUISITOS PREVIOS:
+- Go 1.25.2 o superior instalado
+- Proyecto clonado en: /home/darwin/Escritorio/zajuna-api./zajuna-api
+
+--------------------------------------------------------------------------------
+7.1 EJECUTAR TODOS LOS TESTS
+--------------------------------------------------------------------------------
+
+Comando básico:
+$ go test ./internal/services/
+
+Salida esperada:
+ok      zajunaApi/internal/services     0.012s
+
+--------------------------------------------------------------------------------
+7.2 EJECUTAR CON MODO VERBOSE (ver detalles de cada test)
+--------------------------------------------------------------------------------
+
+Comando:
+$ go test -v ./internal/services/
+
+Salida esperada:
+=== RUN   TestGetAllCourses_Success
+--- PASS: TestGetAllCourses_Success (0.00s)
+=== RUN   TestGetAllCourses_Error
+--- PASS: TestGetAllCourses_Error (0.00s)
+=== RUN   TestGetCoursesByCategory_Success
+--- PASS: TestGetCoursesByCategory_Success (0.00s)
+... (14 tests en total)
+PASS
+ok      zajunaApi/internal/services     0.012s
+
+--------------------------------------------------------------------------------
+7.3 EJECUTAR CON COBERTURA
+--------------------------------------------------------------------------------
+
+Comando simple:
+$ go test -cover ./internal/services/
+
+Salida esperada:
+ok      zajunaApi/internal/services     0.008s  coverage: 86.4% of statements
+
+--------------------------------------------------------------------------------
+7.4 GENERAR REPORTE DETALLADO DE COBERTURA
+--------------------------------------------------------------------------------
+
+Paso 1 - Generar archivo de cobertura:
+$ go test -coverprofile=coverage.out ./internal/services/
+
+Paso 2 - Ver cobertura por función:
+$ go tool cover -func=coverage.out
+
+Salida:
+zajunaApi/internal/services/course_service.go:14:  NewCourseService       100.0%
+zajunaApi/internal/services/course_service.go:18:  GetAllCourses          100.0%
+zajunaApi/internal/services/course_service.go:22:  GetCoursesByCategory   100.0%
+zajunaApi/internal/services/course_service.go:29:  GetCourseDetails       100.0%
+zajunaApi/internal/services/course_service.go:33:  DeleteCourses          100.0%
+zajunaApi/internal/services/course_service.go:42:  UpdateCourses          100.0%
+total:                                              (statements)           86.4%
+
+--------------------------------------------------------------------------------
+7.5 GENERAR REPORTE HTML DE COBERTURA
+--------------------------------------------------------------------------------
+
+Paso 1 - Generar archivo de cobertura:
+$ go test -coverprofile=coverage.out ./internal/services/
+
+Paso 2 - Generar HTML:
+$ go tool cover -html=coverage.out -o coverage.html
+
+Paso 3 - Abrir en navegador:
+$ xdg-open coverage.html       # En Linux
+$ open coverage.html           # En macOS
+$ start coverage.html          # En Windows
+
+El archivo HTML muestra visualmente qué líneas están cubiertas (verde) y
+cuáles no (rojo).
+
+--------------------------------------------------------------------------------
+7.6 EJECUTAR UN TEST ESPECÍFICO
+--------------------------------------------------------------------------------
+
+Comando (usando -run con regex):
+$ go test -v -run TestGetAllCourses_Success ./internal/services/
+
+Esto ejecutará solo el test que coincida con el patrón.
+
+--------------------------------------------------------------------------------
+7.7 EJECUTAR TESTS CON TIMEOUT
+--------------------------------------------------------------------------------
+
+Comando (timeout de 30 segundos):
+$ go test -timeout 30s ./internal/services/
+
+Útil para detectar tests que se cuelgan.
+
+--------------------------------------------------------------------------------
+7.8 EJECUTAR TESTS EN MODO CORTO (skip tests largos)
+--------------------------------------------------------------------------------
+
+Comando:
+$ go test -short ./internal/services/
+
+NOTA: Actualmente no hay tests largos marcados, pero es buena práctica
+para proyectos grandes.
+
+--------------------------------------------------------------------------------
+7.9 EJECUTAR TODOS LOS TESTS DEL PROYECTO
+--------------------------------------------------------------------------------
+
+Comando (recursivo):
+$ go test ./...
+
+Esto ejecuta tests en todos los paquetes del proyecto.
+
+--------------------------------------------------------------------------------
+7.10 LIMPIAR CACHÉ Y RE-EJECUTAR
+--------------------------------------------------------------------------------
+
+Si los tests no se ejecutan correctamente:
+$ go clean -testcache
+$ go test ./internal/services/
+
+
+================================================================================
+8. INTERPRETACIÓN DE RESULTADOS
+================================================================================
+
+RESULTADO EXITOSO:
+PASS
+ok      zajunaApi/internal/services     0.012s
+
+RESULTADO CON FALLOS:
+FAIL
+FAIL    zajunaApi/internal/services     0.010s
+
+Si hay fallos, verás detalles como:
+--- FAIL: TestGetAllCourses_Success (0.00s)
+    course_service_test.go:30:
+        Error Trace:    course_service_test.go:30
+        Error:          Expected nil, but got: database error
+        Test:           TestGetAllCourses_Success
+
+
+================================================================================
+9. BUENAS PRÁCTICAS IMPLEMENTADAS
+================================================================================
+
+1. PATRÓN AAA (Arrange-Act-Assert)
+   - Arrange: Configurar el mock y datos de prueba
+   - Act: Ejecutar la función a probar
+   - Assert: Verificar los resultados
+
+2. NOMENCLATURA CLARA
+   - Formato: Test<FunctionName>_<Scenario>
+   - Ejemplos: TestGetAllCourses_Success, TestDeleteCourses_Error
+
+3. MOCKING DE DEPENDENCIAS
+   - Se usa testify/mock para simular el repository
+   - No se requiere base de datos real para los tests
+
+4. COBERTURA DE CASOS EDGE
+   - Casos exitosos (happy path)
+   - Casos de error (database errors, not found)
+   - Casos de negocio (warnings, validaciones)
+
+5. ASSERTIONS ESPECÍFICAS
+   - assert.NoError() para verificar ausencia de errores
+   - assert.Equal() para comparar valores exactos
+   - assert.Contains() para verificar contenido de strings
+   - mockRepo.AssertExpectations() para validar llamadas al mock
+
+6. INDEPENDENCIA DE TESTS
+   - Cada test crea su propio mock
+   - No hay estado compartido entre tests
+   - Los tests pueden ejecutarse en cualquier orden
+
+
+================================================================================
+10. ESTRUCTURA DE UN TEST TÍPICO
+================================================================================
+
+func TestGetAllCourses_Success(t *testing.T) {
+    // ARRANGE - Preparar el escenario
+    mockRepo := new(mocks.MockCourseRepository)
+    service := NewCourseService(mockRepo)
+
+    expectedCourses := []models.Course{
+        {ID: 1, FullName: "Course 1", ShortName: "C1"},
+        {ID: 2, FullName: "Course 2", ShortName: "C2"},
+    }
+
+    mockRepo.On("GetAllCourses").Return(expectedCourses, nil)
+
+    // ACT - Ejecutar la función
+    result, err := service.GetAllCourses()
+
+    // ASSERT - Verificar resultados
+    assert.NoError(t, err)
+    assert.NotNil(t, result)
+    assert.Equal(t, 2, len(result))
+    assert.Equal(t, "Course 1", result[0].FullName)
+    mockRepo.AssertExpectations(t)
+}
+
+
+================================================================================
+11. PRÓXIMOS PASOS RECOMENDADOS
+================================================================================
+
+1. Implementar tests para CategoryService
+   - Seguir el mismo patrón usado en CourseService
+   - Crear CategoryRepositoryInterface y mock
+
+2. Implementar tests para UserService
+   - Crear UserRepositoryInterface y mock
+   - Cubrir todos los métodos
+
+3. Tests de integración para Handlers
+   - Usar httptest para simular requests HTTP
+   - Probar validaciones de entrada
+   - Verificar códigos de estado HTTP
+
+4. Tests de integración para Repositories
+   - Usar go-sqlmock para simular queries SQL
+   - Verificar queries generadas por GORM
+
+5. Configurar CI/CD
+   - Agregar tests al pipeline de integración continua
+   - Generar reportes de cobertura automáticamente
+   - Bloquear merges si los tests fallan
+
+
+================================================================================
+12. COMANDOS RÁPIDOS DE REFERENCIA
+================================================================================
+
+# Tests básicos
+go test ./internal/services/
+
+# Tests con detalles
+go test -v ./internal/services/
+
+# Tests con cobertura
+go test -cover ./internal/services/
+
+# Reporte de cobertura
+go test -coverprofile=coverage.out ./internal/services/
+go tool cover -func=coverage.out
+
+# Reporte HTML
+go tool cover -html=coverage.out -o coverage.html
+
+# Test específico
+go test -v -run TestGetAllCourses ./internal/services/
+
+# Limpiar caché
+go clean -testcache
+
+# Todos los tests del proyecto
+go test ./...
+
+# Con timeout
+go test -timeout 30s ./internal/services/
+
+
+================================================================================
+13. TROUBLESHOOTING
+================================================================================
+
+PROBLEMA: "no Go files in..."
+SOLUCIÓN: Verifica que estás en el directorio correcto del proyecto
+
+PROBLEMA: "undefined: repository.CourseRepositoryInterface"
+SOLUCIÓN: Ejecuta 'go mod tidy' para actualizar dependencias
+
+PROBLEMA: Tests no se re-ejecutan después de cambios
+SOLUCIÓN: Ejecuta 'go clean -testcache' para limpiar caché
+
+PROBLEMA: "cannot use mockRepo as *repository.CourseRepository"
+SOLUCIÓN: Asegúrate de usar la interfaz CourseRepositoryInterface
+
+PROBLEMA: Mock no registra las llamadas esperadas
+SOLUCIÓN: Verifica que uses mockRepo.On() antes de ejecutar el método
+
+
+================================================================================
+14. CONTACTO Y SOPORTE
+================================================================================
+
+Para reportar problemas con las pruebas:
+1. Verificar que todas las dependencias estén instaladas (go mod tidy)
+2. Revisar la salida de error detalladamente
+3. Ejecutar con -v para ver más detalles
+4. Consultar este informe para pasos de troubleshooting
+
+Archivos de referencia:
+- Tests: internal/services/course_service_test.go
+- Mock: internal/repository/mocks/course_repository_mock.go
+- Interfaz: internal/repository/course_repository_interface.go
+
+
+================================================================================
+FIN DEL INFORME
+================================================================================
+
+Generado automáticamente por Claude Code
+Fecha: 29 de Octubre de 2025
+Proyecto: Zajuna API
+Servicio: CourseService
+
+¡Todas las pruebas están pasando! 

@@ -85,3 +85,8 @@ func DeleteCoursesWarningsToResponse(warnings []models.Warning) []response.Warni
 	}
 	return result
 }
+
+// UpdateCoursesWarningsToResponse convierte warnings del modelo al DTO (reutiliza la misma función)
+func UpdateCoursesWarningsToResponse(warnings []models.Warning) []response.Warning {
+	return DeleteCoursesWarningsToResponse(warnings)
+}

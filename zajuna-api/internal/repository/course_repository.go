@@ -247,3 +247,25 @@ func (r *CourseRepository) DeleteCourses(courseIDs []int) ([]models.Warning, err
 
 	return warnings, nil
 }
+
+// UpdateCourse actualiza un curso en la base de datos
+func (r *CourseRepository) UpdateCourse(id int, updates map[string]interface{}) error {
+	// Siempre actualizar timemodified
+	updates["timemodified"] = gorm.Expr("EXTRACT(EPOCH FROM NOW())::INTEGER")
+
+	// Ejecutar la actualización
+	result := r.db.Table("mdl_course").
+		Where("id = ?", id).
+		Updates(updates)
+
+	if result.Error != nil {
+		return result.Error
+	}
+
+	// Verificar que se actualizó al menos una fila
+	if result.RowsAffected == 0 {
+		return gorm.ErrRecordNotFound
+	}
+
+	return nil
+}

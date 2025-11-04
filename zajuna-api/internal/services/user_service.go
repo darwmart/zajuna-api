@@ -19,12 +19,12 @@ import (
 )
 
 type UserService struct {
-	repo        *repository.UserRepository
+	repo        repository.UserRepositoryInterface
 	sessionRepo *repository.SessionsRepository
-	courseRepo  *repository.CourseRepository
+	courseRepo  repository.CourseRepositoryInterface
 }
 
-func NewUserService(repo *repository.UserRepository, sessionRepo *repository.SessionsRepository, courseRepo *repository.CourseRepository) *UserService {
+func NewUserService(repo repository.UserRepositoryInterface, sessionRepo *repository.SessionsRepository, courseRepo *repository.CourseRepositoryInterface) *UserService {
 	return &UserService{repo: repo, sessionRepo: sessionRepo, courseRepo: courseRepo}
 }
 

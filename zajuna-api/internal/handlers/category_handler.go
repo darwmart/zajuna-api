@@ -11,11 +11,11 @@ import (
 
 // CategoryHandler maneja las solicitudes relacionadas con categorías
 type CategoryHandler struct {
-	service *services.CategoryService
+	service services.CategoryServiceInterface
 }
 
 // NewCategoryHandler constructor para inyectar el servicio
-func NewCategoryHandler(service *services.CategoryService) *CategoryHandler {
+func NewCategoryHandler(service services.CategoryServiceInterface) *CategoryHandler {
 	return &CategoryHandler{service: service}
 }
 

@@ -96,3 +96,22 @@ type UpdateCourseRequest struct {
 	EndDate       *int64 `json:"enddate" binding:"omitempty,min=0"`
 	Visible       *int   `json:"visible" binding:"omitempty,oneof=0 1"`
 }
+
+// UpdateCoursesRequest representa la solicitud de actualización múltiple de cursos (Moodle format)
+type UpdateCoursesRequest struct {
+	Courses []UpdateCourseRequest `json:"courses" binding:"required,min=1,dive"`
+}
+
+// Validate valida reglas de negocio adicionales
+func (r *UpdateCoursesRequest) Validate() error {
+	// Validar que no se intente actualizar el curso site (ID=1)
+	for _, course := range r.Courses {
+		if course.ID == 1 {
+			return &ValidationError{
+				Field:   "courses",
+				Message: "No se puede actualizar el curso site (ID=1)",
+			}
+		}
+	}
+	return nil
+}

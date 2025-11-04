@@ -17,3 +17,8 @@ type Warning struct {
 type DeleteCoursesResponse struct {
 	Warnings []Warning `json:"warnings,omitempty"`
 }
+
+// Respuesta de actualización de cursos
+type UpdateCoursesResponse struct {
+	Warnings []Warning `json:"warnings,omitempty"`
+}

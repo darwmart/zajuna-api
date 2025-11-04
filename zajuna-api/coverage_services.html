@@ -1,0 +1,262 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>services: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">zajunaApi/internal/services/category_service.go (100.0%)</option>
+				
+				<option value="file1">zajunaApi/internal/services/course_service.go (100.0%)</option>
+				
+				<option value="file2">zajunaApi/internal/services/user_service.go (100.0%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">not covered</span>
+				<span class="cov8">covered</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">package services
+
+import (
+        "zajunaApi/internal/models"
+        "zajunaApi/internal/repository"
+)
+
+// CategoryService maneja la lógica de categorías
+type CategoryService struct {
+        repo repository.CategoryRepositoryInterface
+}
+
+// NewCategoryService crea un nuevo servicio de categorías
+func NewCategoryService(repo repository.CategoryRepositoryInterface) *CategoryService <span class="cov8" title="1">{
+        return &amp;CategoryService{repo: repo}
+}</span>
+
+// GetCategories devuelve todas las categorías
+func (s *CategoryService) GetCategories() ([]models.Category, error) <span class="cov8" title="1">{
+        return s.repo.GetAllCategories()
+}</span>
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">package services
+
+import (
+        "fmt"
+        "zajunaApi/internal/dto/request"
+        "zajunaApi/internal/models"
+        "zajunaApi/internal/repository"
+)
+
+type CourseService struct {
+        repo repository.CourseRepositoryInterface
+}
+
+func NewCourseService(repo repository.CourseRepositoryInterface) *CourseService <span class="cov8" title="1">{
+        return &amp;CourseService{repo: repo}
+}</span>
+
+func (s *CourseService) GetAllCourses() ([]models.Course, error) <span class="cov8" title="1">{
+        return s.repo.GetAllCourses()
+}</span>
+
+func (s *CourseService) GetCoursesByCategory(categoryID uint) ([]models.Course, error) <span class="cov8" title="1">{
+        return s.repo.GetCoursesByCategory(categoryID)
+}</span>
+
+//func (s *CourseService) GetCourseRoles(courseID int) (map[string]int64, error) {
+//return s.repo.GetRoleAssignments(courseID)}
+
+func (s *CourseService) GetCourseDetails(courseID int) (*repository.CourseDetails, error) <span class="cov8" title="1">{
+        return s.repo.GetCourseDetails(courseID)
+}</span>
+
+func (s *CourseService) DeleteCourses(courseIDs []int) (*models.DeleteCoursesResponse, error) <span class="cov8" title="1">{
+        warnings, err := s.repo.DeleteCourses(courseIDs)
+        if err != nil </span><span class="cov8" title="1">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">return &amp;models.DeleteCoursesResponse{Warnings: warnings}, nil</span>
+}
+
+// UpdateCourses actualiza múltiples cursos
+func (s *CourseService) UpdateCourses(courses []request.UpdateCourseRequest) (*models.UpdateCoursesResponse, error) <span class="cov8" title="1">{
+        var warnings []models.Warning
+
+        for _, course := range courses </span><span class="cov8" title="1">{
+                // Construir map de updates solo con campos no vacíos
+                updates := make(map[string]interface{})
+
+                if course.FullName != "" </span><span class="cov8" title="1">{
+                        updates["fullname"] = course.FullName
+                }</span>
+                <span class="cov8" title="1">if course.ShortName != "" </span><span class="cov8" title="1">{
+                        updates["shortname"] = course.ShortName
+                }</span>
+                <span class="cov8" title="1">if course.CategoryID != nil </span><span class="cov8" title="1">{
+                        updates["category"] = *course.CategoryID
+                }</span>
+                <span class="cov8" title="1">if course.IDNumber != "" </span><span class="cov8" title="1">{
+                        updates["idnumber"] = course.IDNumber
+                }</span>
+                <span class="cov8" title="1">if course.Summary != "" </span><span class="cov8" title="1">{
+                        updates["summary"] = course.Summary
+                }</span>
+                <span class="cov8" title="1">if course.SummaryFormat != nil </span><span class="cov8" title="1">{
+                        updates["summaryformat"] = *course.SummaryFormat
+                }</span>
+                <span class="cov8" title="1">if course.Format != "" </span><span class="cov8" title="1">{
+                        updates["format"] = course.Format
+                }</span>
+                <span class="cov8" title="1">if course.StartDate != nil </span><span class="cov8" title="1">{
+                        updates["startdate"] = *course.StartDate
+                }</span>
+                <span class="cov8" title="1">if course.EndDate != nil </span><span class="cov8" title="1">{
+                        updates["enddate"] = *course.EndDate
+                }</span>
+                <span class="cov8" title="1">if course.Visible != nil </span><span class="cov8" title="1">{
+                        updates["visible"] = *course.Visible
+                }</span>
+
+                // Si no hay campos para actualizar, agregar warning
+                <span class="cov8" title="1">if len(updates) == 0 </span><span class="cov8" title="1">{
+                        warnings = append(warnings, models.Warning{
+                                Item:        "course",
+                                ItemID:      course.ID,
+                                WarningCode: "nofieldstouptate",
+                                Message:     fmt.Sprintf("No fields provided to update course %d", course.ID),
+                        })
+                        continue</span>
+                }
+
+                // Intentar actualizar el curso
+                <span class="cov8" title="1">err := s.repo.UpdateCourse(course.ID, updates)
+                if err != nil </span><span class="cov8" title="1">{
+                        warnings = append(warnings, models.Warning{
+                                Item:        "course",
+                                ItemID:      course.ID,
+                                WarningCode: "updatefailed",
+                                Message:     fmt.Sprintf("Failed to update course %d: %s", course.ID, err.Error()),
+                        })
+                }</span>
+        }
+
+        <span class="cov8" title="1">return &amp;models.UpdateCoursesResponse{Warnings: warnings}, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">package services
+
+import (
+        "zajunaApi/internal/models"
+        "zajunaApi/internal/repository"
+)
+
+type UserService struct {
+        repo repository.UserRepositoryInterface
+}
+
+func NewUserService(repo repository.UserRepositoryInterface) *UserService <span class="cov8" title="1">{
+        return &amp;UserService{repo: repo}
+}</span>
+
+func (s *UserService) GetUsers(filters map[string]string, page, limit int) ([]models.User, int64, error) <span class="cov8" title="1">{
+        return s.repo.FindByFilters(filters, page, limit)
+}</span>
+
+func (s *UserService) DeleteUsers(userIDs []int) error <span class="cov8" title="1">{
+        return s.repo.DeleteUsers(userIDs)
+}</span>
+
+func (s *UserService) UpdateUsers(users []models.User) (int64, error) <span class="cov8" title="1">{
+        return s.repo.UpdateUsers(users)
+}</span>
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>

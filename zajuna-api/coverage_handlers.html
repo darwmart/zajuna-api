@@ -1,0 +1,599 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>handlers: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">zajunaApi/internal/handlers/category_handler.go (100.0%)</option>
+				
+				<option value="file1">zajunaApi/internal/handlers/course_handler.go (100.0%)</option>
+				
+				<option value="file2">zajunaApi/internal/handlers/user_handler.go (100.0%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">no coverage</span>
+				<span class="cov1">low coverage</span>
+				<span class="cov2">*</span>
+				<span class="cov3">*</span>
+				<span class="cov4">*</span>
+				<span class="cov5">*</span>
+				<span class="cov6">*</span>
+				<span class="cov7">*</span>
+				<span class="cov8">*</span>
+				<span class="cov9">*</span>
+				<span class="cov10">high coverage</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">package handlers
+
+import (
+        "net/http"
+        "zajunaApi/internal/dto/mapper"
+        "zajunaApi/internal/dto/response"
+        "zajunaApi/internal/services"
+
+        "github.com/gin-gonic/gin"
+)
+
+// CategoryHandler maneja las solicitudes relacionadas con categorías
+type CategoryHandler struct {
+        service services.CategoryServiceInterface
+}
+
+// NewCategoryHandler constructor para inyectar el servicio
+func NewCategoryHandler(service services.CategoryServiceInterface) *CategoryHandler <span class="cov10" title="6">{
+        return &amp;CategoryHandler{service: service}
+}</span>
+
+// GetCategories obtiene la lista de categorías
+// @Summary      Listar categorías
+// @Description  Obtiene todas las categorías de cursos disponibles
+// @Tags         categories
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  response.CategoryListResponse
+// @Failure      500  {object}  response.ErrorResponse
+// @Router       /categories [get]
+func (h *CategoryHandler) GetCategories(c *gin.Context) <span class="cov9" title="5">{
+        // 1. Llamar al servicio
+        categories, err := h.service.GetCategories()
+        if err != nil </span><span class="cov1" title="1">{
+                c.JSON(http.StatusInternalServerError, response.NewErrorResponse(
+                        "FETCH_ERROR",
+                        "Error al obtener las categorías",
+                        err.Error(),
+                ))
+                return
+        }</span>
+
+        // 2. Convertir modelos a DTOs
+        <span class="cov7" title="4">categoriesResponse := mapper.CategoriesToResponse(categories)
+
+        // 3. Crear respuesta
+        listResponse := response.CategoryListResponse{
+                Categories: categoriesResponse,
+        }
+
+        // 4. Responder
+        c.JSON(http.StatusOK, listResponse)</span>
+}
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">package handlers
+
+import (
+        "net/http"
+        "zajunaApi/internal/dto/mapper"
+        "zajunaApi/internal/dto/request"
+        "zajunaApi/internal/dto/response"
+        "zajunaApi/internal/models"
+        "zajunaApi/internal/services"
+
+        "github.com/gin-gonic/gin"
+)
+
+type CourseHandler struct {
+        service services.CourseServiceInterface
+}
+
+func NewCourseHandler(service services.CourseServiceInterface) *CourseHandler <span class="cov10" title="19">{
+        return &amp;CourseHandler{service: service}
+}</span>
+
+// GetCourses obtiene la lista de cursos con filtros opcionales
+// @Summary      Listar cursos
+// @Description  Obtiene cursos con filtros opcionales por categoría
+// @Tags         courses
+// @Accept       json
+// @Produce      json
+// @Param        categoryid  query     int  false  "Filtrar por ID de categoría"
+// @Success      200         {object}  response.CourseListResponse
+// @Failure      400         {object}  response.ErrorResponse
+// @Failure      500         {object}  response.ErrorResponse
+// @Router       /courses [get]
+func (h *CourseHandler) GetCourses(c *gin.Context) <span class="cov5" title="5">{
+        // 1. Parsear y validar request
+        var req request.GetCoursesRequest
+
+        if err := c.ShouldBindQuery(&amp;req); err != nil </span><span class="cov1" title="1">{
+                c.JSON(http.StatusBadRequest, response.NewErrorResponse(
+                        "INVALID_PARAMS",
+                        "Parámetros de consulta inválidos",
+                        err.Error(),
+                ))
+                return
+        }</span>
+
+        // 2. Establecer valores por defecto
+        <span class="cov5" title="4">req.SetDefaults()
+
+        var courses []models.Course
+        var err error
+
+        // 3. Obtener cursos según filtros
+        if req.HasCategoryFilter() </span><span class="cov1" title="1">{
+                courses, err = h.service.GetCoursesByCategory(uint(req.CategoryID))
+        }</span> else<span class="cov4" title="3"> {
+                courses, err = h.service.GetAllCourses()
+        }</span>
+
+        <span class="cov5" title="4">if err != nil </span><span class="cov1" title="1">{
+                c.JSON(http.StatusInternalServerError, response.NewErrorResponse(
+                        "FETCH_ERROR",
+                        "Error al obtener los cursos",
+                        err.Error(),
+                ))
+                return
+        }</span>
+
+        // 4. Convertir modelos a DTOs
+        <span class="cov4" title="3">coursesResponse := mapper.CoursesToResponse(courses)
+
+        // 5. Crear respuesta
+        listResponse := response.CourseListResponse{
+                Courses: coursesResponse,
+        }
+
+        // 6. Responder
+        c.JSON(http.StatusOK, listResponse)</span>
+}
+
+// GetCourseDetails obtiene los detalles completos de un curso
+// @Summary      Obtener detalles de curso
+// @Description  Obtiene información detallada de un curso incluyendo roles, grupos y secciones
+// @Tags         courses
+// @Accept       json
+// @Produce      json
+// @Param        id   path      int  true  "ID del curso"
+// @Success      200  {object}  response.CourseDetailResponse
+// @Failure      400  {object}  response.ErrorResponse
+// @Failure      404  {object}  response.ErrorResponse
+// @Failure      500  {object}  response.ErrorResponse
+// @Router       /courses/{id}/details [get]
+func (h *CourseHandler) GetCourseDetails(c *gin.Context) <span class="cov4" title="3">{
+        // 1. Parsear y validar ID del parámetro URI
+        var req request.GetCourseDetailsRequest
+
+        if err := c.ShouldBindUri(&amp;req); err != nil </span><span class="cov1" title="1">{
+                c.JSON(http.StatusBadRequest, response.NewErrorResponse(
+                        "INVALID_ID",
+                        "ID de curso inválido",
+                        err.Error(),
+                ))
+                return
+        }</span>
+
+        // 2. Llamar al servicio
+        <span class="cov3" title="2">details, err := h.service.GetCourseDetails(req.ID)
+        if err != nil </span><span class="cov1" title="1">{
+                c.JSON(http.StatusNotFound, response.NewErrorResponse(
+                        "NOT_FOUND",
+                        "Curso no encontrado",
+                        err.Error(),
+                ))
+                return
+        }</span>
+
+        // 3. Convertir a DTO
+        <span class="cov1" title="1">detailsResponse := mapper.CourseDetailsToResponse(details)
+
+        // 4. Responder
+        c.JSON(http.StatusOK, detailsResponse)</span>
+}
+
+// DeleteCourses elimina múltiples cursos
+// @Summary      Eliminar cursos
+// @Description  Elimina uno o más cursos por sus IDs
+// @Tags         courses
+// @Accept       json
+// @Produce      json
+// @Param        request body request.DeleteCoursesRequest true "IDs de cursos a eliminar"
+// @Success      200 {object} response.DeleteCoursesResponse
+// @Failure      400 {object} response.ErrorResponse
+// @Failure      500 {object} response.ErrorResponse
+// @Router       /courses [delete]
+func (h *CourseHandler) DeleteCourses(c *gin.Context) <span class="cov5" title="5">{
+        // 1. Parsear request
+        var req request.DeleteCoursesRequest
+
+        if err := c.ShouldBindJSON(&amp;req); err != nil </span><span class="cov1" title="1">{
+                c.JSON(http.StatusBadRequest, response.NewErrorResponse(
+                        "INVALID_JSON",
+                        "JSON inválido o campos requeridos faltantes",
+                        err.Error(),
+                ))
+                return
+        }</span>
+
+        // 2. Validación adicional personalizada
+        <span class="cov5" title="4">if err := req.Validate(); err != nil </span><span class="cov1" title="1">{
+                c.JSON(http.StatusBadRequest, response.NewErrorResponse(
+                        "VALIDATION_ERROR",
+                        err.Error(),
+                        nil,
+                ))
+                return
+        }</span>
+
+        // 3. Llamar al servicio
+        <span class="cov4" title="3">serviceResponse, err := h.service.DeleteCourses(req.CourseIDs)
+        if err != nil </span><span class="cov1" title="1">{
+                c.JSON(http.StatusInternalServerError, response.NewErrorResponse(
+                        "DELETE_FAILED",
+                        "Error al eliminar cursos",
+                        err.Error(),
+                ))
+                return
+        }</span>
+
+        // 4. Convertir warnings a DTO
+        <span class="cov3" title="2">warningsResponse := mapper.DeleteCoursesWarningsToResponse(serviceResponse.Warnings)
+
+        // 5. Calcular número de cursos eliminados exitosamente
+        deleted := len(req.CourseIDs) - len(serviceResponse.Warnings)
+
+        // 6. Responder
+        c.JSON(http.StatusOK, response.DeleteCoursesResponse{
+                Message:  "Operación completada",
+                Deleted:  deleted,
+                Warnings: warningsResponse,
+        })</span>
+}
+
+// UpdateCourses actualiza múltiples cursos
+// @Summary      Actualizar cursos
+// @Description  Actualiza uno o más cursos con los datos proporcionados
+// @Tags         courses
+// @Accept       json
+// @Produce      json
+// @Param        request body request.UpdateCoursesRequest true "Cursos a actualizar"
+// @Success      200 {object} response.UpdateCoursesResponse
+// @Failure      400 {object} response.ErrorResponse
+// @Failure      500 {object} response.ErrorResponse
+// @Router       /courses [put]
+func (h *CourseHandler) UpdateCourses(c *gin.Context) <span class="cov5" title="5">{
+        // 1. Parsear request
+        var req request.UpdateCoursesRequest
+
+        if err := c.ShouldBindJSON(&amp;req); err != nil </span><span class="cov1" title="1">{
+                c.JSON(http.StatusBadRequest, response.NewErrorResponse(
+                        "INVALID_JSON",
+                        "JSON inválido o campos requeridos faltantes",
+                        err.Error(),
+                ))
+                return
+        }</span>
+
+        // 2. Validación adicional personalizada
+        <span class="cov5" title="4">if err := req.Validate(); err != nil </span><span class="cov1" title="1">{
+                c.JSON(http.StatusBadRequest, response.NewErrorResponse(
+                        "VALIDATION_ERROR",
+                        err.Error(),
+                        nil,
+                ))
+                return
+        }</span>
+
+        // 3. Llamar al servicio
+        <span class="cov4" title="3">serviceResponse, err := h.service.UpdateCourses(req.Courses)
+        if err != nil </span><span class="cov1" title="1">{
+                c.JSON(http.StatusInternalServerError, response.NewErrorResponse(
+                        "UPDATE_FAILED",
+                        "Error al actualizar cursos",
+                        err.Error(),
+                ))
+                return
+        }</span>
+
+        // 4. Convertir warnings a DTO
+        <span class="cov3" title="2">warningsResponse := mapper.UpdateCoursesWarningsToResponse(serviceResponse.Warnings)
+
+        // 5. Responder
+        c.JSON(http.StatusOK, response.UpdateCoursesResponse{
+                Warnings: warningsResponse,
+        })</span>
+}
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">package handlers
+
+import (
+        "net/http"
+        "zajunaApi/internal/dto/mapper"
+        "zajunaApi/internal/dto/request"
+        "zajunaApi/internal/dto/response"
+        "zajunaApi/internal/models"
+        "zajunaApi/internal/services"
+
+        "github.com/gin-gonic/gin"
+)
+
+type UserHandler struct {
+        service services.UserServiceInterface
+}
+
+func NewUserHandler(service services.UserServiceInterface) *UserHandler <span class="cov10" title="15">{
+        return &amp;UserHandler{service: service}
+}</span>
+
+// GetUsers obtiene la lista de usuarios con filtros y paginación
+// @Summary      Listar usuarios
+// @Description  Obtiene usuarios con filtros opcionales y paginación
+// @Tags         users
+// @Accept       json
+// @Produce      json
+// @Param        firstname  query     string  false  "Filtrar por nombre"
+// @Param        lastname   query     string  false  "Filtrar por apellido"
+// @Param        username   query     string  false  "Filtrar por username"
+// @Param        email      query     string  false  "Filtrar por email"
+// @Param        page       query     int     false  "Número de página"  default(1)
+// @Param        limit      query     int     false  "Elementos por página"  default(15)
+// @Success      200        {object}  response.PaginatedResponse
+// @Failure      400        {object}  response.ErrorResponse
+// @Failure      500        {object}  response.ErrorResponse
+// @Router       /users [get]
+func (h *UserHandler) GetUsers(c *gin.Context) <span class="cov6" title="6">{
+        // 1. Parsear y validar request
+        var req request.GetUsersRequest
+
+        if err := c.ShouldBindQuery(&amp;req); err != nil </span><span class="cov1" title="1">{
+                c.JSON(http.StatusBadRequest, response.NewErrorResponse(
+                        "INVALID_PARAMS",
+                        "Parámetros de consulta inválidos",
+                        err.Error(),
+                ))
+                return
+        }</span>
+
+        // 2. Establecer valores por defecto
+        <span class="cov6" title="5">req.SetDefaults()
+
+        // 3. Convertir a filtros para el servicio
+        filters := req.ToFilterMap()
+
+        // 4. Llamar al servicio
+        users, total, err := h.service.GetUsers(filters, req.Page, req.Limit)
+        if err != nil </span><span class="cov1" title="1">{
+                c.JSON(http.StatusInternalServerError, response.NewErrorResponse(
+                        "FETCH_ERROR",
+                        "Error al obtener usuarios",
+                        err.Error(),
+                ))
+                return
+        }</span>
+
+        // 5. Convertir modelos a DTOs
+        <span class="cov5" title="4">usersResponse := mapper.UsersToResponse(users)
+
+        // 6. Crear respuesta paginada
+        paginatedResponse := response.NewPaginatedResponse(
+                usersResponse,
+                req.Page,
+                req.Limit,
+                total,
+        )
+
+        // 7. Responder
+        c.JSON(http.StatusOK, paginatedResponse)</span>
+}
+
+// UpdateUsers actualiza múltiples usuarios
+// @Summary      Actualizar usuarios
+// @Description  Actualiza la información de uno o más usuarios
+// @Tags         users
+// @Accept       json
+// @Produce      json
+// @Param        request body request.UpdateUsersRequest true "Lista de usuarios a actualizar"
+// @Success      200 {object} response.UpdateUserResponse
+// @Failure      400 {object} response.ErrorResponse
+// @Failure      500 {object} response.ErrorResponse
+// @Router       /users/update [put]
+func (h *UserHandler) UpdateUsers(c *gin.Context) <span class="cov5" title="4">{
+        // 1. Parsear y validar request
+        var req request.UpdateUsersRequest
+
+        if err := c.ShouldBindJSON(&amp;req); err != nil </span><span class="cov3" title="2">{
+                c.JSON(http.StatusBadRequest, response.NewErrorResponse(
+                        "INVALID_JSON",
+                        "JSON inválido o campos requeridos faltantes",
+                        err.Error(),
+                ))
+                return
+        }</span>
+
+        // 2. Convertir DTOs a modelos
+        <span class="cov3" title="2">usersToUpdate := make([]models.User, len(req.Users))
+        for i, userReq := range req.Users </span><span class="cov3" title="2">{
+                usersToUpdate[i] = models.User{
+                        ID:        userReq.ID,
+                        FirstName: userReq.FirstName,
+                        LastName:  userReq.LastName,
+                        Email:     userReq.Email,
+                        City:      userReq.City,
+                        Country:   userReq.Country,
+                        Lang:      userReq.Lang,
+                        Timezone:  userReq.Timezone,
+                        Phone1:    userReq.Phone1,
+                }
+        }</span>
+
+        // 3. Llamar al servicio
+        <span class="cov3" title="2">updated, err := h.service.UpdateUsers(usersToUpdate)
+        if err != nil </span><span class="cov1" title="1">{
+                c.JSON(http.StatusInternalServerError, response.NewErrorResponse(
+                        "UPDATE_FAILED",
+                        "Error al actualizar usuarios",
+                        err.Error(),
+                ))
+                return
+        }</span>
+
+        // 4. Responder
+        <span class="cov1" title="1">c.JSON(http.StatusOK, response.UpdateUserResponse{
+                Message:  "Usuarios actualizados correctamente",
+                Updated:  updated,
+                Warnings: []string{},
+        })</span>
+}
+
+// DeleteUsers suspende múltiples usuarios (soft delete)
+// @Summary      Eliminar usuarios
+// @Description  Suspende usuarios (soft delete) por sus IDs
+// @Tags         users
+// @Accept       json
+// @Produce      json
+// @Param        request body request.DeleteUsersRequest true "IDs de usuarios a eliminar"
+// @Success      200 {object} response.DeleteUserResponse
+// @Failure      400 {object} response.ErrorResponse
+// @Failure      500 {object} response.ErrorResponse
+// @Router       /users [delete]
+func (h *UserHandler) DeleteUsers(c *gin.Context) <span class="cov5" title="4">{
+        // 1. Parsear request
+        var req request.DeleteUsersRequest
+
+        if err := c.ShouldBindJSON(&amp;req); err != nil </span><span class="cov1" title="1">{
+                c.JSON(http.StatusBadRequest, response.NewErrorResponse(
+                        "INVALID_JSON",
+                        "JSON inválido o campos requeridos faltantes",
+                        err.Error(),
+                ))
+                return
+        }</span>
+
+        // 2. Validación adicional personalizada
+        <span class="cov4" title="3">if err := req.Validate(); err != nil </span><span class="cov1" title="1">{
+                c.JSON(http.StatusBadRequest, response.NewErrorResponse(
+                        "VALIDATION_ERROR",
+                        err.Error(),
+                        nil,
+                ))
+                return
+        }</span>
+
+        // 3. Llamar al servicio
+        <span class="cov3" title="2">if err := h.service.DeleteUsers(req.UserIDs); err != nil </span><span class="cov1" title="1">{
+                c.JSON(http.StatusInternalServerError, response.NewErrorResponse(
+                        "DELETE_FAILED",
+                        "Error al suspender usuarios",
+                        err.Error(),
+                ))
+                return
+        }</span>
+
+        // 4. Responder
+        <span class="cov1" title="1">c.JSON(http.StatusOK, response.DeleteUserResponse{
+                Message: "Usuarios suspendidos correctamente",
+                Deleted: len(req.UserIDs),
+                Errors:  []string{},
+        })</span>
+}
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>
