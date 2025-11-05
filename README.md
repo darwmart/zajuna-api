@@ -12,7 +12,7 @@ Antes de comenzar asegúrate de tener instalado:
 | PostgreSQL  | ≥ 14                | `psql --version`      |
 
 Instalación del proyecto
-1️⃣ Clonar el repositorio
+Clonar el repositorio
 
 git clone https://github.com/tu-usuario/zajuna-api.git
 cd zajuna-api
