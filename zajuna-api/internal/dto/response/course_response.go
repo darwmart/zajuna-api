@@ -4,9 +4,9 @@ package response
 type CourseResponse struct {
 	ID                int    `json:"id"`
 	Category          int    `json:"category"`
-	FullName          string `json:"fullName"`
-	ShortName         string `json:"shortName"`
-	IDNumber          string `json:"idNumber"`
+	FullName          string `json:"fullname"`
+	ShortName         string `json:"shortname"`
+	IDNumber          string `json:"idnumber"`
 	Summary           string `json:"summary,omitempty"`
 	SummaryFormat     int    `json:"summaryformat"`
 	Format            string `json:"format"`
@@ -26,9 +26,9 @@ type CourseResponse struct {
 // CourseDetailResponse representa los detalles completos de un curso
 type CourseDetailResponse struct {
 	ID               int64            `json:"id"`
-	FullName         string           `json:"fullName"`
-	ShortName        string           `json:"shortName"`
-	IDNumber         string           `json:"idNumber"`
+	FullName         string           `json:"fullname"`
+	ShortName        string           `json:"shortname"`
+	IDNumber         string           `json:"idnumber"`
 	Format           string           `json:"format"`
 	Category         string           `json:"category"`
 	Groupings        int64            `json:"groupings"`

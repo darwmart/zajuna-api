@@ -1,2 +1,57 @@
-
+# Environment variables
 .env
+.env.development
+.env.production
+.env.local
+.env.*.local
+internal/config/.env
+internal/config/.env.development
+internal/config/.env.production
+
+# Binaries
+bin/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+zajuna-api
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool
+*.out
+coverage*.html
+coverage*.txt
+
+# Dependency directories
+vendor/
+
+# Go workspace file
+go.work
+
+# IDE
+.vscode/
+.idea/
+.claude/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.bak
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
