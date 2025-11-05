@@ -56,3 +56,8 @@ func (m *MockCourseRepository) UpdateCourse(id int, updates map[string]interface
 	args := m.Called(id, updates)
 	return args.Error(0)
 }
+
+func (m *MockCourseRepository) CountUserCourses(userID int) (int, error) {
+	args := m.Called(userID)
+	return args.Int(0), args.Error(1)
+}

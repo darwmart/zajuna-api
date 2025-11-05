@@ -1,2 +1,4 @@
 
 .env
+/internal/config/.env.development
+/internal/config/.env.production

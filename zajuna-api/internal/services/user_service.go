@@ -13,6 +13,7 @@ import (
 	"zajunaApi/internal/services/auth"
 
 	"github.com/golang-jwt/jwt/v5"
+	"golang.org/x/crypto/bcrypt"
 
 	"github.com/amoghe/go-crypt"
 	log "github.com/sirupsen/logrus"
@@ -20,11 +21,11 @@ import (
 
 type UserService struct {
 	repo        repository.UserRepositoryInterface
-	sessionRepo *repository.SessionsRepository
+	sessionRepo repository.SessionsRepositoryInterface
 	courseRepo  repository.CourseRepositoryInterface
 }
 
-func NewUserService(repo repository.UserRepositoryInterface, sessionRepo *repository.SessionsRepository, courseRepo *repository.CourseRepositoryInterface) *UserService {
+func NewUserService(repo repository.UserRepositoryInterface, sessionRepo repository.SessionsRepositoryInterface, courseRepo repository.CourseRepositoryInterface) *UserService {
 	return &UserService{repo: repo, sessionRepo: sessionRepo, courseRepo: courseRepo}
 }
 
@@ -83,7 +84,7 @@ func (s *UserService) Login(r *http.Request, username, password string) (string,
 		//"exp":  time.Now().Add(time.Hour * 3).Unix(),
 	})
 
-	tokenString, err := token.SignedString([]byte(os.Getenv("SECRET")))
+	tokenString, err := signToken(token, os.Getenv("SECRET"))
 
 	if err != nil {
 		return "", errors.New("Error al firmar token: " + err.Error())
@@ -118,14 +119,18 @@ func (s *UserService) Logout(sid string) (string, error) {
 	return "Sesion deleted", nil
 }
 
+var cryptFunc = crypt.Crypt
+
 func PasswordVerify(password string, hash string) bool {
-	// crypt.Crypt() generará un hash con la misma configuración ($6$, rounds, salt)
-	generated, err := crypt.Crypt(password, hash)
+	generated, err := cryptFunc(password, hash)
 	if err != nil {
 		return false
 	}
-	// Si el hash generado es exactamente igual, la contraseña es válida
 	return generated == hash
+}
+func HashPassword(password string) (string, error) {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	return string(bytes), err
 }
 
 // getRemoteAddr devuelve la IP del cliente remoto.
@@ -162,4 +167,8 @@ func (s *UserService) DeleteUsers(userIDs []int) error {
 
 func (s *UserService) UpdateUsers(users []models.User) (int64, error) {
 	return s.repo.UpdateUsers(users)
+}
+
+var signToken = func(token *jwt.Token, secret string) (string, error) {
+	return token.SignedString([]byte(secret))
 }

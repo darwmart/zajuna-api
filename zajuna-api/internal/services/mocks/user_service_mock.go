@@ -1,6 +1,7 @@
 package mocks
 
 import (
+	"net/http"
 	"zajunaApi/internal/models"
 
 	"github.com/stretchr/testify/mock"
@@ -30,4 +31,13 @@ func (m *MockUserService) DeleteUsers(userIDs []int) error {
 func (m *MockUserService) UpdateUsers(users []models.User) (int64, error) {
 	args := m.Called(users)
 	return args.Get(0).(int64), args.Error(1)
+}
+func (m *MockUserService) Login(r *http.Request, username, password string) (string, error) {
+	args := m.Called(r, username, password)
+	return args.String(0), args.Error(1)
+}
+
+func (m *MockUserService) Logout(sid string) (string, error) {
+	args := m.Called(sid)
+	return args.String(0), args.Error(1)
 }

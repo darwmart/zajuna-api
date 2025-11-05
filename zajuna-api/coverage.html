@@ -75,11 +75,11 @@
 				
 				<option value="file9">zajunaApi/internal/dto/response/common.go (0.0%)</option>
 				
-				<option value="file10">zajunaApi/internal/handlers/category_handler.go (0.0%)</option>
+				<option value="file10">zajunaApi/internal/handlers/category_handler.go (100.0%)</option>
 				
-				<option value="file11">zajunaApi/internal/handlers/course_handler.go (0.0%)</option>
+				<option value="file11">zajunaApi/internal/handlers/course_handler.go (100.0%)</option>
 				
-				<option value="file12">zajunaApi/internal/handlers/user_handler.go (0.0%)</option>
+				<option value="file12">zajunaApi/internal/handlers/user_handler.go (60.7%)</option>
 				
 				<option value="file13">zajunaApi/internal/middleware/cors.go (0.0%)</option>
 				
@@ -109,35 +109,49 @@
 				
 				<option value="file26">zajunaApi/internal/repository/course_repository.go (0.0%)</option>
 				
-				<option value="file27">zajunaApi/internal/repository/mocks/config_repository_mock.go (0.0%)</option>
+				<option value="file27">zajunaApi/internal/repository/mocks/category_repository_mock.go (0.0%)</option>
 				
-				<option value="file28">zajunaApi/internal/repository/mocks/role_capability_repository_mock.go (0.0%)</option>
+				<option value="file28">zajunaApi/internal/repository/mocks/config_repository_mock.go (0.0%)</option>
 				
-				<option value="file29">zajunaApi/internal/repository/mocks/sessions_repository_mock.go (0.0%)</option>
+				<option value="file29">zajunaApi/internal/repository/mocks/course_repository_mock.go (0.0%)</option>
 				
-				<option value="file30">zajunaApi/internal/repository/role_capability_repository.go (0.0%)</option>
+				<option value="file30">zajunaApi/internal/repository/mocks/role_capability_repository_mock.go (0.0%)</option>
 				
-				<option value="file31">zajunaApi/internal/repository/sessions_repository.go (0.0%)</option>
+				<option value="file31">zajunaApi/internal/repository/mocks/sessions_repository_mock.go (0.0%)</option>
 				
-				<option value="file32">zajunaApi/internal/repository/user_repository.go (0.0%)</option>
+				<option value="file32">zajunaApi/internal/repository/mocks/user_repository_mock.go (0.0%)</option>
 				
-				<option value="file33">zajunaApi/internal/routes/routes.go (0.0%)</option>
+				<option value="file33">zajunaApi/internal/repository/role_capability_repository.go (0.0%)</option>
 				
-				<option value="file34">zajunaApi/internal/server/server.go (0.0%)</option>
+				<option value="file34">zajunaApi/internal/repository/sessions_repository.go (0.0%)</option>
 				
-				<option value="file35">zajunaApi/internal/services/auth/auth.go (0.0%)</option>
+				<option value="file35">zajunaApi/internal/repository/user_repository.go (0.0%)</option>
 				
-				<option value="file36">zajunaApi/internal/services/auth/cas_auth.go (0.0%)</option>
+				<option value="file36">zajunaApi/internal/routes/routes.go (0.0%)</option>
 				
-				<option value="file37">zajunaApi/internal/services/auth/manual_auth.go (0.0%)</option>
+				<option value="file37">zajunaApi/internal/server/server.go (0.0%)</option>
 				
-				<option value="file38">zajunaApi/internal/services/category_service.go (0.0%)</option>
+				<option value="file38">zajunaApi/internal/services/auth/auth.go (0.0%)</option>
 				
-				<option value="file39">zajunaApi/internal/services/course_service.go (0.0%)</option>
+				<option value="file39">zajunaApi/internal/services/auth/cas_auth.go (0.0%)</option>
 				
-				<option value="file40">zajunaApi/internal/services/user_service.go (0.0%)</option>
+				<option value="file40">zajunaApi/internal/services/auth/manual_auth.go (0.0%)</option>
 				
-				<option value="file41">zajunaApi/internal/validator/validator.go (0.0%)</option>
+				<option value="file41">zajunaApi/internal/services/category_service.go (100.0%)</option>
+				
+				<option value="file42">zajunaApi/internal/services/course_service.go (100.0%)</option>
+				
+				<option value="file43">zajunaApi/internal/services/mocks/auth_mock.go (0.0%)</option>
+				
+				<option value="file44">zajunaApi/internal/services/mocks/category_service_mock.go (0.0%)</option>
+				
+				<option value="file45">zajunaApi/internal/services/mocks/course_service_mock.go (0.0%)</option>
+				
+				<option value="file46">zajunaApi/internal/services/mocks/user_service_mock.go (0.0%)</option>
+				
+				<option value="file47">zajunaApi/internal/services/user_service.go (100.0%)</option>
+				
+				<option value="file48">zajunaApi/internal/validator/validator.go (0.0%)</option>
 				
 				</select>
 			</div>
@@ -384,6 +398,11 @@ func DeleteCoursesWarningsToResponse(warnings []models.Warning) []response.Warni
         }</span>
         <span class="cov0" title="0">return result</span>
 }
+
+// UpdateCoursesWarningsToResponse convierte warnings del modelo al DTO (reutiliza la misma función)
+func UpdateCoursesWarningsToResponse(warnings []models.Warning) []response.Warning <span class="cov0" title="0">{
+        return DeleteCoursesWarningsToResponse(warnings)
+}</span>
 </pre>
 		
 		<pre class="file" id="file5" style="display: none">package mapper
@@ -527,14 +546,14 @@ type CreateCategoryRequest struct {
 
 // UpdateCategoryRequest representa la solicitud de actualización de una categoría
 type UpdateCategoryRequest struct {
-        ID                int     `json:"id" binding:"required,min=1"`
-        Name              string  `json:"name" binding:"omitempty,min=1,max=255"`
-        Parent            *int    `json:"parent" binding:"omitempty,min=0"`
-        IDNumber          string  `json:"idnumber" binding:"omitempty,max=100"`
-        Description       string  `json:"description" binding:"omitempty"`
-        DescriptionFormat *int    `json:"descriptionformat" binding:"omitempty,oneof=0 1 2 4"`
-        Visible           *int    `json:"visible" binding:"omitempty,oneof=0 1"`
-        Theme             string  `json:"theme" binding:"omitempty,max=50"`
+        ID                int    `json:"id" binding:"required,min=1"`
+        Name              string `json:"name" binding:"omitempty,min=1,max=255"`
+        Parent            *int   `json:"parent" binding:"omitempty,min=0"`
+        IDNumber          string `json:"idnumber" binding:"omitempty,max=100"`
+        Description       string `json:"description" binding:"omitempty"`
+        DescriptionFormat *int   `json:"descriptionformat" binding:"omitempty,oneof=0 1 2 4"`
+        Visible           *int   `json:"visible" binding:"omitempty,oneof=0 1"`
+        Theme             string `json:"theme" binding:"omitempty,max=50"`
 }
 
 // DeleteCategoriesRequest representa la solicitud de eliminación de categorías
@@ -667,6 +686,25 @@ type UpdateCourseRequest struct {
         StartDate     *int64 `json:"startdate" binding:"omitempty,min=0"`
         EndDate       *int64 `json:"enddate" binding:"omitempty,min=0"`
         Visible       *int   `json:"visible" binding:"omitempty,oneof=0 1"`
+}
+
+// UpdateCoursesRequest representa la solicitud de actualización múltiple de cursos (Moodle format)
+type UpdateCoursesRequest struct {
+        Courses []UpdateCourseRequest `json:"courses" binding:"required,min=1,dive"`
+}
+
+// Validate valida reglas de negocio adicionales
+func (r *UpdateCoursesRequest) Validate() error <span class="cov0" title="0">{
+        // Validar que no se intente actualizar el curso site (ID=1)
+        for _, course := range r.Courses </span><span class="cov0" title="0">{
+                if course.ID == 1 </span><span class="cov0" title="0">{
+                        return &amp;ValidationError{
+                                Field:   "courses",
+                                Message: "No se puede actualizar el curso site (ID=1)",
+                        }
+                }</span>
+        }
+        <span class="cov0" title="0">return nil</span>
 }
 </pre>
 		
@@ -846,11 +884,11 @@ import (
 
 // CategoryHandler maneja las solicitudes relacionadas con categorías
 type CategoryHandler struct {
-        service *services.CategoryService
+        service services.CategoryServiceInterface
 }
 
 // NewCategoryHandler constructor para inyectar el servicio
-func NewCategoryHandler(service *services.CategoryService) *CategoryHandler <span class="cov0" title="0">{
+func NewCategoryHandler(service services.CategoryServiceInterface) *CategoryHandler <span class="cov8" title="1">{
         return &amp;CategoryHandler{service: service}
 }</span>
 
@@ -863,10 +901,10 @@ func NewCategoryHandler(service *services.CategoryService) *CategoryHandler <spa
 // @Success      200  {object}  response.CategoryListResponse
 // @Failure      500  {object}  response.ErrorResponse
 // @Router       /categories [get]
-func (h *CategoryHandler) GetCategories(c *gin.Context) <span class="cov0" title="0">{
+func (h *CategoryHandler) GetCategories(c *gin.Context) <span class="cov8" title="1">{
         // 1. Llamar al servicio
         categories, err := h.service.GetCategories()
-        if err != nil </span><span class="cov0" title="0">{
+        if err != nil </span><span class="cov8" title="1">{
                 c.JSON(http.StatusInternalServerError, response.NewErrorResponse(
                         "FETCH_ERROR",
                         "Error al obtener las categorías",
@@ -876,7 +914,7 @@ func (h *CategoryHandler) GetCategories(c *gin.Context) <span class="cov0" title
         }</span>
 
         // 2. Convertir modelos a DTOs
-        <span class="cov0" title="0">categoriesResponse := mapper.CategoriesToResponse(categories)
+        <span class="cov8" title="1">categoriesResponse := mapper.CategoriesToResponse(categories)
 
         // 3. Crear respuesta
         listResponse := response.CategoryListResponse{
@@ -902,10 +940,10 @@ import (
 )
 
 type CourseHandler struct {
-        service *services.CourseService
+        service services.CourseServiceInterface
 }
 
-func NewCourseHandler(service *services.CourseService) *CourseHandler <span class="cov0" title="0">{
+func NewCourseHandler(service services.CourseServiceInterface) *CourseHandler <span class="cov8" title="1">{
         return &amp;CourseHandler{service: service}
 }</span>
 
@@ -920,11 +958,11 @@ func NewCourseHandler(service *services.CourseService) *CourseHandler <span clas
 // @Failure      400         {object}  response.ErrorResponse
 // @Failure      500         {object}  response.ErrorResponse
 // @Router       /courses [get]
-func (h *CourseHandler) GetCourses(c *gin.Context) <span class="cov0" title="0">{
+func (h *CourseHandler) GetCourses(c *gin.Context) <span class="cov8" title="1">{
         // 1. Parsear y validar request
         var req request.GetCoursesRequest
 
-        if err := c.ShouldBindQuery(&amp;req); err != nil </span><span class="cov0" title="0">{
+        if err := c.ShouldBindQuery(&amp;req); err != nil </span><span class="cov8" title="1">{
                 c.JSON(http.StatusBadRequest, response.NewErrorResponse(
                         "INVALID_PARAMS",
                         "Parámetros de consulta inválidos",
@@ -934,19 +972,19 @@ func (h *CourseHandler) GetCourses(c *gin.Context) <span class="cov0" title="0">
         }</span>
 
         // 2. Establecer valores por defecto
-        <span class="cov0" title="0">req.SetDefaults()
+        <span class="cov8" title="1">req.SetDefaults()
 
         var courses []models.Course
         var err error
 
         // 3. Obtener cursos según filtros
-        if req.HasCategoryFilter() </span><span class="cov0" title="0">{
+        if req.HasCategoryFilter() </span><span class="cov8" title="1">{
                 courses, err = h.service.GetCoursesByCategory(uint(req.CategoryID))
-        }</span> else<span class="cov0" title="0"> {
+        }</span> else<span class="cov8" title="1"> {
                 courses, err = h.service.GetAllCourses()
         }</span>
 
-        <span class="cov0" title="0">if err != nil </span><span class="cov0" title="0">{
+        <span class="cov8" title="1">if err != nil </span><span class="cov8" title="1">{
                 c.JSON(http.StatusInternalServerError, response.NewErrorResponse(
                         "FETCH_ERROR",
                         "Error al obtener los cursos",
@@ -956,7 +994,7 @@ func (h *CourseHandler) GetCourses(c *gin.Context) <span class="cov0" title="0">
         }</span>
 
         // 4. Convertir modelos a DTOs
-        <span class="cov0" title="0">coursesResponse := mapper.CoursesToResponse(courses)
+        <span class="cov8" title="1">coursesResponse := mapper.CoursesToResponse(courses)
 
         // 5. Crear respuesta
         listResponse := response.CourseListResponse{
@@ -979,11 +1017,11 @@ func (h *CourseHandler) GetCourses(c *gin.Context) <span class="cov0" title="0">
 // @Failure      404  {object}  response.ErrorResponse
 // @Failure      500  {object}  response.ErrorResponse
 // @Router       /courses/{id}/details [get]
-func (h *CourseHandler) GetCourseDetails(c *gin.Context) <span class="cov0" title="0">{
+func (h *CourseHandler) GetCourseDetails(c *gin.Context) <span class="cov8" title="1">{
         // 1. Parsear y validar ID del parámetro URI
         var req request.GetCourseDetailsRequest
 
-        if err := c.ShouldBindUri(&amp;req); err != nil </span><span class="cov0" title="0">{
+        if err := c.ShouldBindUri(&amp;req); err != nil </span><span class="cov8" title="1">{
                 c.JSON(http.StatusBadRequest, response.NewErrorResponse(
                         "INVALID_ID",
                         "ID de curso inválido",
@@ -993,8 +1031,8 @@ func (h *CourseHandler) GetCourseDetails(c *gin.Context) <span class="cov0" titl
         }</span>
 
         // 2. Llamar al servicio
-        <span class="cov0" title="0">details, err := h.service.GetCourseDetails(req.ID)
-        if err != nil </span><span class="cov0" title="0">{
+        <span class="cov8" title="1">details, err := h.service.GetCourseDetails(req.ID)
+        if err != nil </span><span class="cov8" title="1">{
                 c.JSON(http.StatusNotFound, response.NewErrorResponse(
                         "NOT_FOUND",
                         "Curso no encontrado",
@@ -1004,7 +1042,7 @@ func (h *CourseHandler) GetCourseDetails(c *gin.Context) <span class="cov0" titl
         }</span>
 
         // 3. Convertir a DTO
-        <span class="cov0" title="0">detailsResponse := mapper.CourseDetailsToResponse(details)
+        <span class="cov8" title="1">detailsResponse := mapper.CourseDetailsToResponse(details)
 
         // 4. Responder
         c.JSON(http.StatusOK, detailsResponse)</span>
@@ -1021,11 +1059,11 @@ func (h *CourseHandler) GetCourseDetails(c *gin.Context) <span class="cov0" titl
 // @Failure      400 {object} response.ErrorResponse
 // @Failure      500 {object} response.ErrorResponse
 // @Router       /courses [delete]
-func (h *CourseHandler) DeleteCourses(c *gin.Context) <span class="cov0" title="0">{
+func (h *CourseHandler) DeleteCourses(c *gin.Context) <span class="cov8" title="1">{
         // 1. Parsear request
         var req request.DeleteCoursesRequest
 
-        if err := c.ShouldBindJSON(&amp;req); err != nil </span><span class="cov0" title="0">{
+        if err := c.ShouldBindJSON(&amp;req); err != nil </span><span class="cov8" title="1">{
                 c.JSON(http.StatusBadRequest, response.NewErrorResponse(
                         "INVALID_JSON",
                         "JSON inválido o campos requeridos faltantes",
@@ -1035,7 +1073,7 @@ func (h *CourseHandler) DeleteCourses(c *gin.Context) <span class="cov0" title="
         }</span>
 
         // 2. Validación adicional personalizada
-        <span class="cov0" title="0">if err := req.Validate(); err != nil </span><span class="cov0" title="0">{
+        <span class="cov8" title="1">if err := req.Validate(); err != nil </span><span class="cov8" title="1">{
                 c.JSON(http.StatusBadRequest, response.NewErrorResponse(
                         "VALIDATION_ERROR",
                         err.Error(),
@@ -1045,8 +1083,8 @@ func (h *CourseHandler) DeleteCourses(c *gin.Context) <span class="cov0" title="
         }</span>
 
         // 3. Llamar al servicio
-        <span class="cov0" title="0">serviceResponse, err := h.service.DeleteCourses(req.CourseIDs)
-        if err != nil </span><span class="cov0" title="0">{
+        <span class="cov8" title="1">serviceResponse, err := h.service.DeleteCourses(req.CourseIDs)
+        if err != nil </span><span class="cov8" title="1">{
                 c.JSON(http.StatusInternalServerError, response.NewErrorResponse(
                         "DELETE_FAILED",
                         "Error al eliminar cursos",
@@ -1056,7 +1094,7 @@ func (h *CourseHandler) DeleteCourses(c *gin.Context) <span class="cov0" title="
         }</span>
 
         // 4. Convertir warnings a DTO
-        <span class="cov0" title="0">warningsResponse := mapper.DeleteCoursesWarningsToResponse(serviceResponse.Warnings)
+        <span class="cov8" title="1">warningsResponse := mapper.DeleteCoursesWarningsToResponse(serviceResponse.Warnings)
 
         // 5. Calcular número de cursos eliminados exitosamente
         deleted := len(req.CourseIDs) - len(serviceResponse.Warnings)
@@ -1065,6 +1103,60 @@ func (h *CourseHandler) DeleteCourses(c *gin.Context) <span class="cov0" title="
         c.JSON(http.StatusOK, response.DeleteCoursesResponse{
                 Message:  "Operación completada",
                 Deleted:  deleted,
+                Warnings: warningsResponse,
+        })</span>
+}
+
+// UpdateCourses actualiza múltiples cursos
+// @Summary      Actualizar cursos
+// @Description  Actualiza uno o más cursos con los datos proporcionados
+// @Tags         courses
+// @Accept       json
+// @Produce      json
+// @Param        request body request.UpdateCoursesRequest true "Cursos a actualizar"
+// @Success      200 {object} response.UpdateCoursesResponse
+// @Failure      400 {object} response.ErrorResponse
+// @Failure      500 {object} response.ErrorResponse
+// @Router       /courses [put]
+func (h *CourseHandler) UpdateCourses(c *gin.Context) <span class="cov8" title="1">{
+        // 1. Parsear request
+        var req request.UpdateCoursesRequest
+
+        if err := c.ShouldBindJSON(&amp;req); err != nil </span><span class="cov8" title="1">{
+                c.JSON(http.StatusBadRequest, response.NewErrorResponse(
+                        "INVALID_JSON",
+                        "JSON inválido o campos requeridos faltantes",
+                        err.Error(),
+                ))
+                return
+        }</span>
+
+        // 2. Validación adicional personalizada
+        <span class="cov8" title="1">if err := req.Validate(); err != nil </span><span class="cov8" title="1">{
+                c.JSON(http.StatusBadRequest, response.NewErrorResponse(
+                        "VALIDATION_ERROR",
+                        err.Error(),
+                        nil,
+                ))
+                return
+        }</span>
+
+        // 3. Llamar al servicio
+        <span class="cov8" title="1">serviceResponse, err := h.service.UpdateCourses(req.Courses)
+        if err != nil </span><span class="cov8" title="1">{
+                c.JSON(http.StatusInternalServerError, response.NewErrorResponse(
+                        "UPDATE_FAILED",
+                        "Error al actualizar cursos",
+                        err.Error(),
+                ))
+                return
+        }</span>
+
+        // 4. Convertir warnings a DTO
+        <span class="cov8" title="1">warningsResponse := mapper.UpdateCoursesWarningsToResponse(serviceResponse.Warnings)
+
+        // 5. Responder
+        c.JSON(http.StatusOK, response.UpdateCoursesResponse{
                 Warnings: warningsResponse,
         })</span>
 }
@@ -1085,10 +1177,10 @@ import (
 )
 
 type UserHandler struct {
-        service *services.UserService
+        service services.UserServiceInterface
 }
 
-func NewUserHandler(service *services.UserService) *UserHandler <span class="cov0" title="0">{
+func NewUserHandler(service services.UserServiceInterface) *UserHandler <span class="cov8" title="1">{
         return &amp;UserHandler{service: service}
 }</span>
 
@@ -1108,11 +1200,11 @@ func NewUserHandler(service *services.UserService) *UserHandler <span class="cov
 // @Failure      400        {object}  response.ErrorResponse
 // @Failure      500        {object}  response.ErrorResponse
 // @Router       /users [get]
-func (h *UserHandler) GetUsers(c *gin.Context) <span class="cov0" title="0">{
+func (h *UserHandler) GetUsers(c *gin.Context) <span class="cov8" title="1">{
         // 1. Parsear y validar request
         var req request.GetUsersRequest
 
-        if err := c.ShouldBindQuery(&amp;req); err != nil </span><span class="cov0" title="0">{
+        if err := c.ShouldBindQuery(&amp;req); err != nil </span><span class="cov8" title="1">{
                 c.JSON(http.StatusBadRequest, response.NewErrorResponse(
                         "INVALID_PARAMS",
                         "Parámetros de consulta inválidos",
@@ -1122,14 +1214,14 @@ func (h *UserHandler) GetUsers(c *gin.Context) <span class="cov0" title="0">{
         }</span>
 
         // 2. Establecer valores por defecto
-        <span class="cov0" title="0">req.SetDefaults()
+        <span class="cov8" title="1">req.SetDefaults()
 
         // 3. Convertir a filtros para el servicio
         filters := req.ToFilterMap()
 
         // 4. Llamar al servicio
         users, total, err := h.service.GetUsers(filters, req.Page, req.Limit)
-        if err != nil </span><span class="cov0" title="0">{
+        if err != nil </span><span class="cov8" title="1">{
                 c.JSON(http.StatusInternalServerError, response.NewErrorResponse(
                         "FETCH_ERROR",
                         "Error al obtener usuarios",
@@ -1139,7 +1231,7 @@ func (h *UserHandler) GetUsers(c *gin.Context) <span class="cov0" title="0">{
         }</span>
 
         // 5. Convertir modelos a DTOs
-        <span class="cov0" title="0">usersResponse := mapper.UsersToResponse(users)
+        <span class="cov8" title="1">usersResponse := mapper.UsersToResponse(users)
 
         // 6. Crear respuesta paginada
         paginatedResponse := response.NewPaginatedResponse(
@@ -1164,11 +1256,11 @@ func (h *UserHandler) GetUsers(c *gin.Context) <span class="cov0" title="0">{
 // @Failure      400 {object} response.ErrorResponse
 // @Failure      500 {object} response.ErrorResponse
 // @Router       /users/update [put]
-func (h *UserHandler) UpdateUsers(c *gin.Context) <span class="cov0" title="0">{
+func (h *UserHandler) UpdateUsers(c *gin.Context) <span class="cov8" title="1">{
         // 1. Parsear y validar request
         var req request.UpdateUsersRequest
 
-        if err := c.ShouldBindJSON(&amp;req); err != nil </span><span class="cov0" title="0">{
+        if err := c.ShouldBindJSON(&amp;req); err != nil </span><span class="cov8" title="1">{
                 c.JSON(http.StatusBadRequest, response.NewErrorResponse(
                         "INVALID_JSON",
                         "JSON inválido o campos requeridos faltantes",
@@ -1177,19 +1269,9 @@ func (h *UserHandler) UpdateUsers(c *gin.Context) <span class="cov0" title="0">{
                 return
         }</span>
 
-        // 2. Validar que haya al menos un usuario
-        <span class="cov0" title="0">if len(req.Users) == 0 </span><span class="cov0" title="0">{
-                c.JSON(http.StatusBadRequest, response.NewErrorResponse(
-                        "EMPTY_REQUEST",
-                        "Debe proporcionar al menos un usuario para actualizar",
-                        nil,
-                ))
-                return
-        }</span>
-
-        // 3. Convertir DTOs a modelos
-        <span class="cov0" title="0">usersToUpdate := make([]models.User, len(req.Users))
-        for i, userReq := range req.Users </span><span class="cov0" title="0">{
+        // 2. Convertir DTOs a modelos
+        <span class="cov8" title="1">usersToUpdate := make([]models.User, len(req.Users))
+        for i, userReq := range req.Users </span><span class="cov8" title="1">{
                 usersToUpdate[i] = models.User{
                         ID:        userReq.ID,
                         FirstName: userReq.FirstName,
@@ -1203,9 +1285,9 @@ func (h *UserHandler) UpdateUsers(c *gin.Context) <span class="cov0" title="0">{
                 }
         }</span>
 
-        // 4. Llamar al servicio
-        <span class="cov0" title="0">updated, err := h.service.UpdateUsers(usersToUpdate)
-        if err != nil </span><span class="cov0" title="0">{
+        // 3. Llamar al servicio
+        <span class="cov8" title="1">updated, err := h.service.UpdateUsers(usersToUpdate)
+        if err != nil </span><span class="cov8" title="1">{
                 c.JSON(http.StatusInternalServerError, response.NewErrorResponse(
                         "UPDATE_FAILED",
                         "Error al actualizar usuarios",
@@ -1214,8 +1296,8 @@ func (h *UserHandler) UpdateUsers(c *gin.Context) <span class="cov0" title="0">{
                 return
         }</span>
 
-        // 5. Responder
-        <span class="cov0" title="0">c.JSON(http.StatusOK, response.UpdateUserResponse{
+        // 4. Responder
+        <span class="cov8" title="1">c.JSON(http.StatusOK, response.UpdateUserResponse{
                 Message:  "Usuarios actualizados correctamente",
                 Updated:  updated,
                 Warnings: []string{},
@@ -1233,11 +1315,11 @@ func (h *UserHandler) UpdateUsers(c *gin.Context) <span class="cov0" title="0">{
 // @Failure      400 {object} response.ErrorResponse
 // @Failure      500 {object} response.ErrorResponse
 // @Router       /users [delete]
-func (h *UserHandler) DeleteUsers(c *gin.Context) <span class="cov0" title="0">{
+func (h *UserHandler) DeleteUsers(c *gin.Context) <span class="cov8" title="1">{
         // 1. Parsear request
         var req request.DeleteUsersRequest
 
-        if err := c.ShouldBindJSON(&amp;req); err != nil </span><span class="cov0" title="0">{
+        if err := c.ShouldBindJSON(&amp;req); err != nil </span><span class="cov8" title="1">{
                 c.JSON(http.StatusBadRequest, response.NewErrorResponse(
                         "INVALID_JSON",
                         "JSON inválido o campos requeridos faltantes",
@@ -1247,7 +1329,7 @@ func (h *UserHandler) DeleteUsers(c *gin.Context) <span class="cov0" title="0">{
         }</span>
 
         // 2. Validación adicional personalizada
-        <span class="cov0" title="0">if err := req.Validate(); err != nil </span><span class="cov0" title="0">{
+        <span class="cov8" title="1">if err := req.Validate(); err != nil </span><span class="cov8" title="1">{
                 c.JSON(http.StatusBadRequest, response.NewErrorResponse(
                         "VALIDATION_ERROR",
                         err.Error(),
@@ -1257,7 +1339,7 @@ func (h *UserHandler) DeleteUsers(c *gin.Context) <span class="cov0" title="0">{
         }</span>
 
         // 3. Llamar al servicio
-        <span class="cov0" title="0">if err := h.service.DeleteUsers(req.UserIDs); err != nil </span><span class="cov0" title="0">{
+        <span class="cov8" title="1">if err := h.service.DeleteUsers(req.UserIDs); err != nil </span><span class="cov8" title="1">{
                 c.JSON(http.StatusInternalServerError, response.NewErrorResponse(
                         "DELETE_FAILED",
                         "Error al suspender usuarios",
@@ -1267,7 +1349,7 @@ func (h *UserHandler) DeleteUsers(c *gin.Context) <span class="cov0" title="0">{
         }</span>
 
         // 4. Responder
-        <span class="cov0" title="0">c.JSON(http.StatusOK, response.DeleteUserResponse{
+        <span class="cov8" title="1">c.JSON(http.StatusOK, response.DeleteUserResponse{
                 Message: "Usuarios suspendidos correctamente",
                 Deleted: len(req.UserIDs),
                 Errors:  []string{},
@@ -1997,9 +2079,53 @@ func (r *CourseRepository) DeleteCourses(courseIDs []int) ([]models.Warning, err
 
         <span class="cov0" title="0">return warnings, nil</span>
 }
+
+// UpdateCourse actualiza un curso en la base de datos
+func (r *CourseRepository) UpdateCourse(id int, updates map[string]interface{}) error <span class="cov0" title="0">{
+        // Siempre actualizar timemodified
+        updates["timemodified"] = gorm.Expr("EXTRACT(EPOCH FROM NOW())::INTEGER")
+
+        // Ejecutar la actualización
+        result := r.db.Table("mdl_course").
+                Where("id = ?", id).
+                Updates(updates)
+
+        if result.Error != nil </span><span class="cov0" title="0">{
+                return result.Error
+        }</span>
+
+        // Verificar que se actualizó al menos una fila
+        <span class="cov0" title="0">if result.RowsAffected == 0 </span><span class="cov0" title="0">{
+                return gorm.ErrRecordNotFound
+        }</span>
+
+        <span class="cov0" title="0">return nil</span>
+}
 </pre>
 		
 		<pre class="file" id="file27" style="display: none">package mocks
+
+import (
+        "zajunaApi/internal/models"
+
+        "github.com/stretchr/testify/mock"
+)
+
+// MockCategoryRepository es un mock del CategoryRepository para testing
+type MockCategoryRepository struct {
+        mock.Mock
+}
+
+func (m *MockCategoryRepository) GetAllCategories() ([]models.Category, error) <span class="cov0" title="0">{
+        args := m.Called()
+        if args.Get(0) == nil </span><span class="cov0" title="0">{
+                return nil, args.Error(1)
+        }</span>
+        <span class="cov0" title="0">return args.Get(0).([]models.Category), args.Error(1)</span>
+}
+</pre>
+		
+		<pre class="file" id="file28" style="display: none">package mocks
 
 import (
         "zajunaApi/internal/models"
@@ -2021,7 +2147,72 @@ func (m *MockConfigRepository) FindByName(name string) (*models.Config, error) <
 }
 </pre>
 		
-		<pre class="file" id="file28" style="display: none">package mocks
+		<pre class="file" id="file29" style="display: none">package mocks
+
+import (
+        "zajunaApi/internal/models"
+        "zajunaApi/internal/repository"
+
+        "github.com/stretchr/testify/mock"
+)
+
+// MockCourseRepository es un mock del CourseRepository para testing
+type MockCourseRepository struct {
+        mock.Mock
+}
+
+func (m *MockCourseRepository) GetAllCourses() ([]models.Course, error) <span class="cov0" title="0">{
+        args := m.Called()
+        if args.Get(0) == nil </span><span class="cov0" title="0">{
+                return nil, args.Error(1)
+        }</span>
+        <span class="cov0" title="0">return args.Get(0).([]models.Course), args.Error(1)</span>
+}
+
+func (m *MockCourseRepository) GetCoursesByCategory(categoryID uint) ([]models.Course, error) <span class="cov0" title="0">{
+        args := m.Called(categoryID)
+        if args.Get(0) == nil </span><span class="cov0" title="0">{
+                return nil, args.Error(1)
+        }</span>
+        <span class="cov0" title="0">return args.Get(0).([]models.Course), args.Error(1)</span>
+}
+
+func (m *MockCourseRepository) GetCourseByID(id uint) (*models.Course, error) <span class="cov0" title="0">{
+        args := m.Called(id)
+        if args.Get(0) == nil </span><span class="cov0" title="0">{
+                return nil, args.Error(1)
+        }</span>
+        <span class="cov0" title="0">return args.Get(0).(*models.Course), args.Error(1)</span>
+}
+
+func (m *MockCourseRepository) GetCourseDetails(courseID int) (*repository.CourseDetails, error) <span class="cov0" title="0">{
+        args := m.Called(courseID)
+        if args.Get(0) == nil </span><span class="cov0" title="0">{
+                return nil, args.Error(1)
+        }</span>
+        <span class="cov0" title="0">return args.Get(0).(*repository.CourseDetails), args.Error(1)</span>
+}
+
+func (m *MockCourseRepository) DeleteCourses(courseIDs []int) ([]models.Warning, error) <span class="cov0" title="0">{
+        args := m.Called(courseIDs)
+        if args.Get(0) == nil </span><span class="cov0" title="0">{
+                return nil, args.Error(1)
+        }</span>
+        <span class="cov0" title="0">return args.Get(0).([]models.Warning), args.Error(1)</span>
+}
+
+func (m *MockCourseRepository) UpdateCourse(id int, updates map[string]interface{}) error <span class="cov0" title="0">{
+        args := m.Called(id, updates)
+        return args.Error(0)
+}</span>
+
+func (m *MockCourseRepository) CountUserCourses(userID int) (int, error) <span class="cov0" title="0">{
+        args := m.Called(userID)
+        return args.Int(0), args.Error(1)
+}</span>
+</pre>
+		
+		<pre class="file" id="file30" style="display: none">package mocks
 
 import (
         "zajunaApi/internal/models"
@@ -2043,7 +2234,7 @@ func (m *MockRoleCapabilityRepository) FindByUserID(userID int64, roles []string
 }
 </pre>
 		
-		<pre class="file" id="file29" style="display: none">package mocks
+		<pre class="file" id="file31" style="display: none">package mocks
 
 import (
         "zajunaApi/internal/models"
@@ -2073,7 +2264,50 @@ func (m *MockSessionsRepository) DeleteSession(sid string) error <span class="co
 }</span>
 </pre>
 		
-		<pre class="file" id="file30" style="display: none">package repository
+		<pre class="file" id="file32" style="display: none">package mocks
+
+import (
+        "zajunaApi/internal/models"
+
+        "github.com/stretchr/testify/mock"
+)
+
+// MockUserRepository es un mock del UserRepository para testing
+type MockUserRepository struct {
+        mock.Mock
+}
+
+func (m *MockUserRepository) FindByFilters(filters map[string]string, page, limit int) ([]models.User, int64, error) <span class="cov0" title="0">{
+        args := m.Called(filters, page, limit)
+        if args.Get(0) == nil </span><span class="cov0" title="0">{
+                return nil, args.Get(1).(int64), args.Error(2)
+        }</span>
+        <span class="cov0" title="0">return args.Get(0).([]models.User), args.Get(1).(int64), args.Error(2)</span>
+}
+
+func (m *MockUserRepository) DeleteUsers(userIDs []int) error <span class="cov0" title="0">{
+        args := m.Called(userIDs)
+        return args.Error(0)
+}</span>
+
+func (m *MockUserRepository) UpdateUsers(users []models.User) (int64, error) <span class="cov0" title="0">{
+        args := m.Called(users)
+        return args.Get(0).(int64), args.Error(1)
+}</span>
+
+func (m *MockUserRepository) FindByUsername(username string) (*models.User, error) <span class="cov0" title="0">{
+        args := m.Called(username)
+
+        // Si el primer argumento es nil, devolvemos nil directamente
+        if args.Get(0) == nil </span><span class="cov0" title="0">{
+                return nil, args.Error(1)
+        }</span>
+
+        <span class="cov0" title="0">return args.Get(0).(*models.User), args.Error(1)</span>
+}
+</pre>
+		
+		<pre class="file" id="file33" style="display: none">package repository
 
 import (
         "errors"
@@ -2113,7 +2347,7 @@ func (r *RoleCapabilityRepository) FindByUserID(userID int64, roles []string, ca
 }
 </pre>
 		
-		<pre class="file" id="file31" style="display: none">package repository
+		<pre class="file" id="file34" style="display: none">package repository
 
 import (
         "errors"
@@ -2157,7 +2391,7 @@ func (r *SessionsRepository) FindBySID(sid string) (*models.Sessions, error) <sp
 }
 </pre>
 		
-		<pre class="file" id="file32" style="display: none">package repository
+		<pre class="file" id="file35" style="display: none">package repository
 
 import (
         "errors"
@@ -2252,7 +2486,7 @@ func (r *UserRepository) FindByUsername(username string) (*models.User, error) <
 }
 </pre>
 		
-		<pre class="file" id="file33" style="display: none">package routes
+		<pre class="file" id="file36" style="display: none">package routes
 
 import (
         "github.com/gin-gonic/gin"
@@ -2298,6 +2532,7 @@ func RegisterRoutes(router *gin.Engine, db *gorm.DB) <span class="cov0" title="0
         api.GET("/courses", authMiddleware, courseHandler.GetCourses)
         api.GET("/courses/:id/details", authMiddleware, courseHandler.GetCourseDetails)
         api.DELETE("/courses", authMiddleware, courseHandler.DeleteCourses)
+        api.PUT("/courses", courseHandler.UpdateCourses)
         api.GET("/users", authMiddleware, userHandler.GetUsers)
         api.DELETE("/users", authMiddleware, userHandler.DeleteUsers)
         api.PUT("/users/update", authMiddleware, userHandler.UpdateUsers)
@@ -2306,7 +2541,7 @@ func RegisterRoutes(router *gin.Engine, db *gorm.DB) <span class="cov0" title="0
 }</span>
 </pre>
 		
-		<pre class="file" id="file34" style="display: none">package server
+		<pre class="file" id="file37" style="display: none">package server
 
 import (
         "fmt"
@@ -2358,7 +2593,7 @@ func (s *Server) Run() error <span class="cov0" title="0">{
 }</span>
 </pre>
 		
-		<pre class="file" id="file35" style="display: none">package auth
+		<pre class="file" id="file38" style="display: none">package auth
 
 // Interfaz común para los plugins de autenticación
 type AuthPlugin interface {
@@ -2381,7 +2616,7 @@ func Get(name string) (AuthPlugin, bool) <span class="cov0" title="0">{
 }</span>
 </pre>
 		
-		<pre class="file" id="file36" style="display: none">package auth
+		<pre class="file" id="file39" style="display: none">package auth
 
 import (
         log "github.com/sirupsen/logrus"
@@ -2404,7 +2639,7 @@ func init() <span class="cov0" title="0">{
 }</span>
 </pre>
 		
-		<pre class="file" id="file37" style="display: none">package auth
+		<pre class="file" id="file40" style="display: none">package auth
 
 import (
         log "github.com/sirupsen/logrus"
@@ -2425,7 +2660,7 @@ func init() <span class="cov0" title="0">{
 }</span>
 </pre>
 		
-		<pre class="file" id="file38" style="display: none">package services
+		<pre class="file" id="file41" style="display: none">package services
 
 import (
         "zajunaApi/internal/models"
@@ -2434,60 +2669,276 @@ import (
 
 // CategoryService maneja la lógica de categorías
 type CategoryService struct {
-        repo *repository.CategoryRepository
+        repo repository.CategoryRepositoryInterface
 }
 
 // NewCategoryService crea un nuevo servicio de categorías
-func NewCategoryService(repo *repository.CategoryRepository) *CategoryService <span class="cov0" title="0">{
+func NewCategoryService(repo repository.CategoryRepositoryInterface) *CategoryService <span class="cov8" title="1">{
         return &amp;CategoryService{repo: repo}
 }</span>
 
 // GetCategories devuelve todas las categorías
-func (s *CategoryService) GetCategories() ([]models.Category, error) <span class="cov0" title="0">{
+func (s *CategoryService) GetCategories() ([]models.Category, error) <span class="cov8" title="1">{
         return s.repo.GetAllCategories()
 }</span>
 </pre>
 		
-		<pre class="file" id="file39" style="display: none">package services
+		<pre class="file" id="file42" style="display: none">package services
 
 import (
+        "fmt"
+        "zajunaApi/internal/dto/request"
         "zajunaApi/internal/models"
         "zajunaApi/internal/repository"
 )
 
 type CourseService struct {
-        repo *repository.CourseRepository
+        repo repository.CourseRepositoryInterface
 }
 
-func NewCourseService(repo *repository.CourseRepository) *CourseService <span class="cov0" title="0">{
+func NewCourseService(repo repository.CourseRepositoryInterface) *CourseService <span class="cov8" title="1">{
         return &amp;CourseService{repo: repo}
 }</span>
 
-func (s *CourseService) GetAllCourses() ([]models.Course, error) <span class="cov0" title="0">{
+func (s *CourseService) GetAllCourses() ([]models.Course, error) <span class="cov8" title="1">{
         return s.repo.GetAllCourses()
 }</span>
 
-func (s *CourseService) GetCoursesByCategory(categoryID uint) ([]models.Course, error) <span class="cov0" title="0">{
+func (s *CourseService) GetCoursesByCategory(categoryID uint) ([]models.Course, error) <span class="cov8" title="1">{
         return s.repo.GetCoursesByCategory(categoryID)
 }</span>
 
 //func (s *CourseService) GetCourseRoles(courseID int) (map[string]int64, error) {
 //return s.repo.GetRoleAssignments(courseID)}
 
-func (s *CourseService) GetCourseDetails(courseID int) (*repository.CourseDetails, error) <span class="cov0" title="0">{
+func (s *CourseService) GetCourseDetails(courseID int) (*repository.CourseDetails, error) <span class="cov8" title="1">{
         return s.repo.GetCourseDetails(courseID)
 }</span>
 
-func (s *CourseService) DeleteCourses(courseIDs []int) (*models.DeleteCoursesResponse, error) <span class="cov0" title="0">{
+func (s *CourseService) DeleteCourses(courseIDs []int) (*models.DeleteCoursesResponse, error) <span class="cov8" title="1">{
         warnings, err := s.repo.DeleteCourses(courseIDs)
-        if err != nil </span><span class="cov0" title="0">{
+        if err != nil </span><span class="cov8" title="1">{
                 return nil, err
         }</span>
-        <span class="cov0" title="0">return &amp;models.DeleteCoursesResponse{Warnings: warnings}, nil</span>
+        <span class="cov8" title="1">return &amp;models.DeleteCoursesResponse{Warnings: warnings}, nil</span>
+}
+
+// UpdateCourses actualiza múltiples cursos
+func (s *CourseService) UpdateCourses(courses []request.UpdateCourseRequest) (*models.UpdateCoursesResponse, error) <span class="cov8" title="1">{
+        var warnings []models.Warning
+
+        for _, course := range courses </span><span class="cov8" title="1">{
+                // Construir map de updates solo con campos no vacíos
+                updates := make(map[string]interface{})
+
+                if course.FullName != "" </span><span class="cov8" title="1">{
+                        updates["fullname"] = course.FullName
+                }</span>
+                <span class="cov8" title="1">if course.ShortName != "" </span><span class="cov8" title="1">{
+                        updates["shortname"] = course.ShortName
+                }</span>
+                <span class="cov8" title="1">if course.CategoryID != nil </span><span class="cov8" title="1">{
+                        updates["category"] = *course.CategoryID
+                }</span>
+                <span class="cov8" title="1">if course.IDNumber != "" </span><span class="cov8" title="1">{
+                        updates["idnumber"] = course.IDNumber
+                }</span>
+                <span class="cov8" title="1">if course.Summary != "" </span><span class="cov8" title="1">{
+                        updates["summary"] = course.Summary
+                }</span>
+                <span class="cov8" title="1">if course.SummaryFormat != nil </span><span class="cov8" title="1">{
+                        updates["summaryformat"] = *course.SummaryFormat
+                }</span>
+                <span class="cov8" title="1">if course.Format != "" </span><span class="cov8" title="1">{
+                        updates["format"] = course.Format
+                }</span>
+                <span class="cov8" title="1">if course.StartDate != nil </span><span class="cov8" title="1">{
+                        updates["startdate"] = *course.StartDate
+                }</span>
+                <span class="cov8" title="1">if course.EndDate != nil </span><span class="cov8" title="1">{
+                        updates["enddate"] = *course.EndDate
+                }</span>
+                <span class="cov8" title="1">if course.Visible != nil </span><span class="cov8" title="1">{
+                        updates["visible"] = *course.Visible
+                }</span>
+
+                // Si no hay campos para actualizar, agregar warning
+                <span class="cov8" title="1">if len(updates) == 0 </span><span class="cov8" title="1">{
+                        warnings = append(warnings, models.Warning{
+                                Item:        "course",
+                                ItemID:      course.ID,
+                                WarningCode: "nofieldstouptate",
+                                Message:     fmt.Sprintf("No fields provided to update course %d", course.ID),
+                        })
+                        continue</span>
+                }
+
+                // Intentar actualizar el curso
+                <span class="cov8" title="1">err := s.repo.UpdateCourse(course.ID, updates)
+                if err != nil </span><span class="cov8" title="1">{
+                        warnings = append(warnings, models.Warning{
+                                Item:        "course",
+                                ItemID:      course.ID,
+                                WarningCode: "updatefailed",
+                                Message:     fmt.Sprintf("Failed to update course %d: %s", course.ID, err.Error()),
+                        })
+                }</span>
+        }
+
+        <span class="cov8" title="1">return &amp;models.UpdateCoursesResponse{Warnings: warnings}, nil</span>
 }
 </pre>
 		
-		<pre class="file" id="file40" style="display: none">package services
+		<pre class="file" id="file43" style="display: none">package mocks
+
+import "github.com/stretchr/testify/mock"
+
+type MockAuthPlugin struct {
+        mock.Mock
+}
+
+// PreventLocalPasswords simula el método PreventLocalPasswords.
+func (m *MockAuthPlugin) PreventLocalPasswords() bool <span class="cov0" title="0">{
+        args := m.Called()
+        return args.Bool(0)
+}</span>
+
+// Login simula el método Login(username, password string)
+func (m *MockAuthPlugin) Login(username, password string) (bool, error) <span class="cov0" title="0">{
+        args := m.Called(username, password)
+        return args.Bool(0), args.Error(1)
+}</span>
+</pre>
+		
+		<pre class="file" id="file44" style="display: none">package mocks
+
+import (
+        "zajunaApi/internal/models"
+
+        "github.com/stretchr/testify/mock"
+)
+
+// MockCategoryService es un mock del CategoryService para testing
+type MockCategoryService struct {
+        mock.Mock
+}
+
+func (m *MockCategoryService) GetCategories() ([]models.Category, error) <span class="cov0" title="0">{
+        args := m.Called()
+        if args.Get(0) == nil </span><span class="cov0" title="0">{
+                return nil, args.Error(1)
+        }</span>
+        <span class="cov0" title="0">return args.Get(0).([]models.Category), args.Error(1)</span>
+}
+</pre>
+		
+		<pre class="file" id="file45" style="display: none">package mocks
+
+import (
+        "zajunaApi/internal/dto/request"
+        "zajunaApi/internal/models"
+        "zajunaApi/internal/repository"
+
+        "github.com/stretchr/testify/mock"
+)
+
+// MockCourseService es un mock del CourseService para testing
+type MockCourseService struct {
+        mock.Mock
+}
+
+// GetAllCourses mockea el método GetAllCourses
+func (m *MockCourseService) GetAllCourses() ([]models.Course, error) <span class="cov0" title="0">{
+        args := m.Called()
+        if args.Get(0) == nil </span><span class="cov0" title="0">{
+                return nil, args.Error(1)
+        }</span>
+        <span class="cov0" title="0">return args.Get(0).([]models.Course), args.Error(1)</span>
+}
+
+// GetCoursesByCategory mockea el método GetCoursesByCategory
+func (m *MockCourseService) GetCoursesByCategory(categoryID uint) ([]models.Course, error) <span class="cov0" title="0">{
+        args := m.Called(categoryID)
+        if args.Get(0) == nil </span><span class="cov0" title="0">{
+                return nil, args.Error(1)
+        }</span>
+        <span class="cov0" title="0">return args.Get(0).([]models.Course), args.Error(1)</span>
+}
+
+// GetCourseDetails mockea el método GetCourseDetails
+func (m *MockCourseService) GetCourseDetails(courseID int) (*repository.CourseDetails, error) <span class="cov0" title="0">{
+        args := m.Called(courseID)
+        if args.Get(0) == nil </span><span class="cov0" title="0">{
+                return nil, args.Error(1)
+        }</span>
+        <span class="cov0" title="0">return args.Get(0).(*repository.CourseDetails), args.Error(1)</span>
+}
+
+// DeleteCourses mockea el método DeleteCourses
+func (m *MockCourseService) DeleteCourses(courseIDs []int) (*models.DeleteCoursesResponse, error) <span class="cov0" title="0">{
+        args := m.Called(courseIDs)
+        if args.Get(0) == nil </span><span class="cov0" title="0">{
+                return nil, args.Error(1)
+        }</span>
+        <span class="cov0" title="0">return args.Get(0).(*models.DeleteCoursesResponse), args.Error(1)</span>
+}
+
+// UpdateCourses mockea el método UpdateCourses
+func (m *MockCourseService) UpdateCourses(courses []request.UpdateCourseRequest) (*models.UpdateCoursesResponse, error) <span class="cov0" title="0">{
+        args := m.Called(courses)
+        if args.Get(0) == nil </span><span class="cov0" title="0">{
+                return nil, args.Error(1)
+        }</span>
+        <span class="cov0" title="0">return args.Get(0).(*models.UpdateCoursesResponse), args.Error(1)</span>
+}
+</pre>
+		
+		<pre class="file" id="file46" style="display: none">package mocks
+
+import (
+        "net/http"
+        "zajunaApi/internal/models"
+
+        "github.com/stretchr/testify/mock"
+)
+
+// MockUserService es un mock del UserService para testing
+type MockUserService struct {
+        mock.Mock
+}
+
+// GetUsers mockea el método GetUsers
+func (m *MockUserService) GetUsers(filters map[string]string, page, limit int) ([]models.User, int64, error) <span class="cov0" title="0">{
+        args := m.Called(filters, page, limit)
+        if args.Get(0) == nil </span><span class="cov0" title="0">{
+                return nil, args.Get(1).(int64), args.Error(2)
+        }</span>
+        <span class="cov0" title="0">return args.Get(0).([]models.User), args.Get(1).(int64), args.Error(2)</span>
+}
+
+// DeleteUsers mockea el método DeleteUsers
+func (m *MockUserService) DeleteUsers(userIDs []int) error <span class="cov0" title="0">{
+        args := m.Called(userIDs)
+        return args.Error(0)
+}</span>
+
+// UpdateUsers mockea el método UpdateUsers
+func (m *MockUserService) UpdateUsers(users []models.User) (int64, error) <span class="cov0" title="0">{
+        args := m.Called(users)
+        return args.Get(0).(int64), args.Error(1)
+}</span>
+func (m *MockUserService) Login(r *http.Request, username, password string) (string, error) <span class="cov0" title="0">{
+        args := m.Called(r, username, password)
+        return args.String(0), args.Error(1)
+}</span>
+
+func (m *MockUserService) Logout(sid string) (string, error) <span class="cov0" title="0">{
+        args := m.Called(sid)
+        return args.String(0), args.Error(1)
+}</span>
+</pre>
+		
+		<pre class="file" id="file47" style="display: none">package services
 
 import (
         "errors"
@@ -2502,69 +2953,70 @@ import (
         "zajunaApi/internal/services/auth"
 
         "github.com/golang-jwt/jwt/v5"
+        "golang.org/x/crypto/bcrypt"
 
         "github.com/amoghe/go-crypt"
         log "github.com/sirupsen/logrus"
 )
 
 type UserService struct {
-        repo        *repository.UserRepository
-        sessionRepo *repository.SessionsRepository
-        courseRepo  *repository.CourseRepository
+        repo        repository.UserRepositoryInterface
+        sessionRepo repository.SessionsRepositoryInterface
+        courseRepo  repository.CourseRepositoryInterface
 }
 
-func NewUserService(repo *repository.UserRepository, sessionRepo *repository.SessionsRepository, courseRepo *repository.CourseRepository) *UserService <span class="cov0" title="0">{
+func NewUserService(repo repository.UserRepositoryInterface, sessionRepo repository.SessionsRepositoryInterface, courseRepo repository.CourseRepositoryInterface) *UserService <span class="cov8" title="1">{
         return &amp;UserService{repo: repo, sessionRepo: sessionRepo, courseRepo: courseRepo}
 }</span>
 
-func (s *UserService) GetUsers(filters map[string]string, page, limit int) ([]models.User, int64, error) <span class="cov0" title="0">{
+func (s *UserService) GetUsers(filters map[string]string, page, limit int) ([]models.User, int64, error) <span class="cov8" title="1">{
         return s.repo.FindByFilters(filters, page, limit)
 }</span>
 
-func (s *UserService) Login(r *http.Request, username, password string) (string, error) <span class="cov0" title="0">{
+func (s *UserService) Login(r *http.Request, username, password string) (string, error) <span class="cov8" title="1">{
 
         username = strings.TrimSpace(strings.ToLower(username))
 
         //VALIDACION SI EL USUARIO EXISTE EN BD
         user, err := s.repo.FindByUsername(username)
-        if err != nil </span><span class="cov0" title="0">{
+        if err != nil </span><span class="cov8" title="1">{
                 return "", err
         }</span>
-        <span class="cov0" title="0">if user == nil </span><span class="cov0" title="0">{
+        <span class="cov8" title="1">if user == nil </span><span class="cov8" title="1">{
                 return "", fmt.Errorf("usuario no encontrado")
         }</span>
 
         //VALIDACION SI EL USUARIO ESTA SUSPENDIDO
-        <span class="cov0" title="0">if user.Suspended == 1 </span><span class="cov0" title="0">{
+        <span class="cov8" title="1">if user.Suspended == 1 </span><span class="cov8" title="1">{
                 return "", fmt.Errorf("%s", "Suspended Login: "+username)
         }</span>
 
-        <span class="cov0" title="0">plugin, ok := auth.Get(user.Auth)
-        if !ok </span><span class="cov0" title="0">{
+        <span class="cov8" title="1">plugin, ok := auth.Get(user.Auth)
+        if !ok </span><span class="cov8" title="1">{
                 return "", errors.New("método de autenticación no encontrado")
         }</span>
 
         //VALIDACION SI EL USUARIO TIENE CURSOS VINCULADOS
-        <span class="cov0" title="0">countCourses, err := s.courseRepo.CountUserCourses(int(user.ID))
-        if err != nil </span><span class="cov0" title="0">{
+        <span class="cov8" title="1">countCourses, err := s.courseRepo.CountUserCourses(int(user.ID))
+        if err != nil </span><span class="cov8" title="1">{
                 return "", errors.New("Error al buscar los cursos del usuario")
         }</span>
-        <span class="cov0" title="0">if countCourses == 0 </span><span class="cov0" title="0">{
+        <span class="cov8" title="1">if countCourses == 0 </span><span class="cov8" title="1">{
                 return "", errors.New("El usuario no tiene cursos vinculados")
         }</span>
 
         //VALIDACION DE PASSWORD CON SU HASH
-        <span class="cov0" title="0">if PasswordVerify(password, user.Password) </span><span class="cov0" title="0">{
+        <span class="cov8" title="1">if PasswordVerify(password, user.Password) </span><span class="cov8" title="1">{
                 log.Info("Contraseña válida")
-        }</span> else<span class="cov0" title="0"> {
+        }</span> else<span class="cov8" title="1"> {
                 log.Error("Contraseña incorrecta")
                 return "", errors.New("credenciales inválidas")
         }</span>
-        <span class="cov0" title="0">success, err := plugin.Login(username, password)
-        if err != nil || !success </span><span class="cov0" title="0">{
+        <span class="cov8" title="1">success, err := plugin.Login(username, password)
+        if err != nil || !success </span><span class="cov8" title="1">{
                 return "", errors.New("credenciales inválidas")
         }</span>
-        <span class="cov0" title="0">log.Info("Autenticación exitosa con método:", user.Auth)
+        <span class="cov8" title="1">log.Info("Autenticación exitosa con método:", user.Auth)
 
         // GENERAR Y FIRMAR EL TOKEN
         token := jwt.NewWithClaims(jwt.SigningMethodHS512, jwt.MapClaims{
@@ -2572,14 +3024,14 @@ func (s *UserService) Login(r *http.Request, username, password string) (string,
                 //"exp":  time.Now().Add(time.Hour * 3).Unix(),
         })
 
-        tokenString, err := token.SignedString([]byte(os.Getenv("SECRET")))
+        tokenString, err := signToken(token, os.Getenv("SECRET"))
 
-        if err != nil </span><span class="cov0" title="0">{
+        if err != nil </span><span class="cov8" title="1">{
                 return "", errors.New("Error al firmar token: " + err.Error())
         }</span>
 
         //GUARDAR TOKEN EN DB
-        <span class="cov0" title="0">session := &amp;models.Sessions{
+        <span class="cov8" title="1">session := &amp;models.Sessions{
                 State:        0,
                 SID:          tokenString,
                 UserID:       user.ID,
@@ -2591,70 +3043,78 @@ func (s *UserService) Login(r *http.Request, username, password string) (string,
         }
         log.Info("TIEMPO EN SERVICE", time.Now().Add(time.Hour*3).Unix())
         err = s.sessionRepo.InsertSession(session)
-        if err != nil </span><span class="cov0" title="0">{
+        if err != nil </span><span class="cov8" title="1">{
                 // Hubo un error al insertar
                 return "", err
         }</span>
 
-        <span class="cov0" title="0">return tokenString, nil</span>
+        <span class="cov8" title="1">return tokenString, nil</span>
 }
 
-func (s *UserService) Logout(sid string) (string, error) <span class="cov0" title="0">{
+func (s *UserService) Logout(sid string) (string, error) <span class="cov8" title="1">{
         err := s.sessionRepo.DeleteSession(sid)
-        if err != nil </span><span class="cov0" title="0">{
+        if err != nil </span><span class="cov8" title="1">{
                 return "", err
         }</span>
-        <span class="cov0" title="0">return "Sesion deleted", nil</span>
+        <span class="cov8" title="1">return "Sesion deleted", nil</span>
 }
 
-func PasswordVerify(password string, hash string) bool <span class="cov0" title="0">{
-        // crypt.Crypt() generará un hash con la misma configuración ($6$, rounds, salt)
-        generated, err := crypt.Crypt(password, hash)
-        if err != nil </span><span class="cov0" title="0">{
+var cryptFunc = crypt.Crypt
+
+func PasswordVerify(password string, hash string) bool <span class="cov8" title="1">{
+        generated, err := cryptFunc(password, hash)
+        if err != nil </span><span class="cov8" title="1">{
                 return false
         }</span>
-        // Si el hash generado es exactamente igual, la contraseña es válida
-        <span class="cov0" title="0">return generated == hash</span>
+        <span class="cov8" title="1">return generated == hash</span>
 }
+func HashPassword(password string) (string, error) <span class="cov8" title="1">{
+        bytes, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+        return string(bytes), err
+}</span>
 
 // getRemoteAddr devuelve la IP del cliente remoto.
 // Si no se puede determinar, devuelve "0.0.0.0".
-func getRemoteAddr(r *http.Request) string <span class="cov0" title="0">{
+func getRemoteAddr(r *http.Request) string <span class="cov8" title="1">{
         // Revisa la cabecera X-Forwarded-For
-        if xff := r.Header.Get("X-Forwarded-For"); xff != "" </span><span class="cov0" title="0">{
+        if xff := r.Header.Get("X-Forwarded-For"); xff != "" </span><span class="cov8" title="1">{
                 parts := strings.Split(xff, ",")
                 ip := strings.TrimSpace(parts[0])
-                if net.ParseIP(ip) != nil </span><span class="cov0" title="0">{
+                if net.ParseIP(ip) != nil </span><span class="cov8" title="1">{
                         return normalizeLoopback(ip)
                 }</span>
         }
 
         // Usa la IP de la conexión TCP
-        <span class="cov0" title="0">ip, _, err := net.SplitHostPort(r.RemoteAddr)
-        if err == nil &amp;&amp; net.ParseIP(ip) != nil </span><span class="cov0" title="0">{
+        <span class="cov8" title="1">ip, _, err := net.SplitHostPort(r.RemoteAddr)
+        if err == nil &amp;&amp; net.ParseIP(ip) != nil </span><span class="cov8" title="1">{
                 return normalizeLoopback(ip)
         }</span>
 
-        <span class="cov0" title="0">return "0.0.0.0"</span>
+        <span class="cov8" title="1">return "0.0.0.0"</span>
 }
 
-func normalizeLoopback(ip string) string <span class="cov0" title="0">{
-        if ip == "::1" </span><span class="cov0" title="0">{
+func normalizeLoopback(ip string) string <span class="cov8" title="1">{
+        if ip == "::1" </span><span class="cov8" title="1">{
                 return "127.0.0.1"
         }</span>
-        <span class="cov0" title="0">return ip</span>
+        <span class="cov8" title="1">return ip</span>
 }
 
-func (s *UserService) DeleteUsers(userIDs []int) error <span class="cov0" title="0">{
+func (s *UserService) DeleteUsers(userIDs []int) error <span class="cov8" title="1">{
         return s.repo.DeleteUsers(userIDs)
 }</span>
 
-func (s *UserService) UpdateUsers(users []models.User) (int64, error) <span class="cov0" title="0">{
+func (s *UserService) UpdateUsers(users []models.User) (int64, error) <span class="cov8" title="1">{
         return s.repo.UpdateUsers(users)
+}</span>
+
+var signToken = func(token *jwt.Token, secret string) (string, error) <span class="cov8" title="1">{
+        return token.SignedString([]byte(secret))
 }</span>
 </pre>
 		
-		<pre class="file" id="file41" style="display: none">package validator
+		<pre class="file" id="file48" style="display: none">package validator
 
 import (
         "fmt"

@@ -10,4 +10,5 @@ type CourseRepositoryInterface interface {
 	GetCourseDetails(courseID int) (*CourseDetails, error)
 	DeleteCourses(courseIDs []int) ([]models.Warning, error)
 	UpdateCourse(id int, updates map[string]interface{}) error
+	CountUserCourses(userID int) (int, error)
 }
