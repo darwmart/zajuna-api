@@ -33,6 +33,7 @@ func (s *UserService) GetUsers(filters map[string]string, page, limit int) ([]mo
 	return s.repo.FindByFilters(filters, page, limit)
 }
 
+// Login autentica a un usuario utilizando su username y password.
 func (s *UserService) Login(r *http.Request, username, password string) (string, error) {
 
 	username = strings.TrimSpace(strings.ToLower(username))
@@ -59,10 +60,10 @@ func (s *UserService) Login(r *http.Request, username, password string) (string,
 	//VALIDACION SI EL USUARIO TIENE CURSOS VINCULADOS
 	countCourses, err := s.courseRepo.CountUserCourses(int(user.ID))
 	if err != nil {
-		return "", errors.New("Error al buscar los cursos del usuario")
+		return "", errors.New("error al buscar los cursos del usuario")
 	}
 	if countCourses == 0 {
-		return "", errors.New("El usuario no tiene cursos vinculados")
+		return "", errors.New("el usuario no tiene cursos vinculados")
 	}
 
 	//VALIDACION DE PASSWORD CON SU HASH
@@ -111,6 +112,7 @@ func (s *UserService) Login(r *http.Request, username, password string) (string,
 	return tokenString, nil
 }
 
+// Logout elimina una sesión basada en su token (SID).
 func (s *UserService) Logout(sid string) (string, error) {
 	err := s.sessionRepo.DeleteSession(sid)
 	if err != nil {
@@ -121,6 +123,9 @@ func (s *UserService) Logout(sid string) (string, error) {
 
 var cryptFunc = crypt.Crypt
 
+// PasswordVerify compara una contraseña en texto plano con un hash almacenado.
+// Internamente usa la función cryptFunc, que apunta a crypt.Crypt, lo cual permite
+// simular errores durante los tests
 func PasswordVerify(password string, hash string) bool {
 	generated, err := cryptFunc(password, hash)
 	if err != nil {
@@ -128,6 +133,8 @@ func PasswordVerify(password string, hash string) bool {
 	}
 	return generated == hash
 }
+
+// HashPassword genera un hash seguro usando bcrypt.
 func HashPassword(password string) (string, error) {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	return string(bytes), err
@@ -154,6 +161,7 @@ func getRemoteAddr(r *http.Request) string {
 	return "0.0.0.0"
 }
 
+// normalizeLoopback convierte direcciones loopback IPv6 a IPv4.
 func normalizeLoopback(ip string) string {
 	if ip == "::1" {
 		return "127.0.0.1"

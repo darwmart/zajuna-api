@@ -192,6 +192,19 @@ func (h *UserHandler) DeleteUsers(c *gin.Context) {
 	})
 }
 
+// Login autentica a un usuario y genera una cookie de sesión.
+//
+// @Summary      Iniciar sesión
+// @Description  Valida credenciales del usuario, genera un token y lo almacena como cookie HttpOnly.
+// @Tags         auth
+// @Accept       json
+// @Produce      json
+//
+// @Param        body   body      object  true   "Credenciales del usuario"
+// @Success      200    {object}  map[string]interface{}   "Inicio de sesión exitoso"
+// @Failure      400    {object}  map[string]string         "Error en credenciales o body inválido"
+// @Failure      401    {object}  map[string]string         "No autorizado"
+// @Router       /login [post]
 func (h *UserHandler) Login(c *gin.Context) {
 	var body struct {
 		Username string
@@ -234,6 +247,18 @@ func (h *UserHandler) Login(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{})
 }
 
+// Logout elimina la sesión del usuario y limpia la cookie Authorization.
+//
+// @Summary      Cerrar sesión
+// @Description  Borra la cookie de autenticación y elimina la sesión en base de datos.
+// @Tags         auth
+// @Produce      json
+// @Security     CookieAuth
+//
+// @Success      200    {object}  map[string]string    "Sesión eliminada correctamente"
+// @Failure      400    {object}  map[string]string    "Error eliminando la sesión"
+// @Failure      401    {object}  map[string]string    "No autorizado"
+// @Router       /logout [post]
 func (h *UserHandler) Logout(c *gin.Context) {
 
 	token, err := c.Cookie("Authorization")

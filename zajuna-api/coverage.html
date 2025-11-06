@@ -79,7 +79,7 @@
 				
 				<option value="file11">zajunaApi/internal/handlers/course_handler.go (100.0%)</option>
 				
-				<option value="file12">zajunaApi/internal/handlers/user_handler.go (60.7%)</option>
+				<option value="file12">zajunaApi/internal/handlers/user_handler.go (100.0%)</option>
 				
 				<option value="file13">zajunaApi/internal/middleware/cors.go (0.0%)</option>
 				
@@ -1356,34 +1356,47 @@ func (h *UserHandler) DeleteUsers(c *gin.Context) <span class="cov8" title="1">{
         })</span>
 }
 
-func (h *UserHandler) Login(c *gin.Context) <span class="cov0" title="0">{
+// Login autentica a un usuario y genera una cookie de sesión.
+//
+// @Summary      Iniciar sesión
+// @Description  Valida credenciales del usuario, genera un token y lo almacena como cookie HttpOnly.
+// @Tags         auth
+// @Accept       json
+// @Produce      json
+//
+// @Param        body   body      object  true   "Credenciales del usuario"
+// @Success      200    {object}  map[string]interface{}   "Inicio de sesión exitoso"
+// @Failure      400    {object}  map[string]string         "Error en credenciales o body inválido"
+// @Failure      401    {object}  map[string]string         "No autorizado"
+// @Router       /login [post]
+func (h *UserHandler) Login(c *gin.Context) <span class="cov8" title="1">{
         var body struct {
                 Username string
                 Password string
         }
 
-        if c.Bind(&amp;body) != nil </span><span class="cov0" title="0">{
+        if c.Bind(&amp;body) != nil </span><span class="cov8" title="1">{
                 c.JSON(http.StatusBadRequest, gin.H{
                         "error": "Failed to read body",
                 })
                 return
         }</span>
 
-        <span class="cov0" title="0">token, err := h.service.Login(c.Request, body.Username, body.Password)
-        if err != nil </span><span class="cov0" title="0">{
+        <span class="cov8" title="1">token, err := h.service.Login(c.Request, body.Username, body.Password)
+        if err != nil </span><span class="cov8" title="1">{
                 c.JSON(http.StatusBadRequest, gin.H{
                         "error": err.Error(),
                 })
                 return
         }</span>
-        <span class="cov0" title="0">if token == "" </span><span class="cov0" title="0">{
+        <span class="cov8" title="1">if token == "" </span><span class="cov8" title="1">{
                 c.JSON(http.StatusBadRequest, gin.H{
                         "error": "Invalid username",
                 })
                 return
         }</span>
 
-        <span class="cov0" title="0">c.SetSameSite(http.SameSiteLaxMode)
+        <span class="cov8" title="1">c.SetSameSite(http.SameSiteLaxMode)
         //c.SetCookie("Authorization", token, 3600*3, "", "", false, true)
         http.SetCookie(c.Writer, &amp;http.Cookie{
                 Name:     "Authorization",
@@ -1398,23 +1411,35 @@ func (h *UserHandler) Login(c *gin.Context) <span class="cov0" title="0">{
         c.JSON(http.StatusOK, gin.H{})</span>
 }
 
-func (h *UserHandler) Logout(c *gin.Context) <span class="cov0" title="0">{
+// Logout elimina la sesión del usuario y limpia la cookie Authorization.
+//
+// @Summary      Cerrar sesión
+// @Description  Borra la cookie de autenticación y elimina la sesión en base de datos.
+// @Tags         auth
+// @Produce      json
+// @Security     CookieAuth
+//
+// @Success      200    {object}  map[string]string    "Sesión eliminada correctamente"
+// @Failure      400    {object}  map[string]string    "Error eliminando la sesión"
+// @Failure      401    {object}  map[string]string    "No autorizado"
+// @Router       /logout [post]
+func (h *UserHandler) Logout(c *gin.Context) <span class="cov8" title="1">{
 
         token, err := c.Cookie("Authorization")
-        if err != nil </span><span class="cov0" title="0">{
+        if err != nil </span><span class="cov8" title="1">{
                 c.AbortWithStatus(http.StatusUnauthorized)
                 return
         }</span>
 
-        <span class="cov0" title="0">res, err := h.service.Logout(token)
-        if err != nil </span><span class="cov0" title="0">{
+        <span class="cov8" title="1">res, err := h.service.Logout(token)
+        if err != nil </span><span class="cov8" title="1">{
                 c.JSON(http.StatusBadRequest, gin.H{
                         "error": err.Error(),
                 })
                 return
         }</span>
         //c.SetCookie("Authorization", "", -1, "", "", false, true)
-        <span class="cov0" title="0">http.SetCookie(c.Writer, &amp;http.Cookie{
+        <span class="cov8" title="1">http.SetCookie(c.Writer, &amp;http.Cookie{
                 Name:     "Authorization",
                 Value:    "",
                 Path:     "/", // o el path con el que se creó
@@ -1477,6 +1502,16 @@ const (
         CAP_PROHIBIT = -1000
 )
 
+// HasCapability es un middleware de autorización basado en roles y capacidades.
+//
+// @Summary      Middleware de autorización
+// @Description  Verifica si el usuario autenticado posee la capacidad requerida para acceder a la ruta.
+// @Tags         auth
+// @Security     CookieAuth
+//
+// @Param        capability   path      string   true   "Nombre de la capacidad requerida para acceder"
+// @Failure      401          {string}  string   "Unauthorized – el usuario no tiene permisos o no está autenticado"
+// @Failure      500          {string}  string   "Internal Server Error – error consultando la base de datos"
 func HasCapability(
         configRepo repository.ConfigRepositoryInterface,
         sessionRepo repository.SessionsRepositoryInterface,
@@ -1577,6 +1612,16 @@ import (
         log "github.com/sirupsen/logrus"
 )
 
+// RequireAuth es un middleware de autenticación basado en sesiones.
+//
+// @Summary      Middleware de autenticación por sesión
+// @Description  Valida la cookie "Authorization", busca la sesión en la BD y determina si el usuario está autenticado.
+// @Tags         auth
+//
+// @Security     CookieAuth
+//
+// @Failure      401   {string}  string  "Unauthorized – cookie ausente o sesión inválida"
+// @Failure      500   {string}  string  "Internal Server Error – error al consultar la BD"
 func RequireAuth(sessionRepo repository.SessionsRepositoryInterface) gin.HandlerFunc <span class="cov8" title="1">{
         return func(c *gin.Context) </span><span class="cov8" title="1">{
                 log.Info("En el Middleware")
@@ -1599,7 +1644,7 @@ func RequireAuth(sessionRepo repository.SessionsRepositoryInterface) gin.Handler
                         http.SetCookie(c.Writer, &amp;http.Cookie{
                                 Name:     "Authorization",
                                 Value:    "",
-                                Path:     "/", // o el path con el que se creó
+                                Path:     "/",
                                 Domain:   "",
                                 MaxAge:   -1,
                                 Expires:  time.Unix(0, 0),
@@ -2973,6 +3018,7 @@ func (s *UserService) GetUsers(filters map[string]string, page, limit int) ([]mo
         return s.repo.FindByFilters(filters, page, limit)
 }</span>
 
+// Login autentica a un usuario utilizando su username y password.
 func (s *UserService) Login(r *http.Request, username, password string) (string, error) <span class="cov8" title="1">{
 
         username = strings.TrimSpace(strings.ToLower(username))
@@ -2999,10 +3045,10 @@ func (s *UserService) Login(r *http.Request, username, password string) (string,
         //VALIDACION SI EL USUARIO TIENE CURSOS VINCULADOS
         <span class="cov8" title="1">countCourses, err := s.courseRepo.CountUserCourses(int(user.ID))
         if err != nil </span><span class="cov8" title="1">{
-                return "", errors.New("Error al buscar los cursos del usuario")
+                return "", errors.New("error al buscar los cursos del usuario")
         }</span>
         <span class="cov8" title="1">if countCourses == 0 </span><span class="cov8" title="1">{
-                return "", errors.New("El usuario no tiene cursos vinculados")
+                return "", errors.New("el usuario no tiene cursos vinculados")
         }</span>
 
         //VALIDACION DE PASSWORD CON SU HASH
@@ -3051,6 +3097,7 @@ func (s *UserService) Login(r *http.Request, username, password string) (string,
         <span class="cov8" title="1">return tokenString, nil</span>
 }
 
+// Logout elimina una sesión basada en su token (SID).
 func (s *UserService) Logout(sid string) (string, error) <span class="cov8" title="1">{
         err := s.sessionRepo.DeleteSession(sid)
         if err != nil </span><span class="cov8" title="1">{
@@ -3061,6 +3108,9 @@ func (s *UserService) Logout(sid string) (string, error) <span class="cov8" titl
 
 var cryptFunc = crypt.Crypt
 
+// PasswordVerify compara una contraseña en texto plano con un hash almacenado.
+// Internamente usa la función cryptFunc, que apunta a crypt.Crypt, lo cual permite
+// simular errores durante los tests
 func PasswordVerify(password string, hash string) bool <span class="cov8" title="1">{
         generated, err := cryptFunc(password, hash)
         if err != nil </span><span class="cov8" title="1">{
@@ -3068,6 +3118,8 @@ func PasswordVerify(password string, hash string) bool <span class="cov8" title=
         }</span>
         <span class="cov8" title="1">return generated == hash</span>
 }
+
+// HashPassword genera un hash seguro usando bcrypt.
 func HashPassword(password string) (string, error) <span class="cov8" title="1">{
         bytes, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
         return string(bytes), err
@@ -3094,6 +3146,7 @@ func getRemoteAddr(r *http.Request) string <span class="cov8" title="1">{
         <span class="cov8" title="1">return "0.0.0.0"</span>
 }
 
+// normalizeLoopback convierte direcciones loopback IPv6 a IPv4.
 func normalizeLoopback(ip string) string <span class="cov8" title="1">{
         if ip == "::1" </span><span class="cov8" title="1">{
                 return "127.0.0.1"

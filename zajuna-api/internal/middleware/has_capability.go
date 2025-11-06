@@ -15,6 +15,16 @@ const (
 	CAP_PROHIBIT = -1000
 )
 
+// HasCapability es un middleware de autorización basado en roles y capacidades.
+//
+// @Summary      Middleware de autorización
+// @Description  Verifica si el usuario autenticado posee la capacidad requerida para acceder a la ruta.
+// @Tags         auth
+// @Security     CookieAuth
+//
+// @Param        capability   path      string   true   "Nombre de la capacidad requerida para acceder"
+// @Failure      401          {string}  string   "Unauthorized – el usuario no tiene permisos o no está autenticado"
+// @Failure      500          {string}  string   "Internal Server Error – error consultando la base de datos"
 func HasCapability(
 	configRepo repository.ConfigRepositoryInterface,
 	sessionRepo repository.SessionsRepositoryInterface,

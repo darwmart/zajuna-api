@@ -591,7 +591,7 @@ func TestUserService_Login_NoCourses(t *testing.T) {
 	token, err := service.Login(req, "testuser", "password123")
 
 	assert.Error(t, err)
-	assert.EqualError(t, err, "El usuario no tiene cursos vinculados")
+	assert.EqualError(t, err, "el usuario no tiene cursos vinculados")
 	assert.Empty(t, token)
 	mockRepo.AssertExpectations(t)
 	courseRepoMock.AssertExpectations(t)
@@ -771,7 +771,7 @@ func TestUserService_Login_CountUserCoursesError(t *testing.T) {
 	token, err := service.Login(req, "testuser", "password123")
 
 	assert.Error(t, err)
-	assert.EqualError(t, err, "Error al buscar los cursos del usuario")
+	assert.EqualError(t, err, "error al buscar los cursos del usuario")
 	assert.Empty(t, token)
 	mockRepo.AssertExpectations(t)
 	courseRepoMock.AssertExpectations(t)

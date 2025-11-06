@@ -6,6 +6,7 @@ import (
 	"errors"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 	"zajunaApi/internal/dto/response"
 	"zajunaApi/internal/models"
@@ -492,4 +493,167 @@ func TestNewUserHandler(t *testing.T) {
 	// Assert
 	assert.NotNil(t, handler)
 	assert.Equal(t, mockService, handler.service)
+}
+func TestUserHandler_Login_InvalidBody(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+
+	mockService := new(mocks.MockUserService)
+	handler := NewUserHandler(mockService)
+
+	router := gin.New()
+	router.POST("/login", handler.Login)
+
+	req := httptest.NewRequest("POST", "/login", strings.NewReader("{invalid json"))
+	req.Header.Set("Content-Type", "application/json")
+
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+}
+func TestUserHandler_Login_ServiceError(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+
+	mockService := new(mocks.MockUserService)
+	handler := NewUserHandler(mockService)
+
+	router := gin.New()
+	router.POST("/login", handler.Login)
+
+	body := `{"Username":"user", "Password":"pass"}`
+
+	req := httptest.NewRequest("POST", "/login", strings.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+
+	mockService.
+		On("Login", req, "user", "pass").
+		Return("", errors.New("bad credentials"))
+
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+	mockService.AssertExpectations(t)
+}
+func TestUserHandler_Login_EmptyToken(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+
+	mockService := new(mocks.MockUserService)
+	handler := NewUserHandler(mockService)
+
+	router := gin.New()
+	router.POST("/login", handler.Login)
+
+	body := `{"Username":"user", "Password":"pass"}`
+
+	req := httptest.NewRequest("POST", "/login", strings.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+
+	mockService.
+		On("Login", req, "user", "pass").
+		Return("", nil)
+
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+	mockService.AssertExpectations(t)
+}
+func TestUserHandler_Login_Success(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+
+	mockService := new(mocks.MockUserService)
+	handler := NewUserHandler(mockService)
+
+	router := gin.New()
+	router.POST("/login", handler.Login)
+
+	body := `{"Username":"user","Password":"pass"}`
+
+	req := httptest.NewRequest("POST", "/login", strings.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+
+	mockToken := "abc123"
+
+	mockService.
+		On("Login", req, "user", "pass").
+		Return(mockToken, nil)
+
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusOK, w.Code)
+
+	cookie := w.Result().Cookies()
+	assert.NotEmpty(t, cookie)
+	assert.Equal(t, "Authorization", cookie[0].Name)
+	assert.Equal(t, mockToken, cookie[0].Value)
+
+	mockService.AssertExpectations(t)
+}
+func TestUserHandler_Logout_NoCookie(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+
+	mockService := new(mocks.MockUserService)
+	handler := NewUserHandler(mockService)
+
+	router := gin.New()
+	router.POST("/logout", handler.Logout)
+
+	req := httptest.NewRequest("POST", "/logout", nil)
+	w := httptest.NewRecorder()
+
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusUnauthorized, w.Code)
+}
+func TestUserHandler_Logout_ServiceError(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+
+	mockService := new(mocks.MockUserService)
+	handler := NewUserHandler(mockService)
+
+	router := gin.New()
+	router.POST("/logout", handler.Logout)
+
+	req := httptest.NewRequest("POST", "/logout", nil)
+	req.AddCookie(&http.Cookie{Name: "Authorization", Value: "token123"})
+
+	mockService.
+		On("Logout", "token123").
+		Return("", errors.New("logout failed"))
+
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+	mockService.AssertExpectations(t)
+}
+func TestUserHandler_Logout_Success(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+
+	mockService := new(mocks.MockUserService)
+	handler := NewUserHandler(mockService)
+
+	router := gin.New()
+	router.POST("/logout", handler.Logout)
+
+	req := httptest.NewRequest("POST", "/logout", nil)
+	req.AddCookie(&http.Cookie{Name: "Authorization", Value: "token123"})
+
+	mockService.
+		On("Logout", "token123").
+		Return("Sesion deleted", nil)
+
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusOK, w.Code)
+
+	cookie := w.Result().Cookies()
+	assert.NotEmpty(t, cookie)
+	assert.Equal(t, -1, cookie[0].MaxAge)
+	assert.Equal(t, "", cookie[0].Value)
+
+	mockService.AssertExpectations(t)
 }
