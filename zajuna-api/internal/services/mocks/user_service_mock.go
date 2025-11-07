@@ -1,6 +1,7 @@
 package mocks
 
 import (
+	"zajunaApi/internal/dto/response"
 	"zajunaApi/internal/models"
 
 	"github.com/stretchr/testify/mock"
@@ -30,4 +31,13 @@ func (m *MockUserService) DeleteUsers(userIDs []int) error {
 func (m *MockUserService) UpdateUsers(users []models.User) (int64, error) {
 	args := m.Called(users)
 	return args.Get(0).(int64), args.Error(1)
+}
+
+// GetEnrolledUsers mockea el método GetEnrolledUsers
+func (m *MockUserService) GetEnrolledUsers(courseID int, options map[string]interface{}) ([]response.EnrolledUserResponse, int, error) {
+	args := m.Called(courseID, options)
+	if args.Get(0) == nil {
+		return nil, args.Get(1).(int), args.Error(2)
+	}
+	return args.Get(0).([]response.EnrolledUserResponse), args.Get(1).(int), args.Error(2)
 }

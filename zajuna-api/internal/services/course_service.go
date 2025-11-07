@@ -26,8 +26,8 @@ func (s *CourseService) GetCoursesByCategory(categoryID uint) ([]models.Course, 
 //func (s *CourseService) GetCourseRoles(courseID int) (map[string]int64, error) {
 //return s.repo.GetRoleAssignments(courseID)}
 
-func (s *CourseService) GetCourseDetails(courseID int) (*repository.CourseDetails, error) {
-	return s.repo.GetCourseDetails(courseID)
+func (s *CourseService) GetCourseDetails(idnumber string) (*repository.CourseDetails, error) {
+	return s.repo.GetCourseDetails(idnumber)
 }
 
 func (s *CourseService) DeleteCourses(courseIDs []int) (*models.DeleteCoursesResponse, error) {
@@ -101,4 +101,9 @@ func (s *CourseService) UpdateCourses(courses []request.UpdateCourseRequest) (*m
 	}
 
 	return &models.UpdateCoursesResponse{Warnings: warnings}, nil
+}
+
+// SearchCourses busca cursos según criterio y valor
+func (s *CourseService) SearchCourses(criteriaName, criteriaValue string, page, perPage int) ([]models.Course, int64, error) {
+	return s.repo.SearchCourses(criteriaName, criteriaValue, page, perPage)
 }

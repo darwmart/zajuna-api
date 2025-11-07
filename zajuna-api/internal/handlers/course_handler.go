@@ -29,7 +29,7 @@ func NewCourseHandler(service services.CourseServiceInterface) *CourseHandler {
 // @Success      200         {object}  response.CourseListResponse
 // @Failure      400         {object}  response.ErrorResponse
 // @Failure      500         {object}  response.ErrorResponse
-// @Router       /courses [get]
+// @Router       /courses get
 func (h *CourseHandler) GetCourses(c *gin.Context) {
 	// 1. Parsear y validar request
 	var req request.GetCoursesRequest
@@ -83,7 +83,7 @@ func (h *CourseHandler) GetCourses(c *gin.Context) {
 // @Tags         courses
 // @Accept       json
 // @Produce      json
-// @Param        id   path      int  true  "ID del curso"
+// @Param        id   path      int  true  ID del curso
 // @Success      200  {object}  response.CourseDetailResponse
 // @Failure      400  {object}  response.ErrorResponse
 // @Failure      404  {object}  response.ErrorResponse
@@ -103,7 +103,7 @@ func (h *CourseHandler) GetCourseDetails(c *gin.Context) {
 	}
 
 	// 2. Llamar al servicio
-	details, err := h.service.GetCourseDetails(req.ID)
+	details, err := h.service.GetCourseDetails(req.IDNumber)
 	if err != nil {
 		c.JSON(http.StatusNotFound, response.NewErrorResponse(
 			"NOT_FOUND",
@@ -154,7 +154,7 @@ func (h *CourseHandler) DeleteCourses(c *gin.Context) {
 		return
 	}
 
-	// 3. Llamar al servicio
+	// 3. Llamar al servicio.
 	serviceResponse, err := h.service.DeleteCourses(req.CourseIDs)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, response.NewErrorResponse(

@@ -25,7 +25,7 @@ func (r *GetCoursesRequest) HasCategoryFilter() bool {
 
 // GetCourseDetailsRequest representa los parámetros para obtener detalles de un curso
 type GetCourseDetailsRequest struct {
-	ID int `uri:"id" binding:"required,min=1"`
+	IDNumber string `uri:"idnumber" binding:"required"`
 }
 
 // DeleteCoursesRequest representa la solicitud de eliminación de cursos

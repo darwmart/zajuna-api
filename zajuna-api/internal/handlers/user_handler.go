@@ -190,3 +190,100 @@ func (h *UserHandler) DeleteUsers(c *gin.Context) {
 		Errors:  []string{},
 	})
 }
+
+// GetEnrolledUsers obtiene usuarios matriculados en un curso
+// @Summary      Obtener usuarios matriculados en un curso
+// @Description  Obtiene la lista de usuarios matriculados en un curso con opciones de filtrado
+// @Tags         users
+// @Accept       json
+// @Produce      json
+// @Param        courseid        path      int     true   "ID del curso"
+// @Param        withcapability  query     string  false  "Filtrar por capacidad"
+// @Param        groupid         query     int     false  "Filtrar por grupo"
+// @Param        onlyactive      query     int     false  "Solo usuarios activos (1=sí, 0=no)"
+// @Param        onlysuspended   query     int     false  "Solo usuarios suspendidos (1=sí, 0=no)"
+// @Param        userfields      query     string  false  "Campos de usuario a retornar"
+// @Param        limitfrom       query     int     false  "Offset de paginación"
+// @Param        limitnumber     query     int     false  "Límite de resultados"
+// @Param        sortby          query     string  false  "Campo de ordenamiento (id, firstname, lastname, siteorder)"
+// @Param        sortdirection   query     string  false  "Dirección de ordenamiento (ASC, DESC)"
+// @Success      200             {object}  response.EnrolledUsersListResponse
+// @Failure      400             {object}  response.ErrorResponse
+// @Failure      500             {object}  response.ErrorResponse
+// @Router       /courses/{courseid}/users [get]
+func (h *UserHandler) GetEnrolledUsers(c *gin.Context) {
+	// 1. Parsear y validar courseID del path
+	var uriReq request.GetEnrolledUsersRequest
+	if err := c.ShouldBindUri(&uriReq); err != nil {
+		c.JSON(http.StatusBadRequest, response.NewErrorResponse(
+			"INVALID_COURSE_ID",
+			"ID de curso inválido",
+			err.Error(),
+		))
+		return
+	}
+
+	// 2. Parsear opciones de query string
+	var options request.EnrolledUsersOptions
+	if err := c.ShouldBindQuery(&options); err != nil {
+		c.JSON(http.StatusBadRequest, response.NewErrorResponse(
+			"INVALID_OPTIONS",
+			"Opciones de consulta inválidas",
+			err.Error(),
+		))
+		return
+	}
+
+	// 3. Establecer valores por defecto
+	options.SetDefaults()
+
+	// 4. Validar opciones
+	if err := options.Validate(); err != nil {
+		c.JSON(http.StatusBadRequest, response.NewErrorResponse(
+			"VALIDATION_ERROR",
+			err.Error(),
+			nil,
+		))
+		return
+	}
+
+	// 5. Convertir opciones a map para el service
+	optionsMap := map[string]interface{}{
+		"sortby":        options.SortBy,
+		"sortdirection": options.SortDirection,
+		"limitnumber":   options.LimitNumber,
+	}
+
+	if options.WithCapability != "" {
+		optionsMap["withcapability"] = options.WithCapability
+	}
+	if options.GroupID > 0 {
+		optionsMap["groupid"] = options.GroupID
+	}
+	if options.OnlyActive > 0 {
+		optionsMap["onlyactive"] = options.OnlyActive
+	}
+	if options.OnlySuspended > 0 {
+		optionsMap["onlysuspended"] = options.OnlySuspended
+	}
+	if options.LimitFrom > 0 {
+		optionsMap["limitfrom"] = options.LimitFrom
+	}
+
+	// 6. Llamar al servicio
+	users, total, err := h.service.GetEnrolledUsers(uriReq.CourseID, optionsMap)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, response.NewErrorResponse(
+			"FETCH_ERROR",
+			"Error al obtener usuarios matriculados",
+			err.Error(),
+		))
+		return
+	}
+
+	// 7. Responder
+	c.JSON(http.StatusOK, response.EnrolledUsersListResponse{
+		Users: users,
+		Total: total,
+	})
+}

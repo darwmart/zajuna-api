@@ -13,7 +13,7 @@ type Warning struct {
 	Message     string `json:"message"`
 }
 
-// Respuesta estándar de la API Moodle-like
+// Respuesta estándar de la API
 type DeleteCoursesResponse struct {
 	Warnings []Warning `json:"warnings,omitempty"`
 }

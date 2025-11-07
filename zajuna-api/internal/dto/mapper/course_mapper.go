@@ -53,18 +53,24 @@ func CourseDetailsToResponse(details *repository.CourseDetails) *response.Course
 		return nil
 	}
 
+	// Convertir EnrollmentMethod (string) a EnrolMethods ([]string)
+	var enrolMethods []string
+	if details.EnrollmentMethod != "" {
+		enrolMethods = []string{details.EnrollmentMethod}
+	}
+
 	return &response.CourseDetailResponse{
-		ID:               details.ID,
-		FullName:         details.FullName,
-		ShortName:        details.ShortName,
-		IDNumber:         details.IDNumber,
-		Format:           details.Format,
-		Category:         details.Category,
-		Groupings:        details.Groupings,
-		Groups:           details.Groups,
-		RoleAssignments:  details.RoleAssignments,
-		EnrollmentMethod: details.EnrollmentMethod,
-		Sections:         details.Sections,
+		ID:              details.ID,
+		FullName:        details.FullName,
+		ShortName:       details.ShortName,
+		IDNumber:        details.IDNumber,
+		Format:          details.Format,
+		Category:        details.Category,
+		Groupings:       details.Groupings,
+		Groups:          details.Groups,
+		RoleAssignments: details.RoleAssignments,
+		EnrolMethods:    enrolMethods,
+		Sections:        details.Sections,
 	}
 }
 

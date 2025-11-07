@@ -68,13 +68,28 @@ func (r *CourseRepository) GetCourseByID(id uint) (*models.Course, error) {
 	return &course, nil
 }
 
+// Obtener un curso por IDNumber
+func (r *CourseRepository) GetCourseByIDNumber(idnumber string) (*models.Course, error) {
+	var course models.Course
+
+	if err := r.db.Table("mdl_course").
+		Where("idnumber = ?", idnumber).
+		First(&course).Error; err != nil {
+		return nil, err
+	}
+
+	return &course, nil
+}
+
 // GetRoleAssignments obtiene el número de usuarios por rol en un curso.
-func (r *CourseRepository) GetCourseDetails(courseID int) (*CourseDetails, error) {
-	// Reutilizamos GetCourseByID para obtener la información base
-	course, err := r.GetCourseByID(uint(courseID))
+func (r *CourseRepository) GetCourseDetails(idnumber string) (*CourseDetails, error) {
+	// Buscar curso por idnumber
+	course, err := r.GetCourseByIDNumber(idnumber)
 	if err != nil {
 		return nil, err
 	}
+
+	courseID := int(course.ID)
 
 	// Creamos el struct base de detalles
 	details := CourseDetails{
@@ -179,6 +194,57 @@ func (r *CourseRepository) DeleteCourses(courseIDs []int) ([]models.Warning, err
 	}
 
 	return warnings, nil
+}
+
+// SearchCourses busca cursos según criterio y valor
+func (r *CourseRepository) SearchCourses(criteriaName, criteriaValue string, page, perPage int) ([]models.Course, int64, error) {
+	var courses []models.Course
+	var total int64
+
+	query := r.db.Table("mdl_course")
+
+	// Aplicar el criterio de búsqueda
+	switch criteriaName {
+	case "search":
+		// Búsqueda por texto en fullname, shortname o idnumber
+		searchPattern := "%" + criteriaValue + "%"
+		query = query.Where("fullname ILIKE ? OR shortname ILIKE ? OR idnumber ILIKE ?",
+			searchPattern, searchPattern, searchPattern)
+
+	case "categoryid":
+		// Búsqueda por categoría
+		query = query.Where("category = ?", criteriaValue)
+
+	case "id":
+		// Búsqueda por ID
+		query = query.Where("id = ?", criteriaValue)
+
+	case "idnumber":
+		// Búsqueda por idnumber
+		query = query.Where("idnumber = ?", criteriaValue)
+
+	default:
+		return nil, 0, nil
+	}
+
+	// Contar total
+	query.Count(&total)
+
+	// Ordenar alfabéticamente
+	query = query.Order("fullname ASC")
+
+	// Aplicar paginación si perPage > 0
+	if perPage > 0 {
+		offset := page * perPage
+		query = query.Offset(offset).Limit(perPage)
+	}
+
+	// Ejecutar consulta
+	if err := query.Find(&courses).Error; err != nil {
+		return nil, 0, err
+	}
+
+	return courses, total, nil
 }
 
 // UpdateCourse actualiza un curso en la base de datos

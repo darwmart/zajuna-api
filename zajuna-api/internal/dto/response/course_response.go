@@ -25,22 +25,22 @@ type CourseResponse struct {
 
 // CourseDetailResponse representa los detalles completos de un curso
 type CourseDetailResponse struct {
-	ID               int64            `json:"id"`
-	FullName         string           `json:"fullname"`
-	ShortName        string           `json:"shortname"`
-	IDNumber         string           `json:"idnumber"`
-	Format           string           `json:"format"`
-	Category         string           `json:"category"`
-	Groupings        int64            `json:"groupings"`
-	Groups           int64            `json:"groups"`
-	RoleAssignments  map[string]int64 `json:"roleAssignments"`
-	EnrollmentMethod string           `json:"enrollmentMethod"`
-	Sections         []string         `json:"sections"`
-	StartDate        int64            `json:"startdate"`
-	EndDate          int64            `json:"enddate"`
-	Visible          bool             `json:"visible"`
-	TimeCreated      int64            `json:"timecreated"`
-	TimeModified     int64            `json:"timemodified"`
+	ID              int64            `json:"id"`
+	FullName        string           `json:"fullname"`
+	ShortName       string           `json:"shortname"`
+	IDNumber        string           `json:"idnumber"`
+	Format          string           `json:"format"`
+	Category        string           `json:"category"`
+	Groupings       int64            `json:"groupings"`
+	Groups          int64            `json:"groups"`
+	RoleAssignments map[string]int64 `json:"role_assignments"`
+	EnrolMethods    []string         `json:"enrol_methods"`
+	Sections        []string         `json:"sections"`
+	StartDate       int64            `json:"startdate"`
+	EndDate         int64            `json:"enddate"`
+	Visible         bool             `json:"visible"`
+	TimeCreated     int64            `json:"timecreated"`
+	TimeModified    int64            `json:"timemodified"`
 }
 
 // CourseListResponse representa la respuesta de listado de cursos

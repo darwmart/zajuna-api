@@ -36,8 +36,16 @@ func (m *MockCourseRepository) GetCourseByID(id uint) (*models.Course, error) {
 	return args.Get(0).(*models.Course), args.Error(1)
 }
 
-func (m *MockCourseRepository) GetCourseDetails(courseID int) (*repository.CourseDetails, error) {
-	args := m.Called(courseID)
+func (m *MockCourseRepository) GetCourseByIDNumber(idnumber string) (*models.Course, error) {
+	args := m.Called(idnumber)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*models.Course), args.Error(1)
+}
+
+func (m *MockCourseRepository) GetCourseDetails(idnumber string) (*repository.CourseDetails, error) {
+	args := m.Called(idnumber)
 	if args.Get(0) == nil {
 		return nil, args.Error(1)
 	}
@@ -55,4 +63,12 @@ func (m *MockCourseRepository) DeleteCourses(courseIDs []int) ([]models.Warning,
 func (m *MockCourseRepository) UpdateCourse(id int, updates map[string]interface{}) error {
 	args := m.Called(id, updates)
 	return args.Error(0)
+}
+
+func (m *MockCourseRepository) SearchCourses(criteriaName, criteriaValue string, page, perPage int) ([]models.Course, int64, error) {
+	args := m.Called(criteriaName, criteriaValue, page, perPage)
+	if args.Get(0) == nil {
+		return nil, args.Get(1).(int64), args.Error(2)
+	}
+	return args.Get(0).([]models.Course), args.Get(1).(int64), args.Error(2)
 }

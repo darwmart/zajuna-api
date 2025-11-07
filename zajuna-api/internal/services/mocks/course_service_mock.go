@@ -32,8 +32,8 @@ func (m *MockCourseService) GetCoursesByCategory(categoryID uint) ([]models.Cour
 }
 
 // GetCourseDetails mockea el método GetCourseDetails
-func (m *MockCourseService) GetCourseDetails(courseID int) (*repository.CourseDetails, error) {
-	args := m.Called(courseID)
+func (m *MockCourseService) GetCourseDetails(idnumber string) (*repository.CourseDetails, error) {
+	args := m.Called(idnumber)
 	if args.Get(0) == nil {
 		return nil, args.Error(1)
 	}
@@ -56,4 +56,13 @@ func (m *MockCourseService) UpdateCourses(courses []request.UpdateCourseRequest)
 		return nil, args.Error(1)
 	}
 	return args.Get(0).(*models.UpdateCoursesResponse), args.Error(1)
+}
+
+// SearchCourses mockea el método SearchCourses
+func (m *MockCourseService) SearchCourses(criteriaName, criteriaValue string, page, perPage int) ([]models.Course, int64, error) {
+	args := m.Called(criteriaName, criteriaValue, page, perPage)
+	if args.Get(0) == nil {
+		return nil, args.Get(1).(int64), args.Error(2)
+	}
+	return args.Get(0).([]models.Course), args.Get(1).(int64), args.Error(2)
 }
