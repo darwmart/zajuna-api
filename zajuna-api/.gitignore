@@ -1,4 +1,4 @@
-# Environment variables
+# Environment variables (sensitive data)
 .env
 .env.development
 .env.production
@@ -8,6 +8,9 @@ internal/config/.env
 internal/config/.env.development
 internal/config/.env.production
 
+# Keep example files (templates without sensitive data)
+!**/.env*.example
+
 # Binaries
 bin/
 *.exe
@@ -16,6 +19,7 @@ bin/
 *.so
 *.dylib
 zajuna-api
+server
 
 # Test binary, built with `go test -c`
 *.test
