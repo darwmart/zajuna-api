@@ -13,10 +13,18 @@ type Course struct {
 	NewsItems         int    `gorm:"column:newsitems" json:"newsitems"`
 	StartDate         int64  `gorm:"column:startdate" json:"startdate"`
 	EndDate           int64  `gorm:"column:enddate" json:"enddate"`
+	NumSections       int    `gorm:"column:numsections" json:"numsections"`
+	MaxBytes          int    `gorm:"column:maxbytes" json:"maxbytes"`
+	ShowReports       int    `gorm:"column:showreports" json:"showreports"`
 	Visible           int    `gorm:"column:visible" json:"visible"`
+	HiddenSections    int    `gorm:"column:hiddensections" json:"hiddensections"`
 	GroupMode         int    `gorm:"column:groupmode" json:"groupmode"`
 	GroupModeForce    int    `gorm:"column:groupmodeforce" json:"groupmodeforce"`
 	DefaultGroupingID int    `gorm:"column:defaultgroupingid" json:"defaultgroupingid"`
+	EnableCompletion  int    `gorm:"column:enablecompletion" json:"enablecompletion"`
+	CompletionNotify  int    `gorm:"column:completionnotify" json:"completionnotify"`
+	Lang              string `gorm:"column:lang" json:"lang"`
+	ForceTheme        string `gorm:"column:theme" json:"forcetheme"`
 	SortOrder         int    `gorm:"column:sortorder" json:"sortorder"`
 	TimeCreated       int64  `gorm:"column:timecreated" json:"timecreated"`
 	TimeModified      int64  `gorm:"column:timemodified" json:"timemodified"`

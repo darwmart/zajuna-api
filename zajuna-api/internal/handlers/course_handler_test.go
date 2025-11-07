@@ -175,11 +175,12 @@ func TestGetCourseDetails_Success(t *testing.T) {
 	mockService := new(mocks.MockCourseService)
 	handler := NewCourseHandler(mockService)
 
+	idNumber := "TC001"
 	expectedDetails := &repository.CourseDetails{
 		ID:               1,
 		FullName:         "Test Course",
 		ShortName:        "TC1",
-		IDNumber:         "TC001",
+		IDNumber:         idNumber,
 		Format:           "weeks",
 		Category:         "Test Category",
 		Groupings:        2,
@@ -189,12 +190,12 @@ func TestGetCourseDetails_Success(t *testing.T) {
 		Sections:         []string{"Section 1", "Section 2"},
 	}
 
-	mockService.On("GetCourseDetails", 1).Return(expectedDetails, nil)
+	mockService.On("GetCourseDetails", idNumber).Return(expectedDetails, nil)
 
 	router := gin.New()
-	router.GET("/courses/:id/details", handler.GetCourseDetails)
+	router.GET("/courses/:idnumber/details", handler.GetCourseDetails)
 
-	req, _ := http.NewRequest(http.MethodGet, "/courses/1/details", nil)
+	req, _ := http.NewRequest(http.MethodGet, "/courses/TC001/details", nil)
 	w := httptest.NewRecorder()
 
 	// Act
@@ -219,13 +220,14 @@ func TestGetCourseDetails_NotFound(t *testing.T) {
 	mockService := new(mocks.MockCourseService)
 	handler := NewCourseHandler(mockService)
 
+	idNumber := "NONEXISTENT"
 	expectedError := errors.New("course not found")
-	mockService.On("GetCourseDetails", 999).Return(nil, expectedError)
+	mockService.On("GetCourseDetails", idNumber).Return(nil, expectedError)
 
 	router := gin.New()
-	router.GET("/courses/:id/details", handler.GetCourseDetails)
+	router.GET("/courses/:idnumber/details", handler.GetCourseDetails)
 
-	req, _ := http.NewRequest(http.MethodGet, "/courses/999/details", nil)
+	req, _ := http.NewRequest(http.MethodGet, "/courses/NONEXISTENT/details", nil)
 	w := httptest.NewRecorder()
 
 	// Act

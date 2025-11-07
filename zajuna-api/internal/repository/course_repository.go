@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"zajunaApi/internal/dto/request"
 	"zajunaApi/internal/models"
 
 	"gorm.io/gorm"
@@ -264,6 +265,130 @@ func (r *CourseRepository) UpdateCourse(id int, updates map[string]interface{}) 
 	// Verificar que se actualizó al menos una fila
 	if result.RowsAffected == 0 {
 		return gorm.ErrRecordNotFound
+	}
+
+	return nil
+}
+
+// UpdateCourseFormatOptions actualiza o inserta opciones de formato de curso
+func (r *CourseRepository) UpdateCourseFormatOptions(courseID int, options []request.CourseFormatOption) error {
+	// Primero verificar que el curso existe
+	var exists bool
+	if err := r.db.Table("mdl_course").
+		Select("1").
+		Where("id = ?", courseID).
+		Limit(1).
+		Find(&exists).Error; err != nil {
+		return err
+	}
+
+	if !exists {
+		return gorm.ErrRecordNotFound
+	}
+
+	// Obtener el formato del curso
+	var format string
+	if err := r.db.Table("mdl_course").
+		Select("format").
+		Where("id = ?", courseID).
+		Scan(&format).Error; err != nil {
+		return err
+	}
+
+	// Procesar cada opción de formato
+	for _, option := range options {
+		// Verificar si la opción ya existe
+		var existingID int
+		err := r.db.Table("mdl_course_format_options").
+			Select("id").
+			Where("courseid = ? AND format = ? AND name = ?", courseID, format, option.Name).
+			Scan(&existingID).Error
+
+		if err == gorm.ErrRecordNotFound || existingID == 0 {
+			// Insertar nueva opción
+			if err := r.db.Exec(`
+				INSERT INTO mdl_course_format_options (courseid, format, sectionid, name, value)
+				VALUES (?, ?, 0, ?, ?)
+			`, courseID, format, option.Name, option.Value).Error; err != nil {
+				return err
+			}
+		} else {
+			// Actualizar opción existente
+			if err := r.db.Table("mdl_course_format_options").
+				Where("id = ?", existingID).
+				Update("value", option.Value).Error; err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
+// UpdateCourseCustomFields actualiza o inserta campos personalizados de curso
+func (r *CourseRepository) UpdateCourseCustomFields(courseID int, fields []request.CustomField) error {
+	// Primero verificar que el curso existe
+	var exists bool
+	if err := r.db.Table("mdl_course").
+		Select("1").
+		Where("id = ?", courseID).
+		Limit(1).
+		Find(&exists).Error; err != nil {
+		return err
+	}
+
+	if !exists {
+		return gorm.ErrRecordNotFound
+	}
+
+	// Obtener el context ID del curso
+	var contextID int
+	if err := r.db.Table("mdl_context").
+		Select("id").
+		Where("contextlevel = 50 AND instanceid = ?", courseID).
+		Scan(&contextID).Error; err != nil {
+		return err
+	}
+
+	// Procesar cada campo personalizado
+	for _, field := range fields {
+		// Buscar el ID del campo personalizado por shortname
+		var fieldID int
+		err := r.db.Table("mdl_customfield_field").
+			Select("id").
+			Where("shortname = ?", field.ShortName).
+			Scan(&fieldID).Error
+
+		if err == gorm.ErrRecordNotFound || fieldID == 0 {
+			// El campo personalizado no existe, continuar con el siguiente
+			continue
+		}
+
+		// Verificar si ya existe un valor para este campo y curso
+		var existingDataID int
+		err = r.db.Table("mdl_customfield_data").
+			Select("id").
+			Where("fieldid = ? AND instanceid = ? AND contextid = ?", fieldID, courseID, contextID).
+			Scan(&existingDataID).Error
+
+		if err == gorm.ErrRecordNotFound || existingDataID == 0 {
+			// Insertar nuevo valor
+			if err := r.db.Exec(`
+				INSERT INTO mdl_customfield_data (fieldid, instanceid, contextid, value, valueformat, timecreated, timemodified)
+				VALUES (?, ?, ?, ?, 0, EXTRACT(EPOCH FROM NOW())::INTEGER, EXTRACT(EPOCH FROM NOW())::INTEGER)
+			`, fieldID, courseID, contextID, field.Value).Error; err != nil {
+				return err
+			}
+		} else {
+			// Actualizar valor existente
+			if err := r.db.Exec(`
+				UPDATE mdl_customfield_data
+				SET value = ?, timemodified = EXTRACT(EPOCH FROM NOW())::INTEGER
+				WHERE id = ?
+			`, field.Value, existingDataID).Error; err != nil {
+				return err
+			}
+		}
 	}
 
 	return nil

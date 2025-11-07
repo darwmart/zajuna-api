@@ -3,7 +3,7 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-		<title>services: Go Coverage Report</title>
+		<title>server: Go Coverage Report</title>
 		<style>
 			body {
 				background: black;
@@ -55,25 +55,2784 @@
 			<div id="nav">
 				<select id="files">
 				
-				<option value="file0">zajunaApi/internal/services/category_service.go (0.0%)</option>
+				<option value="file0">zajunaApi/cmd/server/main.go (0.0%)</option>
 				
-				<option value="file1">zajunaApi/internal/services/course_service.go (100.0%)</option>
+				<option value="file1">zajunaApi/internal/config/config.go (0.0%)</option>
 				
-				<option value="file2">zajunaApi/internal/services/user_service.go (0.0%)</option>
+				<option value="file2">zajunaApi/internal/db/db.go (0.0%)</option>
+				
+				<option value="file3">zajunaApi/internal/dto/mapper/category_mapper.go (0.0%)</option>
+				
+				<option value="file4">zajunaApi/internal/dto/mapper/course_mapper.go (0.0%)</option>
+				
+				<option value="file5">zajunaApi/internal/dto/mapper/enrolled_users_mapper.go (0.0%)</option>
+				
+				<option value="file6">zajunaApi/internal/dto/mapper/user_mapper.go (0.0%)</option>
+				
+				<option value="file7">zajunaApi/internal/dto/request/category_request.go (0.0%)</option>
+				
+				<option value="file8">zajunaApi/internal/dto/request/course_request.go (0.0%)</option>
+				
+				<option value="file9">zajunaApi/internal/dto/request/enrolled_users_request.go (0.0%)</option>
+				
+				<option value="file10">zajunaApi/internal/dto/request/search_courses_request.go (0.0%)</option>
+				
+				<option value="file11">zajunaApi/internal/dto/request/user_request.go (0.0%)</option>
+				
+				<option value="file12">zajunaApi/internal/dto/response/common.go (0.0%)</option>
+				
+				<option value="file13">zajunaApi/internal/handlers/category_handler.go (100.0%)</option>
+				
+				<option value="file14">zajunaApi/internal/handlers/course_handler.go (100.0%)</option>
+				
+				<option value="file15">zajunaApi/internal/handlers/user_handler.go (56.9%)</option>
+				
+				<option value="file16">zajunaApi/internal/middleware/cors.go (0.0%)</option>
+				
+				<option value="file17">zajunaApi/internal/middleware/logging.go (0.0%)</option>
+				
+				<option value="file18">zajunaApi/internal/models/context.go (0.0%)</option>
+				
+				<option value="file19">zajunaApi/internal/models/role.go (0.0%)</option>
+				
+				<option value="file20">zajunaApi/internal/models/role_assignment.go (0.0%)</option>
+				
+				<option value="file21">zajunaApi/internal/models/user.go (0.0%)</option>
+				
+				<option value="file22">zajunaApi/internal/repository/category_repository.go (0.0%)</option>
+				
+				<option value="file23">zajunaApi/internal/repository/course_repository.go (0.0%)</option>
+				
+				<option value="file24">zajunaApi/internal/repository/mocks/category_repository_mock.go (0.0%)</option>
+				
+				<option value="file25">zajunaApi/internal/repository/mocks/course_repository_mock.go (0.0%)</option>
+				
+				<option value="file26">zajunaApi/internal/repository/mocks/user_repository_mock.go (0.0%)</option>
+				
+				<option value="file27">zajunaApi/internal/repository/user_repository.go (0.0%)</option>
+				
+				<option value="file28">zajunaApi/internal/routes/routes.go (0.0%)</option>
+				
+				<option value="file29">zajunaApi/internal/server/server.go (0.0%)</option>
+				
+				<option value="file30">zajunaApi/internal/services/category_service.go (100.0%)</option>
+				
+				<option value="file31">zajunaApi/internal/services/course_service.go (75.0%)</option>
+				
+				<option value="file32">zajunaApi/internal/services/mocks/category_service_mock.go (0.0%)</option>
+				
+				<option value="file33">zajunaApi/internal/services/mocks/course_service_mock.go (0.0%)</option>
+				
+				<option value="file34">zajunaApi/internal/services/mocks/user_service_mock.go (0.0%)</option>
+				
+				<option value="file35">zajunaApi/internal/services/user_service.go (21.1%)</option>
+				
+				<option value="file36">zajunaApi/internal/validator/validator.go (0.0%)</option>
 				
 				</select>
 			</div>
 			<div id="legend">
 				<span>not tracked</span>
 			
-				<span class="cov0">not covered</span>
-				<span class="cov8">covered</span>
+				<span class="cov0">no coverage</span>
+				<span class="cov1">low coverage</span>
+				<span class="cov2">*</span>
+				<span class="cov3">*</span>
+				<span class="cov4">*</span>
+				<span class="cov5">*</span>
+				<span class="cov6">*</span>
+				<span class="cov7">*</span>
+				<span class="cov8">*</span>
+				<span class="cov9">*</span>
+				<span class="cov10">high coverage</span>
 			
 			</div>
 		</div>
 		<div id="content">
 		
-		<pre class="file" id="file0" style="display: none">package services
+		<pre class="file" id="file0" style="display: none">package main
+
+import (
+        "log"
+        "zajunaApi/internal/server"
+)
+
+func main() <span class="cov0" title="0">{
+        srv := server.New()
+        if err := srv.Run(); err != nil </span><span class="cov0" title="0">{
+                log.Fatal("Error iniciando el servidor:", err)
+        }</span>
+}
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">package config
+
+import (
+        "fmt"
+        "log"
+        "os"
+
+        "github.com/joho/godotenv"
+)
+
+type Config struct {
+        AppEnv  string
+        AppPort string
+        DSN     string
+}
+
+// LoadConfig detecta el entorno y carga el .env correcto
+func LoadConfig() *Config <span class="cov0" title="0">{
+        env := getEnv("APP_ENV", "development")
+
+        envFile := fmt.Sprintf("internal/config/.env.%s", env)
+        err := godotenv.Load(envFile)
+        if err != nil </span><span class="cov0" title="0">{
+                log.Printf("⚠️ No se encontró %s, usando variables del sistema", envFile)
+        }</span>
+
+        <span class="cov0" title="0">dbHost := os.Getenv("DB_HOST")
+        dbPort := os.Getenv("DB_PORT")
+        dbUser := os.Getenv("DB_USER")
+        dbPass := os.Getenv("DB_PASSWORD")
+        dbName := os.Getenv("DB_NAME")
+        sslMode := os.Getenv("SSL_MODE")
+
+        dsn := fmt.Sprintf(
+                "host=%s user=%s password=%s dbname=%s port=%s sslmode=%s",
+                dbHost, dbUser, dbPass, dbName, dbPort, sslMode,
+        )
+
+        return &amp;Config{
+                AppEnv:  env,
+                AppPort: getEnv("APP_PORT", "8080"),
+                DSN:     dsn,
+        }</span>
+}
+
+func getEnv(key, defaultValue string) string <span class="cov0" title="0">{
+        if value := os.Getenv(key); value != "" </span><span class="cov0" title="0">{
+                return value
+        }</span>
+        <span class="cov0" title="0">return defaultValue</span>
+}
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">package db
+
+import (
+        "database/sql"
+        "fmt"
+
+        _ "github.com/lib/pq"
+)
+
+const (
+        host     = "localhost"
+        port     = 5432
+        user     = "postgres"
+        password = "12345"
+        dbname   = "zajuna"
+)
+
+func Connect() (*sql.DB, error) <span class="cov0" title="0">{
+        psqlInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
+                host, port, user, password, dbname)
+
+        db, err := sql.Open("postgres", psqlInfo)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">err = db.Ping()
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">fmt.Println("✅ Conectado a PostgreSQL")
+        return db, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file3" style="display: none">package mapper
+
+import (
+        "zajunaApi/internal/dto/response"
+        "zajunaApi/internal/models"
+)
+
+// CategoryToResponse convierte un modelo Category a CategoryResponse
+func CategoryToResponse(category *models.Category) *response.CategoryResponse <span class="cov0" title="0">{
+        if category == nil </span><span class="cov0" title="0">{
+                return nil
+        }</span>
+
+        <span class="cov0" title="0">return &amp;response.CategoryResponse{
+                ID:                category.ID,
+                Name:              category.Name,
+                IDNumber:          category.IDNumber,
+                Description:       category.Description,
+                DescriptionFormat: category.DescriptionFormat,
+                Parent:            category.Parent,
+                SortOrder:         category.SortOrder,
+                CourseCount:       category.CourseCount,
+                Visible:           category.Visible,
+                Depth:             category.Depth,
+                Path:              category.Path,
+                Theme:             category.Theme,
+        }</span>
+}
+
+// CategoriesToResponse convierte un slice de Categories a slice de CategoryResponse
+func CategoriesToResponse(categories []models.Category) []response.CategoryResponse <span class="cov0" title="0">{
+        responses := make([]response.CategoryResponse, len(categories))
+        for i, category := range categories </span><span class="cov0" title="0">{
+                resp := CategoryToResponse(&amp;category)
+                if resp != nil </span><span class="cov0" title="0">{
+                        responses[i] = *resp
+                }</span>
+        }
+        <span class="cov0" title="0">return responses</span>
+}
+</pre>
+		
+		<pre class="file" id="file4" style="display: none">package mapper
+
+import (
+        "zajunaApi/internal/dto/response"
+        "zajunaApi/internal/models"
+        "zajunaApi/internal/repository"
+)
+
+// CourseToResponse convierte un modelo Course a CourseResponse
+func CourseToResponse(course *models.Course) *response.CourseResponse <span class="cov0" title="0">{
+        if course == nil </span><span class="cov0" title="0">{
+                return nil
+        }</span>
+
+        <span class="cov0" title="0">return &amp;response.CourseResponse{
+                ID:                course.ID,
+                Category:          course.Category,
+                FullName:          course.FullName,
+                ShortName:         course.ShortName,
+                IDNumber:          course.IDNumber,
+                Summary:           course.Summary,
+                SummaryFormat:     course.SummaryFormat,
+                Format:            course.Format,
+                ShowGrades:        course.ShowGrades,
+                NewsItems:         course.NewsItems,
+                StartDate:         course.StartDate,
+                EndDate:           course.EndDate,
+                Visible:           course.Visible,
+                GroupMode:         course.GroupMode,
+                GroupModeForce:    course.GroupModeForce,
+                DefaultGroupingID: course.DefaultGroupingID,
+                SortOrder:         course.SortOrder,
+                TimeCreated:       course.TimeCreated,
+                TimeModified:      course.TimeModified,
+        }</span>
+}
+
+// CoursesToResponse convierte un slice de Courses a slice de CourseResponse
+func CoursesToResponse(courses []models.Course) []response.CourseResponse <span class="cov0" title="0">{
+        responses := make([]response.CourseResponse, len(courses))
+        for i, course := range courses </span><span class="cov0" title="0">{
+                resp := CourseToResponse(&amp;course)
+                if resp != nil </span><span class="cov0" title="0">{
+                        responses[i] = *resp
+                }</span>
+        }
+        <span class="cov0" title="0">return responses</span>
+}
+
+// CourseDetailsToResponse convierte CourseDetails a CourseDetailResponse
+func CourseDetailsToResponse(details *repository.CourseDetails) *response.CourseDetailResponse <span class="cov0" title="0">{
+        if details == nil </span><span class="cov0" title="0">{
+                return nil
+        }</span>
+
+        // Convertir EnrollmentMethod (string) a EnrolMethods ([]string)
+        <span class="cov0" title="0">var enrolMethods []string
+        if details.EnrollmentMethod != "" </span><span class="cov0" title="0">{
+                enrolMethods = []string{details.EnrollmentMethod}
+        }</span>
+
+        <span class="cov0" title="0">return &amp;response.CourseDetailResponse{
+                ID:              details.ID,
+                FullName:        details.FullName,
+                ShortName:       details.ShortName,
+                IDNumber:        details.IDNumber,
+                Format:          details.Format,
+                Category:        details.Category,
+                Groupings:       details.Groupings,
+                Groups:          details.Groups,
+                RoleAssignments: details.RoleAssignments,
+                EnrolMethods:    enrolMethods,
+                Sections:        details.Sections,
+        }</span>
+}
+
+// DeleteCoursesWarningsToResponse convierte warnings del modelo al DTO
+func DeleteCoursesWarningsToResponse(warnings []models.Warning) []response.Warning <span class="cov0" title="0">{
+        if warnings == nil </span><span class="cov0" title="0">{
+                return nil
+        }</span>
+
+        <span class="cov0" title="0">result := make([]response.Warning, len(warnings))
+        for i, warning := range warnings </span><span class="cov0" title="0">{
+                result[i] = response.Warning{
+                        Item:        warning.Item,
+                        ItemID:      warning.ItemID,
+                        WarningCode: warning.WarningCode,
+                        Message:     warning.Message,
+                }
+        }</span>
+        <span class="cov0" title="0">return result</span>
+}
+
+// UpdateCoursesWarningsToResponse convierte warnings del modelo al DTO (reutiliza la misma función)
+func UpdateCoursesWarningsToResponse(warnings []models.Warning) []response.Warning <span class="cov0" title="0">{
+        return DeleteCoursesWarningsToResponse(warnings)
+}</span>
+</pre>
+		
+		<pre class="file" id="file5" style="display: none">package mapper
+
+import (
+        "zajunaApi/internal/dto/response"
+        "zajunaApi/internal/repository"
+)
+
+// EnrolledUserDetailToResponse convierte EnrolledUserDetail a EnrolledUserResponse
+func EnrolledUserDetailToResponse(
+        user *repository.EnrolledUserDetail,
+        groups []map[string]interface{},
+        roles []map[string]interface{},
+        customFields []map[string]interface{},
+        preferences []map[string]interface{},
+        enrolledCourses []map[string]interface{},
+) *response.EnrolledUserResponse <span class="cov0" title="0">{
+        if user == nil </span><span class="cov0" title="0">{
+                return nil
+        }</span>
+
+        <span class="cov0" title="0">resp := &amp;response.EnrolledUserResponse{
+                ID:                   int64(user.ID),
+                Username:             user.Username,
+                FirstName:            user.FirstName,
+                LastName:             user.LastName,
+                FullName:             user.FirstName + " " + user.LastName,
+                Email:                user.Email,
+                Address:              user.Address,
+                Phone1:               user.Phone1,
+                Phone2:               user.Phone2,
+                Department:           user.Department,
+                Institution:          user.Institution,
+                IDNumber:             user.IDNumber,
+                Interests:            user.Interests,
+                FirstAccess:          user.FirstAccess,
+                LastAccess:           user.LastAccess,
+                LastCourseAccess:     user.LastCourseAccess,
+                Description:          user.Description,
+                DescriptionFormat:    user.DescriptionFormat,
+                City:                 user.City,
+                Country:              user.Country,
+                ProfileImageURLSmall: user.ProfileImageSmall,
+                ProfileImageURL:      user.ProfileImage,
+        }
+
+        // Mapear custom fields
+        if len(customFields) &gt; 0 </span><span class="cov0" title="0">{
+                resp.CustomFields = make([]response.UserCustomField, 0, len(customFields))
+                for _, cf := range customFields </span><span class="cov0" title="0">{
+                        resp.CustomFields = append(resp.CustomFields, response.UserCustomField{
+                                Type:      getStringFromMap(cf, "type"),
+                                Value:     getStringFromMap(cf, "value"),
+                                Name:      getStringFromMap(cf, "name"),
+                                ShortName: getStringFromMap(cf, "shortname"),
+                        })
+                }</span>
+        }
+
+        // Mapear groups
+        <span class="cov0" title="0">if len(groups) &gt; 0 </span><span class="cov0" title="0">{
+                resp.Groups = make([]response.EnrolledUserGroup, 0, len(groups))
+                for _, g := range groups </span><span class="cov0" title="0">{
+                        resp.Groups = append(resp.Groups, response.EnrolledUserGroup{
+                                ID:                getIntFromMap(g, "id"),
+                                Name:              getStringFromMap(g, "name"),
+                                Description:       getStringFromMap(g, "description"),
+                                DescriptionFormat: getIntFromMap(g, "descriptionformat"),
+                        })
+                }</span>
+        }
+
+        // Mapear roles
+        <span class="cov0" title="0">if len(roles) &gt; 0 </span><span class="cov0" title="0">{
+                resp.Roles = make([]response.EnrolledUserRole, 0, len(roles))
+                for _, r := range roles </span><span class="cov0" title="0">{
+                        resp.Roles = append(resp.Roles, response.EnrolledUserRole{
+                                RoleID:    int64(getIntFromMap(r, "roleid")),
+                                Name:      getStringFromMap(r, "name"),
+                                ShortName: getStringFromMap(r, "shortname"),
+                                SortOrder: getIntFromMap(r, "sortorder"),
+                        })
+                }</span>
+        }
+
+        // Mapear preferences
+        <span class="cov0" title="0">if len(preferences) &gt; 0 </span><span class="cov0" title="0">{
+                resp.Preferences = make([]response.UserPreference, 0, len(preferences))
+                for _, p := range preferences </span><span class="cov0" title="0">{
+                        resp.Preferences = append(resp.Preferences, response.UserPreference{
+                                Name:  getStringFromMap(p, "name"),
+                                Value: getStringFromMap(p, "value"),
+                        })
+                }</span>
+        }
+
+        // Mapear enrolled courses
+        <span class="cov0" title="0">if len(enrolledCourses) &gt; 0 </span><span class="cov0" title="0">{
+                resp.EnrolledCourses = make([]response.UserEnrolledCourse, 0, len(enrolledCourses))
+                for _, ec := range enrolledCourses </span><span class="cov0" title="0">{
+                        resp.EnrolledCourses = append(resp.EnrolledCourses, response.UserEnrolledCourse{
+                                ID:        int64(getIntFromMap(ec, "id")),
+                                FullName:  getStringFromMap(ec, "fullname"),
+                                ShortName: getStringFromMap(ec, "shortname"),
+                        })
+                }</span>
+        }
+
+        <span class="cov0" title="0">return resp</span>
+}
+
+// Helper functions para extraer valores de maps
+func getStringFromMap(m map[string]interface{}, key string) string <span class="cov0" title="0">{
+        if val, ok := m[key]; ok </span><span class="cov0" title="0">{
+                if str, ok := val.(string); ok </span><span class="cov0" title="0">{
+                        return str
+                }</span>
+        }
+        <span class="cov0" title="0">return ""</span>
+}
+
+func getIntFromMap(m map[string]interface{}, key string) int <span class="cov0" title="0">{
+        if val, ok := m[key]; ok </span><span class="cov0" title="0">{
+                switch v := val.(type) </span>{
+                case int:<span class="cov0" title="0">
+                        return v</span>
+                case int64:<span class="cov0" title="0">
+                        return int(v)</span>
+                case float64:<span class="cov0" title="0">
+                        return int(v)</span>
+                }
+        }
+        <span class="cov0" title="0">return 0</span>
+}
+</pre>
+		
+		<pre class="file" id="file6" style="display: none">package mapper
+
+import (
+        "fmt"
+        "zajunaApi/internal/dto/response"
+        "zajunaApi/internal/models"
+)
+
+// UserToResponse convierte un modelo User a UserResponse
+func UserToResponse(user *models.User) *response.UserResponse <span class="cov0" title="0">{
+        if user == nil </span><span class="cov0" title="0">{
+                return nil
+        }</span>
+
+        <span class="cov0" title="0">fullName := fmt.Sprintf("%s %s", user.FirstName, user.LastName)
+
+        return &amp;response.UserResponse{
+                ID:                user.ID,
+                Username:          user.Username,
+                FirstName:         user.FirstName,
+                LastName:          user.LastName,
+                FullName:          fullName,
+                Email:             user.Email,
+                Address:           user.Address,
+                Phone1:            user.Phone1,
+                Phone2:            user.Phone2,
+                Department:        user.Department,
+                Institution:       user.Institution,
+                IDNumber:          user.IDNumber,
+                Interests:         user.Interests,
+                FirstAccess:       user.FirstAccess,
+                LastAccess:        user.LastAccess,
+                Auth:              user.Auth,
+                Suspended:         user.Suspended,
+                Confirmed:         user.Confirmed,
+                Lang:              user.Lang,
+                Theme:             user.Theme,
+                Timezone:          user.Timezone,
+                MailFormat:        user.MailFormat,
+                Description:       user.Description,
+                DescriptionFormat: user.DescriptionFormat,
+                City:              user.City,
+                Country:           user.Country,
+                ProfileImageSmall: user.ProfileImageSmall,
+                ProfileImage:      user.ProfileImage,
+                CustomFields:      mapUserCustomFields(user.CustomFields),
+                Preferences:       mapUserPreferences(user.Preferences),
+        }</span>
+}
+
+// UsersToResponse convierte un slice de Users a slice de UserResponse
+func UsersToResponse(users []models.User) []response.UserResponse <span class="cov0" title="0">{
+        responses := make([]response.UserResponse, len(users))
+        for i, user := range users </span><span class="cov0" title="0">{
+                resp := UserToResponse(&amp;user)
+                if resp != nil </span><span class="cov0" title="0">{
+                        responses[i] = *resp
+                }</span>
+        }
+        <span class="cov0" title="0">return responses</span>
+}
+
+// mapUserCustomFields convierte custom fields del modelo al DTO
+func mapUserCustomFields(fields []models.UserCustomField) []response.UserCustomField <span class="cov0" title="0">{
+        if fields == nil </span><span class="cov0" title="0">{
+                return nil
+        }</span>
+
+        <span class="cov0" title="0">result := make([]response.UserCustomField, len(fields))
+        for i, field := range fields </span><span class="cov0" title="0">{
+                result[i] = response.UserCustomField{
+                        Type:         field.Type,
+                        Value:        field.Value,
+                        DisplayValue: field.DisplayValue,
+                        Name:         field.Name,
+                        ShortName:    field.ShortName,
+                }
+        }</span>
+        <span class="cov0" title="0">return result</span>
+}
+
+// mapUserPreferences convierte preferencias del modelo al DTO
+func mapUserPreferences(prefs []models.UserPreference) []response.UserPreference <span class="cov0" title="0">{
+        if prefs == nil </span><span class="cov0" title="0">{
+                return nil
+        }</span>
+
+        <span class="cov0" title="0">result := make([]response.UserPreference, len(prefs))
+        for i, pref := range prefs </span><span class="cov0" title="0">{
+                result[i] = response.UserPreference{
+                        Name:  pref.Name,
+                        Value: pref.Value,
+                }
+        }</span>
+        <span class="cov0" title="0">return result</span>
+}
+</pre>
+		
+		<pre class="file" id="file7" style="display: none">package request
+
+// GetCategoriesRequest representa los parámetros para listar categorías
+type GetCategoriesRequest struct {
+        Parent  *int `form:"parent" binding:"omitempty,min=0"`
+        Visible *int `form:"visible" binding:"omitempty,oneof=0 1"`
+        Page    int  `form:"page" binding:"omitempty,min=1"`
+        Limit   int  `form:"limit" binding:"omitempty,min=1,max=100"`
+}
+
+// SetDefaults establece valores por defecto
+func (r *GetCategoriesRequest) SetDefaults() <span class="cov0" title="0">{
+        if r.Page == 0 </span><span class="cov0" title="0">{
+                r.Page = 1
+        }</span>
+        <span class="cov0" title="0">if r.Limit == 0 </span><span class="cov0" title="0">{
+                r.Limit = 50
+        }</span>
+}
+
+// HasParentFilter verifica si hay filtro de categoría padre
+func (r *GetCategoriesRequest) HasParentFilter() bool <span class="cov0" title="0">{
+        return r.Parent != nil
+}</span>
+
+// GetCategoryDetailsRequest representa los parámetros para obtener detalles de una categoría
+type GetCategoryDetailsRequest struct {
+        ID int `uri:"id" binding:"required,min=1"`
+}
+
+// CreateCategoryRequest representa la solicitud de creación de una categoría
+type CreateCategoryRequest struct {
+        Name              string `json:"name" binding:"required,min=1,max=255"`
+        Parent            int    `json:"parent" binding:"omitempty,min=0"`
+        IDNumber          string `json:"idnumber" binding:"omitempty,max=100"`
+        Description       string `json:"description" binding:"omitempty"`
+        DescriptionFormat int    `json:"descriptionformat" binding:"omitempty,oneof=0 1 2 4"`
+        Visible           int    `json:"visible" binding:"omitempty,oneof=0 1"`
+        Theme             string `json:"theme" binding:"omitempty,max=50"`
+}
+
+// UpdateCategoryRequest representa la solicitud de actualización de una categoría
+type UpdateCategoryRequest struct {
+        ID                int    `json:"id" binding:"required,min=1"`
+        Name              string `json:"name" binding:"omitempty,min=1,max=255"`
+        Parent            *int   `json:"parent" binding:"omitempty,min=0"`
+        IDNumber          string `json:"idnumber" binding:"omitempty,max=100"`
+        Description       string `json:"description" binding:"omitempty"`
+        DescriptionFormat *int   `json:"descriptionformat" binding:"omitempty,oneof=0 1 2 4"`
+        Visible           *int   `json:"visible" binding:"omitempty,oneof=0 1"`
+        Theme             string `json:"theme" binding:"omitempty,max=50"`
+}
+
+// DeleteCategoriesRequest representa la solicitud de eliminación de categorías
+type DeleteCategoriesRequest struct {
+        CategoryIDs []int `json:"categoryids" binding:"required,min=1,dive,min=1"`
+        MoveToID    *int  `json:"movetoid" binding:"omitempty,min=1"`
+}
+
+// Validate valida que los IDs sean únicos
+func (r *DeleteCategoriesRequest) Validate() error <span class="cov0" title="0">{
+        seen := make(map[int]bool)
+        for _, id := range r.CategoryIDs </span><span class="cov0" title="0">{
+                if seen[id] </span><span class="cov0" title="0">{
+                        return &amp;ValidationError{
+                                Field:   "categoryids",
+                                Message: "IDs duplicados detectados",
+                        }
+                }</span>
+                <span class="cov0" title="0">seen[id] = true</span>
+        }
+
+        // Validar que movetoid no esté en la lista de eliminación
+        <span class="cov0" title="0">if r.MoveToID != nil </span><span class="cov0" title="0">{
+                if seen[*r.MoveToID] </span><span class="cov0" title="0">{
+                        return &amp;ValidationError{
+                                Field:   "movetoid",
+                                Message: "No se puede mover los cursos a una categoría que está siendo eliminada",
+                        }
+                }</span>
+        }
+
+        <span class="cov0" title="0">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file8" style="display: none">package request
+
+// GetCoursesRequest representa los parámetros para listar cursos
+type GetCoursesRequest struct {
+        CategoryID int  `form:"categoryid" binding:"omitempty,min=1"`
+        Page       int  `form:"page" binding:"omitempty,min=1"`
+        Limit      int  `form:"limit" binding:"omitempty,min=1,max=100"`
+        Visible    *int `form:"visible" binding:"omitempty,oneof=0 1"`
+}
+
+// SetDefaults establece valores por defecto
+func (r *GetCoursesRequest) SetDefaults() <span class="cov0" title="0">{
+        if r.Page == 0 </span><span class="cov0" title="0">{
+                r.Page = 1
+        }</span>
+        <span class="cov0" title="0">if r.Limit == 0 </span><span class="cov0" title="0">{
+                r.Limit = 20
+        }</span>
+}
+
+// HasCategoryFilter verifica si hay filtro de categoría
+func (r *GetCoursesRequest) HasCategoryFilter() bool <span class="cov0" title="0">{
+        return r.CategoryID &gt; 0
+}</span>
+
+// GetCourseDetailsRequest representa los parámetros para obtener detalles de un curso
+type GetCourseDetailsRequest struct {
+        IDNumber string `uri:"idnumber" binding:"required"`
+}
+
+// DeleteCoursesRequest representa la solicitud de eliminación de cursos
+type DeleteCoursesRequest struct {
+        CourseIDs []int `json:"courseid" binding:"required,min=1,dive,min=1"`
+}
+
+// Validate valida que los IDs sean únicos y no incluyan el curso site (ID=1)
+func (r *DeleteCoursesRequest) Validate() error <span class="cov0" title="0">{
+        seen := make(map[int]bool)
+        for _, id := range r.CourseIDs </span><span class="cov0" title="0">{
+                // Validar que no intenten eliminar el curso site (ID=1)
+                if id == 1 </span><span class="cov0" title="0">{
+                        return &amp;ValidationError{
+                                Field:   "courseid",
+                                Message: "No se puede eliminar el coursid",
+                        }
+                }</span>
+                // Validar duplicados
+                <span class="cov0" title="0">if seen[id] </span><span class="cov0" title="0">{
+                        return &amp;ValidationError{
+                                Field:   "courseid",
+                                Message: "id duplicado detectado",
+                        }
+                }</span>
+                <span class="cov0" title="0">seen[id] = true</span>
+        }
+        <span class="cov0" title="0">return nil</span>
+}
+
+// CreateCourseRequest representa la solicitud de creación de un curso
+type CreateCourseRequest struct {
+        CategoryID    int    `json:"category" binding:"required,min=1"`
+        FullName      string `json:"fullname" binding:"required,min=3,max=254"`
+        ShortName     string `json:"shortname" binding:"required,min=1,max=100"`
+        IDNumber      string `json:"idnumber" binding:"omitempty,max=100"`
+        Summary       string `json:"summary" binding:"omitempty"`
+        SummaryFormat int    `json:"summaryformat" binding:"omitempty,oneof=0 1 2 4"`
+        Format        string `json:"format" binding:"omitempty,oneof=weeks topics social"`
+        StartDate     int64  `json:"startdate" binding:"omitempty,min=0"`
+        EndDate       int64  `json:"enddate" binding:"omitempty,min=0"`
+        Visible       int    `json:"visible" binding:"omitempty,oneof=0 1"`
+}
+
+// Validate valida reglas de negocio adicionales
+func (r *CreateCourseRequest) Validate() error <span class="cov0" title="0">{
+        // Validar que enddate sea mayor que startdate
+        if r.EndDate &gt; 0 &amp;&amp; r.StartDate &gt; 0 &amp;&amp; r.EndDate &lt;= r.StartDate </span><span class="cov0" title="0">{
+                return &amp;ValidationError{
+                        Field:   "enddate",
+                        Message: "La fecha de fin debe ser posterior a la fecha de inicio",
+                }
+        }</span>
+        <span class="cov0" title="0">return nil</span>
+}
+
+// CourseFormatOption representa una opción de formato de curso
+type CourseFormatOption struct {
+        Name  string `json:"name" binding:"required"`
+        Value string `json:"value" binding:"required"`
+}
+
+// CustomField representa un campo personalizado de curso
+type CustomField struct {
+        ShortName string `json:"shortname" binding:"required"`
+        Value     string `json:"value" binding:"required"`
+}
+
+// UpdateCourseRequest representa la solicitud de actualización de un curso
+type UpdateCourseRequest struct {
+        ID                  int                  `json:"id" binding:"required,min=1"`
+        FullName            string               `json:"fullname" binding:"omitempty,min=3,max=254"`
+        ShortName           string               `json:"shortname" binding:"omitempty,min=1,max=100"`
+        CategoryID          *int                 `json:"categoryid" binding:"omitempty,min=1"`
+        IDNumber            string               `json:"idnumber" binding:"omitempty,max=100"`
+        Summary             string               `json:"summary" binding:"omitempty"`
+        SummaryFormat       *int                 `json:"summaryformat" binding:"omitempty,oneof=0 1 2 4"`
+        Format              string               `json:"format" binding:"omitempty,oneof=weeks topics social"`
+        ShowGrades          *int                 `json:"showgrades" binding:"omitempty,oneof=0 1"`
+        NewsItems           *int                 `json:"newsitems" binding:"omitempty,min=0"`
+        StartDate           *int64               `json:"startdate" binding:"omitempty,min=0"`
+        EndDate             *int64               `json:"enddate" binding:"omitempty,min=0"`
+        NumSections         *int                 `json:"numsections" binding:"omitempty,min=0"`
+        MaxBytes            *int                 `json:"maxbytes" binding:"omitempty,min=0"`
+        ShowReports         *int                 `json:"showreports" binding:"omitempty,oneof=0 1"`
+        Visible             *int                 `json:"visible" binding:"omitempty,oneof=0 1"`
+        HiddenSections      *int                 `json:"hiddensections" binding:"omitempty,min=0"`
+        GroupMode           *int                 `json:"groupmode" binding:"omitempty,oneof=0 1 2"`
+        GroupModeForce      *int                 `json:"groupmodeforce" binding:"omitempty,oneof=0 1"`
+        DefaultGroupingID   *int                 `json:"defaultgroupingid" binding:"omitempty,min=0"`
+        EnableCompletion    *int                 `json:"enablecompletion" binding:"omitempty,oneof=0 1"`
+        CompletionNotify    *int                 `json:"completionnotify" binding:"omitempty,oneof=0 1"`
+        Lang                string               `json:"lang" binding:"omitempty,max=30"`
+        ForceTheme          string               `json:"forcetheme" binding:"omitempty,max=50"`
+        CourseFormatOptions []CourseFormatOption `json:"courseformatoptions" binding:"omitempty,dive"`
+        CustomFields        []CustomField        `json:"customfields" binding:"omitempty,dive"`
+}
+
+// UpdateCoursesRequest representa la solicitud de actualización múltiple de cursos (Moodle format)
+type UpdateCoursesRequest struct {
+        Courses []UpdateCourseRequest `json:"courses" binding:"required,min=1,dive"`
+}
+
+// Validate valida las reglas de negocio de un curso individual
+func (r *UpdateCourseRequest) Validate() error <span class="cov0" title="0">{
+        // Validar que enddate sea mayor que startdate si ambos están presentes
+        if r.EndDate != nil &amp;&amp; r.StartDate != nil &amp;&amp; *r.EndDate &gt; 0 &amp;&amp; *r.StartDate &gt; 0 </span><span class="cov0" title="0">{
+                if *r.EndDate &lt;= *r.StartDate </span><span class="cov0" title="0">{
+                        return &amp;ValidationError{
+                                Field:   "enddate",
+                                Message: "La fecha de fin debe ser posterior a la fecha de inicio",
+                        }
+                }</span>
+        }
+
+        // Validar que el formato esté dentro de los valores permitidos si está presente
+        <span class="cov0" title="0">if r.Format != "" </span><span class="cov0" title="0">{
+                validFormats := map[string]bool{"weeks": true, "topics": true, "social": true}
+                if !validFormats[r.Format] </span><span class="cov0" title="0">{
+                        return &amp;ValidationError{
+                                Field:   "format",
+                                Message: "Formato de curso inválido. Valores permitidos: weeks, topics, social",
+                        }
+                }</span>
+        }
+
+        <span class="cov0" title="0">return nil</span>
+}
+
+// Validate valida reglas de negocio adicionales
+func (r *UpdateCoursesRequest) Validate() error <span class="cov0" title="0">{
+        // Validar que no se intente actualizar el curso site (ID=1)
+        for i, course := range r.Courses </span><span class="cov0" title="0">{
+                if course.ID == 1 </span><span class="cov0" title="0">{
+                        return &amp;ValidationError{
+                                Field:   "courses",
+                                Message: "No se puede actualizar el curso site (ID=1)",
+                        }
+                }</span>
+
+                // Validar cada curso individualmente
+                <span class="cov0" title="0">if err := course.Validate(); err != nil </span><span class="cov0" title="0">{
+                        valErr := err.(*ValidationError)
+                        return &amp;ValidationError{
+                                Field:   "courses[" + string(rune(i)) + "]." + valErr.Field,
+                                Message: valErr.Message,
+                        }
+                }</span>
+        }
+        <span class="cov0" title="0">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file9" style="display: none">package request
+
+import "fmt"
+
+// GetEnrolledUsersRequest representa la solicitud para obtener usuarios matriculados
+type GetEnrolledUsersRequest struct {
+        CourseID int `uri:"courseid" binding:"required"`
+}
+
+// EnrolledUsersOptions representa las opciones de filtrado
+type EnrolledUsersOptions struct {
+        WithCapability  string `form:"withcapability"`
+        GroupID         int    `form:"groupid"`
+        OnlyActive      int    `form:"onlyactive"`
+        OnlySuspended   int    `form:"onlysuspended"`
+        UserFields      string `form:"userfields"`
+        LimitFrom       int    `form:"limitfrom"`
+        LimitNumber     int    `form:"limitnumber"`
+        SortBy          string `form:"sortby"`          // id, firstname, lastname, siteorder
+        SortDirection   string `form:"sortdirection"`   // ASC or DESC
+}
+
+// SetDefaults establece valores por defecto
+func (o *EnrolledUsersOptions) SetDefaults() <span class="cov0" title="0">{
+        if o.SortBy == "" </span><span class="cov0" title="0">{
+                o.SortBy = "id"
+        }</span>
+        <span class="cov0" title="0">if o.SortDirection == "" </span><span class="cov0" title="0">{
+                o.SortDirection = "ASC"
+        }</span>
+        <span class="cov0" title="0">if o.LimitNumber == 0 </span><span class="cov0" title="0">{
+                o.LimitNumber = 100 // Límite por defecto
+        }</span>
+}
+
+// Validate valida las opciones
+func (o *EnrolledUsersOptions) Validate() error <span class="cov0" title="0">{
+        // No se puede usar onlyactive y onlysuspended al mismo tiempo
+        if o.OnlyActive == 1 &amp;&amp; o.OnlySuspended == 1 </span><span class="cov0" title="0">{
+                return fmt.Errorf("onlyactive and onlysuspended cannot be used together")
+        }</span>
+        <span class="cov0" title="0">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file10" style="display: none">package request
+
+import "errors"
+
+// SearchCoursesRequest representa la petición de búsqueda de cursos
+type SearchCoursesRequest struct {
+        CriteriaName  string `form:"criterianame" binding:"required"` // search, categoryid, etc.
+        CriteriaValue string `form:"criteriavalue" binding:"required"` // valor a buscar
+        Page          int    `form:"page"`                            // página (base 0)
+        PerPage       int    `form:"perpage"`                         // elementos por página (0 = todos)
+}
+
+// SetDefaults establece valores por defecto
+func (r *SearchCoursesRequest) SetDefaults() <span class="cov0" title="0">{
+        if r.Page &lt; 0 </span><span class="cov0" title="0">{
+                r.Page = 0
+        }</span>
+        <span class="cov0" title="0">if r.PerPage &lt; 0 </span><span class="cov0" title="0">{
+                r.PerPage = 0
+        }</span>
+}
+
+// Validate valida los parámetros de búsqueda
+func (r *SearchCoursesRequest) Validate() error <span class="cov0" title="0">{
+        if r.CriteriaName == "" </span><span class="cov0" title="0">{
+                return errors.New("criterianame is required")
+        }</span>
+        <span class="cov0" title="0">if r.CriteriaValue == "" </span><span class="cov0" title="0">{
+                return errors.New("criteriavalue is required")
+        }</span>
+
+        // Validar criterios soportados
+        <span class="cov0" title="0">validCriteria := map[string]bool{
+                "search":     true,
+                "categoryid": true,
+                "id":         true,
+                "idnumber":   true,
+        }
+
+        if !validCriteria[r.CriteriaName] </span><span class="cov0" title="0">{
+                return errors.New("invalid criterianame: supported values are search, categoryid, id, idnumber")
+        }</span>
+
+        <span class="cov0" title="0">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file11" style="display: none">package request
+
+// GetUsersRequest representa los parámetros de búsqueda de usuarios
+type GetUsersRequest struct {
+        Firstname string `form:"firstname" binding:"omitempty,min=2,max=100"`
+        Lastname  string `form:"lastname" binding:"omitempty,min=2,max=100"`
+        Username  string `form:"username" binding:"omitempty,min=2,max=100"`
+        Email     string `form:"email" binding:"omitempty,email"`
+        Page      int    `form:"page" binding:"omitempty,min=1"`
+        Limit     int    `form:"limit" binding:"omitempty,min=1,max=100"`
+}
+
+// SetDefaults establece valores por defecto para la paginación
+func (r *GetUsersRequest) SetDefaults() <span class="cov0" title="0">{
+        if r.Page == 0 </span><span class="cov0" title="0">{
+                r.Page = 1
+        }</span>
+        <span class="cov0" title="0">if r.Limit == 0 </span><span class="cov0" title="0">{
+                r.Limit = 15
+        }</span>
+}
+
+// ToFilterMap convierte la request a un mapa de filtros
+func (r *GetUsersRequest) ToFilterMap() map[string]string <span class="cov0" title="0">{
+        filters := make(map[string]string)
+
+        if r.Firstname != "" </span><span class="cov0" title="0">{
+                filters["firstname"] = r.Firstname
+        }</span>
+        <span class="cov0" title="0">if r.Lastname != "" </span><span class="cov0" title="0">{
+                filters["lastname"] = r.Lastname
+        }</span>
+        <span class="cov0" title="0">if r.Username != "" </span><span class="cov0" title="0">{
+                filters["username"] = r.Username
+        }</span>
+        <span class="cov0" title="0">if r.Email != "" </span><span class="cov0" title="0">{
+                filters["email"] = r.Email
+        }</span>
+
+        <span class="cov0" title="0">return filters</span>
+}
+
+// UpdateUserRequest representa la solicitud de actualización de un usuario
+type UpdateUserRequest struct {
+        ID        uint   `json:"id" binding:"required,min=1"`
+        FirstName string `json:"firstname" binding:"required,min=2,max=100"`
+        LastName  string `json:"lastname" binding:"required,min=2,max=100"`
+        Email     string `json:"email" binding:"required,email"`
+        City      string `json:"city" binding:"omitempty,max=120"`
+        Country   string `json:"country" binding:"omitempty,len=2"`
+        Lang      string `json:"lang" binding:"omitempty,min=2,max=30"`
+        Timezone  string `json:"timezone" binding:"omitempty,max=100"`
+        Phone1    string `json:"phone1" binding:"omitempty,max=20"`
+}
+
+// UpdateUsersRequest representa la solicitud de actualización de múltiples usuarios
+type UpdateUsersRequest struct {
+        Users []UpdateUserRequest `json:"users" binding:"required,min=1,dive"`
+}
+
+// DeleteUsersRequest representa la solicitud de eliminación de usuarios
+type DeleteUsersRequest struct {
+        UserIDs []int `json:"userids" binding:"required,min=1,dive,min=1"`
+}
+
+// Validate valida que los IDs sean únicos
+func (r *DeleteUsersRequest) Validate() error <span class="cov0" title="0">{
+        seen := make(map[int]bool)
+        for _, id := range r.UserIDs </span><span class="cov0" title="0">{
+                if seen[id] </span><span class="cov0" title="0">{
+                        return ErrDuplicateIDs
+                }</span>
+                <span class="cov0" title="0">seen[id] = true</span>
+        }
+        <span class="cov0" title="0">return nil</span>
+}
+
+// Errores personalizados para validación
+var (
+        ErrDuplicateIDs = &amp;ValidationError{Field: "userids", Message: "IDs duplicados detectados"}
+)
+
+// ValidationError representa un error de validación
+type ValidationError struct {
+        Field   string
+        Message string
+}
+
+func (e *ValidationError) Error() string <span class="cov0" title="0">{
+        return e.Message
+}</span>
+</pre>
+		
+		<pre class="file" id="file12" style="display: none">package response
+
+import "time"
+
+// ErrorResponse representa una respuesta de error estandarizada
+type ErrorResponse struct {
+        Code      string      `json:"code"`
+        Message   string      `json:"message"`
+        Details   interface{} `json:"details,omitempty"`
+        Timestamp time.Time   `json:"timestamp"`
+}
+
+// SuccessResponse representa una respuesta exitosa genérica
+type SuccessResponse struct {
+        Message string      `json:"message"`
+        Data    interface{} `json:"data,omitempty"`
+}
+
+// PaginationMeta contiene la metadata de paginación
+type PaginationMeta struct {
+        Page        int   `json:"page"`
+        Limit       int   `json:"limit"`
+        Total       int64 `json:"total"`
+        TotalPages  int   `json:"total_pages"`
+        HasNext     bool  `json:"has_next"`
+        HasPrevious bool  `json:"has_previous"`
+}
+
+// PaginatedResponse representa una respuesta paginada genérica
+type PaginatedResponse struct {
+        Data       interface{}    `json:"data"`
+        Pagination PaginationMeta `json:"pagination"`
+}
+
+// NewPaginatedResponse crea una nueva respuesta paginada
+func NewPaginatedResponse(data interface{}, page, limit int, total int64) *PaginatedResponse <span class="cov0" title="0">{
+        totalPages := int((total + int64(limit) - 1) / int64(limit))
+
+        return &amp;PaginatedResponse{
+                Data: data,
+                Pagination: PaginationMeta{
+                        Page:        page,
+                        Limit:       limit,
+                        Total:       total,
+                        TotalPages:  totalPages,
+                        HasNext:     page &lt; totalPages,
+                        HasPrevious: page &gt; 1,
+                },
+        }
+}</span>
+
+// NewErrorResponse crea una nueva respuesta de error
+func NewErrorResponse(code, message string, details interface{}) *ErrorResponse <span class="cov0" title="0">{
+        return &amp;ErrorResponse{
+                Code:      code,
+                Message:   message,
+                Details:   details,
+                Timestamp: time.Now(),
+        }
+}</span>
+
+// NewSuccessResponse crea una nueva respuesta exitosa
+func NewSuccessResponse(message string, data interface{}) *SuccessResponse <span class="cov0" title="0">{
+        return &amp;SuccessResponse{
+                Message: message,
+                Data:    data,
+        }
+}</span>
+</pre>
+		
+		<pre class="file" id="file13" style="display: none">package handlers
+
+import (
+        "net/http"
+        "zajunaApi/internal/dto/mapper"
+        "zajunaApi/internal/dto/response"
+        "zajunaApi/internal/services"
+
+        "github.com/gin-gonic/gin"
+)
+
+// CategoryHandler maneja las solicitudes relacionadas con categorías
+type CategoryHandler struct {
+        service services.CategoryServiceInterface
+}
+
+// NewCategoryHandler constructor para inyectar el servicio
+func NewCategoryHandler(service services.CategoryServiceInterface) *CategoryHandler <span class="cov10" title="6">{
+        return &amp;CategoryHandler{service: service}
+}</span>
+
+// GetCategories obtiene la lista de categorías
+// @Summary      Listar categorías
+// @Description  Obtiene todas las categorías de cursos disponibles
+// @Tags         categories
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  response.CategoryListResponse
+// @Failure      500  {object}  response.ErrorResponse
+// @Router       /categories [get]
+func (h *CategoryHandler) GetCategories(c *gin.Context) <span class="cov9" title="5">{
+        // 1. Llamar al servicio
+        categories, err := h.service.GetCategories()
+        if err != nil </span><span class="cov1" title="1">{
+                c.JSON(http.StatusInternalServerError, response.NewErrorResponse(
+                        "FETCH_ERROR",
+                        "Error al obtener las categorías",
+                        err.Error(),
+                ))
+                return
+        }</span>
+
+        // 2. Convertir modelos a DTOs
+        <span class="cov7" title="4">categoriesResponse := mapper.CategoriesToResponse(categories)
+
+        // 3. Crear respuesta
+        listResponse := response.CategoryListResponse{
+                Categories: categoriesResponse,
+        }
+
+        // 4. Responder
+        c.JSON(http.StatusOK, listResponse)</span>
+}
+</pre>
+		
+		<pre class="file" id="file14" style="display: none">package handlers
+
+import (
+        "net/http"
+        "zajunaApi/internal/dto/mapper"
+        "zajunaApi/internal/dto/request"
+        "zajunaApi/internal/dto/response"
+        "zajunaApi/internal/models"
+        "zajunaApi/internal/services"
+
+        "github.com/gin-gonic/gin"
+)
+
+type CourseHandler struct {
+        service services.CourseServiceInterface
+}
+
+func NewCourseHandler(service services.CourseServiceInterface) *CourseHandler <span class="cov10" title="19">{
+        return &amp;CourseHandler{service: service}
+}</span>
+
+// GetCourses obtiene la lista de cursos con filtros opcionales
+// @Summary      Listar cursos
+// @Description  Obtiene cursos con filtros opcionales por categoría
+// @Tags         courses
+// @Accept       json
+// @Produce      json
+// @Param        categoryid  query     int  false  "Filtrar por ID de categoría"
+// @Success      200         {object}  response.CourseListResponse
+// @Failure      400         {object}  response.ErrorResponse
+// @Failure      500         {object}  response.ErrorResponse
+// @Router       /courses get
+func (h *CourseHandler) GetCourses(c *gin.Context) <span class="cov5" title="5">{
+        // 1. Parsear y validar request
+        var req request.GetCoursesRequest
+
+        if err := c.ShouldBindQuery(&amp;req); err != nil </span><span class="cov1" title="1">{
+                c.JSON(http.StatusBadRequest, response.NewErrorResponse(
+                        "INVALID_PARAMS",
+                        "Parámetros de consulta inválidos",
+                        err.Error(),
+                ))
+                return
+        }</span>
+
+        // 2. Establecer valores por defecto
+        <span class="cov5" title="4">req.SetDefaults()
+
+        var courses []models.Course
+        var err error
+
+        // 3. Obtener cursos según filtros
+        if req.HasCategoryFilter() </span><span class="cov1" title="1">{
+                courses, err = h.service.GetCoursesByCategory(uint(req.CategoryID))
+        }</span> else<span class="cov4" title="3"> {
+                courses, err = h.service.GetAllCourses()
+        }</span>
+
+        <span class="cov5" title="4">if err != nil </span><span class="cov1" title="1">{
+                c.JSON(http.StatusInternalServerError, response.NewErrorResponse(
+                        "FETCH_ERROR",
+                        "Error al obtener los cursos",
+                        err.Error(),
+                ))
+                return
+        }</span>
+
+        // 4. Convertir modelos a DTOs
+        <span class="cov4" title="3">coursesResponse := mapper.CoursesToResponse(courses)
+
+        // 5. Crear respuesta
+        listResponse := response.CourseListResponse{
+                Courses: coursesResponse,
+        }
+
+        // 6. Responder
+        c.JSON(http.StatusOK, listResponse)</span>
+}
+
+// GetCourseDetails obtiene los detalles completos de un curso
+// @Summary      Obtener detalles de curso
+// @Description  Obtiene información detallada de un curso incluyendo roles, grupos y secciones
+// @Tags         courses
+// @Accept       json
+// @Produce      json
+// @Param        id   path      int  true  ID del curso
+// @Success      200  {object}  response.CourseDetailResponse
+// @Failure      400  {object}  response.ErrorResponse
+// @Failure      404  {object}  response.ErrorResponse
+// @Failure      500  {object}  response.ErrorResponse
+// @Router       /courses/{id}/details [get]
+func (h *CourseHandler) GetCourseDetails(c *gin.Context) <span class="cov4" title="3">{
+        // 1. Parsear y validar ID del parámetro URI
+        var req request.GetCourseDetailsRequest
+
+        if err := c.ShouldBindUri(&amp;req); err != nil </span><span class="cov1" title="1">{
+                c.JSON(http.StatusBadRequest, response.NewErrorResponse(
+                        "INVALID_ID",
+                        "ID de curso inválido",
+                        err.Error(),
+                ))
+                return
+        }</span>
+
+        // 2. Llamar al servicio
+        <span class="cov3" title="2">details, err := h.service.GetCourseDetails(req.IDNumber)
+        if err != nil </span><span class="cov1" title="1">{
+                c.JSON(http.StatusNotFound, response.NewErrorResponse(
+                        "NOT_FOUND",
+                        "Curso no encontrado",
+                        err.Error(),
+                ))
+                return
+        }</span>
+
+        // 3. Convertir a DTO
+        <span class="cov1" title="1">detailsResponse := mapper.CourseDetailsToResponse(details)
+
+        // 4. Responder
+        c.JSON(http.StatusOK, detailsResponse)</span>
+}
+
+// DeleteCourses elimina múltiples cursos
+// @Summary      Eliminar cursos
+// @Description  Elimina uno o más cursos por sus IDs
+// @Tags         courses
+// @Accept       json
+// @Produce      json
+// @Param        request body request.DeleteCoursesRequest true "IDs de cursos a eliminar"
+// @Success      200 {object} response.DeleteCoursesResponse
+// @Failure      400 {object} response.ErrorResponse
+// @Failure      500 {object} response.ErrorResponse
+// @Router       /courses [delete]
+func (h *CourseHandler) DeleteCourses(c *gin.Context) <span class="cov5" title="5">{
+        // 1. Parsear request
+        var req request.DeleteCoursesRequest
+
+        if err := c.ShouldBindJSON(&amp;req); err != nil </span><span class="cov1" title="1">{
+                c.JSON(http.StatusBadRequest, response.NewErrorResponse(
+                        "INVALID_JSON",
+                        "JSON inválido o campos requeridos faltantes",
+                        err.Error(),
+                ))
+                return
+        }</span>
+
+        // 2. Validación adicional personalizada
+        <span class="cov5" title="4">if err := req.Validate(); err != nil </span><span class="cov1" title="1">{
+                c.JSON(http.StatusBadRequest, response.NewErrorResponse(
+                        "VALIDATION_ERROR",
+                        err.Error(),
+                        nil,
+                ))
+                return
+        }</span>
+
+        // 3. Llamar al servicio.
+        <span class="cov4" title="3">serviceResponse, err := h.service.DeleteCourses(req.CourseIDs)
+        if err != nil </span><span class="cov1" title="1">{
+                c.JSON(http.StatusInternalServerError, response.NewErrorResponse(
+                        "DELETE_FAILED",
+                        "Error al eliminar cursos",
+                        err.Error(),
+                ))
+                return
+        }</span>
+
+        // 4. Convertir warnings a DTO
+        <span class="cov3" title="2">warningsResponse := mapper.DeleteCoursesWarningsToResponse(serviceResponse.Warnings)
+
+        // 5. Calcular número de cursos eliminados exitosamente
+        deleted := len(req.CourseIDs) - len(serviceResponse.Warnings)
+
+        // 6. Responder
+        c.JSON(http.StatusOK, response.DeleteCoursesResponse{
+                Message:  "Operación completada",
+                Deleted:  deleted,
+                Warnings: warningsResponse,
+        })</span>
+}
+
+// UpdateCourses actualiza múltiples cursos
+// @Summary      Actualizar cursos
+// @Description  Actualiza uno o más cursos con los datos proporcionados
+// @Tags         courses
+// @Accept       json
+// @Produce      json
+// @Param        request body request.UpdateCoursesRequest true "Cursos a actualizar"
+// @Success      200 {object} response.UpdateCoursesResponse
+// @Failure      400 {object} response.ErrorResponse
+// @Failure      500 {object} response.ErrorResponse
+// @Router       /courses [put]
+func (h *CourseHandler) UpdateCourses(c *gin.Context) <span class="cov5" title="5">{
+        // 1. Parsear request
+        var req request.UpdateCoursesRequest
+
+        if err := c.ShouldBindJSON(&amp;req); err != nil </span><span class="cov1" title="1">{
+                c.JSON(http.StatusBadRequest, response.NewErrorResponse(
+                        "INVALID_JSON",
+                        "JSON inválido o campos requeridos faltantes",
+                        err.Error(),
+                ))
+                return
+        }</span>
+
+        // 2. Validación adicional personalizada
+        <span class="cov5" title="4">if err := req.Validate(); err != nil </span><span class="cov1" title="1">{
+                c.JSON(http.StatusBadRequest, response.NewErrorResponse(
+                        "VALIDATION_ERROR",
+                        err.Error(),
+                        nil,
+                ))
+                return
+        }</span>
+
+        // 3. Llamar al servicio
+        <span class="cov4" title="3">serviceResponse, err := h.service.UpdateCourses(req.Courses)
+        if err != nil </span><span class="cov1" title="1">{
+                c.JSON(http.StatusInternalServerError, response.NewErrorResponse(
+                        "UPDATE_FAILED",
+                        "Error al actualizar cursos",
+                        err.Error(),
+                ))
+                return
+        }</span>
+
+        // 4. Convertir warnings a DTO
+        <span class="cov3" title="2">warningsResponse := mapper.UpdateCoursesWarningsToResponse(serviceResponse.Warnings)
+
+        // 5. Responder
+        c.JSON(http.StatusOK, response.UpdateCoursesResponse{
+                Warnings: warningsResponse,
+        })</span>
+}
+</pre>
+		
+		<pre class="file" id="file15" style="display: none">package handlers
+
+import (
+        "net/http"
+        "zajunaApi/internal/dto/mapper"
+        "zajunaApi/internal/dto/request"
+        "zajunaApi/internal/dto/response"
+        "zajunaApi/internal/models"
+        "zajunaApi/internal/services"
+
+        "github.com/gin-gonic/gin"
+)
+
+type UserHandler struct {
+        service services.UserServiceInterface
+}
+
+func NewUserHandler(service services.UserServiceInterface) *UserHandler <span class="cov10" title="15">{
+        return &amp;UserHandler{service: service}
+}</span>
+
+// GetUsers obtiene la lista de usuarios con filtros y paginación
+// @Summary      Listar usuarios
+// @Description  Obtiene usuarios con filtros opcionales y paginación
+// @Tags         users
+// @Accept       json
+// @Produce      json
+// @Param        firstname  query     string  false  "Filtrar por nombre"
+// @Param        lastname   query     string  false  "Filtrar por apellido"
+// @Param        username   query     string  false  "Filtrar por username"
+// @Param        email      query     string  false  "Filtrar por email"
+// @Param        page       query     int     false  "Número de página"  default(1)
+// @Param        limit      query     int     false  "Elementos por página"  default(15)
+// @Success      200        {object}  response.PaginatedResponse
+// @Failure      400        {object}  response.ErrorResponse
+// @Failure      500        {object}  response.ErrorResponse
+// @Router       /users [get]
+func (h *UserHandler) GetUsers(c *gin.Context) <span class="cov6" title="6">{
+        // 1. Parsear y validar request
+        var req request.GetUsersRequest
+
+        if err := c.ShouldBindQuery(&amp;req); err != nil </span><span class="cov1" title="1">{
+                c.JSON(http.StatusBadRequest, response.NewErrorResponse(
+                        "INVALID_PARAMS",
+                        "Parámetros de consulta inválidos",
+                        err.Error(),
+                ))
+                return
+        }</span>
+
+        // 2. Establecer valores por defecto
+        <span class="cov6" title="5">req.SetDefaults()
+
+        // 3. Convertir a filtros para el servicio
+        filters := req.ToFilterMap()
+
+        // 4. Llamar al servicio
+        users, total, err := h.service.GetUsers(filters, req.Page, req.Limit)
+        if err != nil </span><span class="cov1" title="1">{
+                c.JSON(http.StatusInternalServerError, response.NewErrorResponse(
+                        "FETCH_ERROR",
+                        "Error al obtener usuarios",
+                        err.Error(),
+                ))
+                return
+        }</span>
+
+        // 5. Convertir modelos a DTOs
+        <span class="cov5" title="4">usersResponse := mapper.UsersToResponse(users)
+
+        // 6. Crear respuesta paginada
+        paginatedResponse := response.NewPaginatedResponse(
+                usersResponse,
+                req.Page,
+                req.Limit,
+                total,
+        )
+
+        // 7. Responder
+        c.JSON(http.StatusOK, paginatedResponse)</span>
+}
+
+// UpdateUsers actualiza múltiples usuarios
+// @Summary      Actualizar usuarios
+// @Description  Actualiza la información de uno o más usuarios
+// @Tags         users
+// @Accept       json
+// @Produce      json
+// @Param        request body request.UpdateUsersRequest true "Lista de usuarios a actualizar"
+// @Success      200 {object} response.UpdateUserResponse
+// @Failure      400 {object} response.ErrorResponse
+// @Failure      500 {object} response.ErrorResponse
+// @Router       /users/update [put]
+func (h *UserHandler) UpdateUsers(c *gin.Context) <span class="cov5" title="4">{
+        // 1. Parsear y validar request
+        var req request.UpdateUsersRequest
+
+        if err := c.ShouldBindJSON(&amp;req); err != nil </span><span class="cov3" title="2">{
+                c.JSON(http.StatusBadRequest, response.NewErrorResponse(
+                        "INVALID_JSON",
+                        "JSON inválido o campos requeridos faltantes",
+                        err.Error(),
+                ))
+                return
+        }</span>
+
+        // 2. Convertir DTOs a modelos
+        <span class="cov3" title="2">usersToUpdate := make([]models.User, len(req.Users))
+        for i, userReq := range req.Users </span><span class="cov3" title="2">{
+                usersToUpdate[i] = models.User{
+                        ID:        userReq.ID,
+                        FirstName: userReq.FirstName,
+                        LastName:  userReq.LastName,
+                        Email:     userReq.Email,
+                        City:      userReq.City,
+                        Country:   userReq.Country,
+                        Lang:      userReq.Lang,
+                        Timezone:  userReq.Timezone,
+                        Phone1:    userReq.Phone1,
+                }
+        }</span>
+
+        // 3. Llamar al servicio
+        <span class="cov3" title="2">updated, err := h.service.UpdateUsers(usersToUpdate)
+        if err != nil </span><span class="cov1" title="1">{
+                c.JSON(http.StatusInternalServerError, response.NewErrorResponse(
+                        "UPDATE_FAILED",
+                        "Error al actualizar usuarios",
+                        err.Error(),
+                ))
+                return
+        }</span>
+
+        // 4. Responder
+        <span class="cov1" title="1">c.JSON(http.StatusOK, response.UpdateUserResponse{
+                Message:  "Usuarios actualizados correctamente",
+                Updated:  updated,
+                Warnings: []string{},
+        })</span>
+}
+
+// DeleteUsers suspende múltiples usuarios (soft delete)
+// @Summary      Eliminar usuarios
+// @Description  Suspende usuarios (soft delete) por sus IDs
+// @Tags         users
+// @Accept       json
+// @Produce      json
+// @Param        request body request.DeleteUsersRequest true "IDs de usuarios a eliminar"
+// @Success      200 {object} response.DeleteUserResponse
+// @Failure      400 {object} response.ErrorResponse
+// @Failure      500 {object} response.ErrorResponse
+// @Router       /users [delete]
+func (h *UserHandler) DeleteUsers(c *gin.Context) <span class="cov5" title="4">{
+        // 1. Parsear request
+        var req request.DeleteUsersRequest
+
+        if err := c.ShouldBindJSON(&amp;req); err != nil </span><span class="cov1" title="1">{
+                c.JSON(http.StatusBadRequest, response.NewErrorResponse(
+                        "INVALID_JSON",
+                        "JSON inválido o campos requeridos faltantes",
+                        err.Error(),
+                ))
+                return
+        }</span>
+
+        // 2. Validación adicional personalizada
+        <span class="cov4" title="3">if err := req.Validate(); err != nil </span><span class="cov1" title="1">{
+                c.JSON(http.StatusBadRequest, response.NewErrorResponse(
+                        "VALIDATION_ERROR",
+                        err.Error(),
+                        nil,
+                ))
+                return
+        }</span>
+
+        // 3. Llamar al servicio
+        <span class="cov3" title="2">if err := h.service.DeleteUsers(req.UserIDs); err != nil </span><span class="cov1" title="1">{
+                c.JSON(http.StatusInternalServerError, response.NewErrorResponse(
+                        "DELETE_FAILED",
+                        "Error al suspender usuarios",
+                        err.Error(),
+                ))
+                return
+        }</span>
+
+        // 4. Responder
+        <span class="cov1" title="1">c.JSON(http.StatusOK, response.DeleteUserResponse{
+                Message: "Usuarios suspendidos correctamente",
+                Deleted: len(req.UserIDs),
+                Errors:  []string{},
+        })</span>
+}
+
+// GetEnrolledUsers obtiene usuarios matriculados en un curso
+// @Summary      Obtener usuarios matriculados en un curso
+// @Description  Obtiene la lista de usuarios matriculados en un curso con opciones de filtrado
+// @Tags         users
+// @Accept       json
+// @Produce      json
+// @Param        courseid        path      int     true   "ID del curso"
+// @Param        withcapability  query     string  false  "Filtrar por capacidad"
+// @Param        groupid         query     int     false  "Filtrar por grupo"
+// @Param        onlyactive      query     int     false  "Solo usuarios activos (1=sí, 0=no)"
+// @Param        onlysuspended   query     int     false  "Solo usuarios suspendidos (1=sí, 0=no)"
+// @Param        userfields      query     string  false  "Campos de usuario a retornar"
+// @Param        limitfrom       query     int     false  "Offset de paginación"
+// @Param        limitnumber     query     int     false  "Límite de resultados"
+// @Param        sortby          query     string  false  "Campo de ordenamiento (id, firstname, lastname, siteorder)"
+// @Param        sortdirection   query     string  false  "Dirección de ordenamiento (ASC, DESC)"
+// @Success      200             {object}  response.EnrolledUsersListResponse
+// @Failure      400             {object}  response.ErrorResponse
+// @Failure      500             {object}  response.ErrorResponse
+// @Router       /courses/{courseid}/users [get]
+func (h *UserHandler) GetEnrolledUsers(c *gin.Context) <span class="cov0" title="0">{
+        // 1. Parsear y validar courseID del path
+        var uriReq request.GetEnrolledUsersRequest
+        if err := c.ShouldBindUri(&amp;uriReq); err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, response.NewErrorResponse(
+                        "INVALID_COURSE_ID",
+                        "ID de curso inválido",
+                        err.Error(),
+                ))
+                return
+        }</span>
+
+        // 2. Parsear opciones de query string
+        <span class="cov0" title="0">var options request.EnrolledUsersOptions
+        if err := c.ShouldBindQuery(&amp;options); err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, response.NewErrorResponse(
+                        "INVALID_OPTIONS",
+                        "Opciones de consulta inválidas",
+                        err.Error(),
+                ))
+                return
+        }</span>
+
+        // 3. Establecer valores por defecto
+        <span class="cov0" title="0">options.SetDefaults()
+
+        // 4. Validar opciones
+        if err := options.Validate(); err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, response.NewErrorResponse(
+                        "VALIDATION_ERROR",
+                        err.Error(),
+                        nil,
+                ))
+                return
+        }</span>
+
+        // 5. Convertir opciones a map para el service
+        <span class="cov0" title="0">optionsMap := map[string]interface{}{
+                "sortby":        options.SortBy,
+                "sortdirection": options.SortDirection,
+                "limitnumber":   options.LimitNumber,
+        }
+
+        if options.WithCapability != "" </span><span class="cov0" title="0">{
+                optionsMap["withcapability"] = options.WithCapability
+        }</span>
+        <span class="cov0" title="0">if options.GroupID &gt; 0 </span><span class="cov0" title="0">{
+                optionsMap["groupid"] = options.GroupID
+        }</span>
+        <span class="cov0" title="0">if options.OnlyActive &gt; 0 </span><span class="cov0" title="0">{
+                optionsMap["onlyactive"] = options.OnlyActive
+        }</span>
+        <span class="cov0" title="0">if options.OnlySuspended &gt; 0 </span><span class="cov0" title="0">{
+                optionsMap["onlysuspended"] = options.OnlySuspended
+        }</span>
+        <span class="cov0" title="0">if options.LimitFrom &gt; 0 </span><span class="cov0" title="0">{
+                optionsMap["limitfrom"] = options.LimitFrom
+        }</span>
+
+        // 6. Llamar al servicio
+        <span class="cov0" title="0">users, total, err := h.service.GetEnrolledUsers(uriReq.CourseID, optionsMap)
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusInternalServerError, response.NewErrorResponse(
+                        "FETCH_ERROR",
+                        "Error al obtener usuarios matriculados",
+                        err.Error(),
+                ))
+                return
+        }</span>
+
+        // 7. Responder
+        <span class="cov0" title="0">c.JSON(http.StatusOK, response.EnrolledUsersListResponse{
+                Users: users,
+                Total: total,
+        })</span>
+}
+</pre>
+		
+		<pre class="file" id="file16" style="display: none">package middleware
+
+import "github.com/gin-gonic/gin"
+
+// EnableCORS aplica las cabeceras CORS a todas las rutas
+func EnableCORS() gin.HandlerFunc <span class="cov0" title="0">{
+        return func(c *gin.Context) </span><span class="cov0" title="0">{
+                origin := c.Request.Header.Get("Origin")
+
+                // Permitir el front local durante desarrollo (React en 3000, Vite en 5173)
+                if origin == "http://localhost:3000" || origin == "http://localhost:8080" </span><span class="cov0" title="0">{
+                        c.Writer.Header().Set("Access-Control-Allow-Origin", origin)
+                        c.Writer.Header().Set("Vary", "Origin")
+                }</span>
+
+                <span class="cov0" title="0">c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+                c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With, X-API-Key")
+                c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
+
+                if c.Request.Method == "OPTIONS" </span><span class="cov0" title="0">{
+                        c.AbortWithStatus(204)
+                        return
+                }</span>
+
+                <span class="cov0" title="0">c.Next()</span>
+        }
+}
+</pre>
+		
+		<pre class="file" id="file17" style="display: none">package middleware
+
+import (
+        "log"
+        "time"
+
+        "github.com/gin-gonic/gin"
+)
+
+func LoggingMiddleware() gin.HandlerFunc <span class="cov0" title="0">{
+        return func(c *gin.Context) </span><span class="cov0" title="0">{
+                start := time.Now()
+                c.Next()
+                duration := time.Since(start)
+                log.Printf("%s %s - %d (%v)", c.Request.Method, c.Request.URL.Path, c.Writer.Status(), duration)
+        }</span>
+}
+</pre>
+		
+		<pre class="file" id="file18" style="display: none">package models
+
+type Context struct {
+        ID           int `gorm:"column:id;primaryKey"`
+        ContextLevel int `gorm:"column:contextlevel"`
+        InstanceID   int `gorm:"column:instanceid"`
+}
+
+func (Context) TableName() string <span class="cov0" title="0">{
+        return "mdl_context"
+}</span>
+</pre>
+		
+		<pre class="file" id="file19" style="display: none">package models
+
+type Role struct {
+        ID        int    `gorm:"column:id;primaryKey"`
+        ShortName string `gorm:"column:shortname"`
+        Name      string `gorm:"column:name"`
+}
+
+func (Role) TableName() string <span class="cov0" title="0">{
+        return "mdl_role"
+}</span>
+</pre>
+		
+		<pre class="file" id="file20" style="display: none">package models
+
+type RoleAssignment struct {
+        ID        int `gorm:"column:id;primaryKey"`
+        RoleID    int `gorm:"column:roleid"`
+        UserID    int `gorm:"column:userid"`
+        ContextID int `gorm:"column:contextid"`
+}
+
+func (RoleAssignment) TableName() string <span class="cov0" title="0">{
+        return "mdl_role_assignments"
+}</span>
+</pre>
+		
+		<pre class="file" id="file21" style="display: none">package models
+
+type User struct {
+        ID                uint              `gorm:"column:id;primaryKey" json:"id"`
+        Username          string            `gorm:"column:username" json:"username"`
+        FirstName         string            `gorm:"column:firstname" json:"firstname"`
+        LastName          string            `gorm:"column:lastname" json:"lastname"`
+        FullName          string            `gorm:"-" json:"fullname"`
+        Email             string            `gorm:"column:email" json:"email"`
+        Address           string            `gorm:"column:address" json:"address"`
+        Phone1            string            `gorm:"column:phone1" json:"phone1"`
+        Phone2            string            `gorm:"column:phone2" json:"phone2"`
+        Department        string            `gorm:"column:department" json:"department"`
+        Institution       string            `gorm:"column:institution" json:"institution"`
+        IDNumber          string            `gorm:"column:idnumber" json:"idnumber"`
+        Interests         string            `gorm:"column:interests" json:"interests"`
+        FirstAccess       int64             `gorm:"column:firstaccess" json:"firstaccess"`
+        LastAccess        int64             `gorm:"column:lastaccess" json:"lastaccess"`
+        Auth              string            `gorm:"column:auth" json:"auth"`
+        Suspended         int               `gorm:"column:suspended" json:"suspended"`
+        Confirmed         int               `gorm:"column:confirmed" json:"confirmed"`
+        Lang              string            `gorm:"column:lang" json:"lang"`
+        Theme             string            `gorm:"column:theme" json:"theme"`
+        Timezone          string            `gorm:"column:timezone" json:"timezone"`
+        MailFormat        int               `gorm:"column:mailformat" json:"mailformat"`
+        Description       string            `gorm:"column:description" json:"description"`
+        DescriptionFormat int               `gorm:"column:descriptionformat" json:"descriptionformat"`
+        City              string            `gorm:"column:city" json:"city"`
+        Country           string            `gorm:"column:country" json:"country"`
+        ProfileImageSmall string            `gorm:"-" json:"profileimageurlsmall"`
+        ProfileImage      string            `gorm:"-" json:"profileimageurl"`
+        CustomFields      []UserCustomField `gorm:"-" json:"customfields,omitempty"`
+        Preferences       []UserPreference  `gorm:"-" json:"preferences,omitempty"`
+}
+
+// Nombre de la tabla real en Moodle
+func (User) TableName() string <span class="cov0" title="0">{
+        return "mdl_user"
+}</span>
+
+// Campos adicionales del usuario (no pertenecen directamente a mdl_user)
+type UserCustomField struct {
+        Type         string `json:"type"`
+        Value        string `json:"value"`
+        DisplayValue string `json:"displayvalue,omitempty"`
+        Name         string `json:"name"`
+        ShortName    string `json:"shortname"`
+}
+
+type UserPreference struct {
+        Name  string `json:"name"`
+        Value string `json:"value"`
+}
+
+type APIResponse struct {
+        Users       []User `json:"users"`
+        Total       int    `json:"total"`
+        Page        int    `json:"page"`
+        PageSize    int    `json:"pageSize"`
+        TotalPages  int    `json:"totalPages"`
+        HasNext     bool   `json:"hasNext"`
+        HasPrevious bool   `json:"hasPrevious"`
+}
+</pre>
+		
+		<pre class="file" id="file22" style="display: none">package repository
+
+import (
+        "gorm.io/gorm"
+        "zajunaApi/internal/models"
+)
+
+type CategoryRepository struct {
+        db *gorm.DB
+}
+
+func NewCategoryRepository(db *gorm.DB) *CategoryRepository <span class="cov0" title="0">{
+        return &amp;CategoryRepository{db: db}
+}</span>
+
+func (r *CategoryRepository) GetAllCategories() ([]models.Category, error) <span class="cov0" title="0">{
+        var categories []models.Category
+
+        if err := r.db.Table("mdl_course_categories").
+                Order("sortorder").
+                Find(&amp;categories).Error; err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">return categories, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file23" style="display: none">package repository
+
+import (
+        "zajunaApi/internal/dto/request"
+        "zajunaApi/internal/models"
+
+        "gorm.io/gorm"
+)
+
+type CourseRepository struct {
+        db *gorm.DB
+}
+
+func NewCourseRepository(db *gorm.DB) *CourseRepository <span class="cov0" title="0">{
+        return &amp;CourseRepository{db: db}
+}</span>
+
+type CourseDetails struct {
+        ID               int64            `json:"id"`
+        FullName         string           `json:"fullName"`
+        ShortName        string           `json:"shortName"`
+        IDNumber         string           `json:"idNumber"`
+        Format           string           `json:"format"`
+        Category         string           `json:"category"`
+        Groupings        int64            `json:"groupings"`
+        Groups           int64            `json:"groups"`
+        RoleAssignments  map[string]int64 `json:"roleAssignments" gorm:"-"`
+        EnrollmentMethod string           `json:"enrollmentMethod"`
+        Sections         []string         `json:"sections" gorm:"-"`
+}
+
+// Obtener todos los cursos
+func (r *CourseRepository) GetAllCourses() ([]models.Course, error) <span class="cov0" title="0">{
+        var courses []models.Course
+
+        if err := r.db.Table("mdl_course").
+                Order("fullname").
+                Find(&amp;courses).Error; err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">return courses, nil</span>
+}
+
+// Obtener cursos por categoría (útil para filtrar)
+func (r *CourseRepository) GetCoursesByCategory(categoryID uint) ([]models.Course, error) <span class="cov0" title="0">{
+        var courses []models.Course
+
+        if err := r.db.Table("mdl_course").
+                Where("category = ?", categoryID).
+                Order("fullname").
+                Find(&amp;courses).Error; err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">return courses, nil</span>
+}
+
+// Obtener un curso por ID
+func (r *CourseRepository) GetCourseByID(id uint) (*models.Course, error) <span class="cov0" title="0">{
+        var course models.Course
+
+        if err := r.db.Table("mdl_course").
+                Where("id = ?", id).
+                First(&amp;course).Error; err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">return &amp;course, nil</span>
+}
+
+// Obtener un curso por IDNumber
+func (r *CourseRepository) GetCourseByIDNumber(idnumber string) (*models.Course, error) <span class="cov0" title="0">{
+        var course models.Course
+
+        if err := r.db.Table("mdl_course").
+                Where("idnumber = ?", idnumber).
+                First(&amp;course).Error; err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">return &amp;course, nil</span>
+}
+
+// GetRoleAssignments obtiene el número de usuarios por rol en un curso.
+func (r *CourseRepository) GetCourseDetails(idnumber string) (*CourseDetails, error) <span class="cov0" title="0">{
+        // Buscar curso por idnumber
+        course, err := r.GetCourseByIDNumber(idnumber)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">courseID := int(course.ID)
+
+        // Creamos el struct base de detalles
+        details := CourseDetails{
+                ID:        int64(course.ID),
+                FullName:  course.FullName,
+                ShortName: course.ShortName,
+                IDNumber:  course.IDNumber,
+                Format:    course.Format,
+        }
+
+        // Obtener categoría
+        r.db.Table("mdl_course_categories").
+                Select("name").
+                Where("id = ?", course.Category).
+                Scan(&amp;details.Category)
+
+        // Contar agrupamientos
+        r.db.Table("mdl_groupings").Where("courseid = ?", courseID).Count(&amp;details.Groupings)
+
+        // Contar grupos
+        r.db.Table("mdl_groups").Where("courseid = ?", courseID).Count(&amp;details.Groups)
+
+        // Asignaciones de roles
+        roleAssignments := map[string]int64{}
+        rows, _ := r.db.Table("mdl_role_assignments ra").
+                Select("r.shortname, COUNT(ra.id) as total").
+                Joins("JOIN mdl_context ctx ON ra.contextid = ctx.id").
+                Joins("JOIN mdl_role r ON r.id = ra.roleid").
+                Where("ctx.contextlevel = 50 AND ctx.instanceid = ?", courseID).
+                Group("r.shortname").
+                Rows()
+
+        defer rows.Close()
+        for rows.Next() </span><span class="cov0" title="0">{
+                var role string
+                var total int64
+                rows.Scan(&amp;role, &amp;total)
+                roleAssignments[role] = total
+        }</span>
+        <span class="cov0" title="0">details.RoleAssignments = roleAssignments
+
+        // Métodos de matriculación
+        var enrolMethods []string
+        r.db.Table("mdl_enrol").
+                Select("DISTINCT enrol").
+                Where("courseid = ?", courseID).
+                Scan(&amp;enrolMethods)
+        if len(enrolMethods) == 0 </span><span class="cov0" title="0">{
+                enrolMethods = []string{"Matriculación manual"}
+        }</span>
+        <span class="cov0" title="0">details.EnrollmentMethod = enrolMethods[0]
+
+        // Secciones
+        var sectionNames []string
+        r.db.Table("mdl_course_sections").
+                Select("name").
+                Where("course = ? AND name IS NOT NULL AND name != ''", courseID).
+                Order("section ASC").
+                Scan(&amp;sectionNames)
+        details.Sections = sectionNames
+
+        return &amp;details, nil</span>
+}
+
+func (r *CourseRepository) DeleteCourses(courseIDs []int) ([]models.Warning, error) <span class="cov0" title="0">{
+        var warnings []models.Warning
+
+        // Validar si los cursos existen
+        var existingIDs []int
+        if err := r.db.Table("mdl_course").
+                Where("id IN ?", courseIDs).
+                Pluck("id", &amp;existingIDs).Error; err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        // Generar warnings para los IDs inexistentes
+        <span class="cov0" title="0">for _, id := range courseIDs </span><span class="cov0" title="0">{
+                found := false
+                for _, existing := range existingIDs </span><span class="cov0" title="0">{
+                        if id == existing </span><span class="cov0" title="0">{
+                                found = true
+                                break</span>
+                        }
+                }
+                <span class="cov0" title="0">if !found </span><span class="cov0" title="0">{
+                        warnings = append(warnings, models.Warning{
+                                Item:        "course",
+                                ItemID:      id,
+                                WarningCode: "invalidcourseid",
+                                Message:     "Course ID not found in the database",
+                        })
+                }</span>
+        }
+
+        // Eliminar físicamente los cursos válidos
+        <span class="cov0" title="0">if len(existingIDs) &gt; 0 </span><span class="cov0" title="0">{
+                if err := r.db.Table("mdl_course").
+                        Where("id IN ?", existingIDs).
+                        Delete(nil).Error; err != nil </span><span class="cov0" title="0">{
+                        return warnings, err
+                }</span>
+        }
+
+        <span class="cov0" title="0">return warnings, nil</span>
+}
+
+// SearchCourses busca cursos según criterio y valor
+func (r *CourseRepository) SearchCourses(criteriaName, criteriaValue string, page, perPage int) ([]models.Course, int64, error) <span class="cov0" title="0">{
+        var courses []models.Course
+        var total int64
+
+        query := r.db.Table("mdl_course")
+
+        // Aplicar el criterio de búsqueda
+        switch criteriaName </span>{
+        case "search":<span class="cov0" title="0">
+                // Búsqueda por texto en fullname, shortname o idnumber
+                searchPattern := "%" + criteriaValue + "%"
+                query = query.Where("fullname ILIKE ? OR shortname ILIKE ? OR idnumber ILIKE ?",
+                        searchPattern, searchPattern, searchPattern)</span>
+
+        case "categoryid":<span class="cov0" title="0">
+                // Búsqueda por categoría
+                query = query.Where("category = ?", criteriaValue)</span>
+
+        case "id":<span class="cov0" title="0">
+                // Búsqueda por ID
+                query = query.Where("id = ?", criteriaValue)</span>
+
+        case "idnumber":<span class="cov0" title="0">
+                // Búsqueda por idnumber
+                query = query.Where("idnumber = ?", criteriaValue)</span>
+
+        default:<span class="cov0" title="0">
+                return nil, 0, nil</span>
+        }
+
+        // Contar total
+        <span class="cov0" title="0">query.Count(&amp;total)
+
+        // Ordenar alfabéticamente
+        query = query.Order("fullname ASC")
+
+        // Aplicar paginación si perPage &gt; 0
+        if perPage &gt; 0 </span><span class="cov0" title="0">{
+                offset := page * perPage
+                query = query.Offset(offset).Limit(perPage)
+        }</span>
+
+        // Ejecutar consulta
+        <span class="cov0" title="0">if err := query.Find(&amp;courses).Error; err != nil </span><span class="cov0" title="0">{
+                return nil, 0, err
+        }</span>
+
+        <span class="cov0" title="0">return courses, total, nil</span>
+}
+
+// UpdateCourse actualiza un curso en la base de datos
+func (r *CourseRepository) UpdateCourse(id int, updates map[string]interface{}) error <span class="cov0" title="0">{
+        // Siempre actualizar timemodified
+        updates["timemodified"] = gorm.Expr("EXTRACT(EPOCH FROM NOW())::INTEGER")
+
+        // Ejecutar la actualización
+        result := r.db.Table("mdl_course").
+                Where("id = ?", id).
+                Updates(updates)
+
+        if result.Error != nil </span><span class="cov0" title="0">{
+                return result.Error
+        }</span>
+
+        // Verificar que se actualizó al menos una fila
+        <span class="cov0" title="0">if result.RowsAffected == 0 </span><span class="cov0" title="0">{
+                return gorm.ErrRecordNotFound
+        }</span>
+
+        <span class="cov0" title="0">return nil</span>
+}
+
+// UpdateCourseFormatOptions actualiza o inserta opciones de formato de curso
+func (r *CourseRepository) UpdateCourseFormatOptions(courseID int, options []request.CourseFormatOption) error <span class="cov0" title="0">{
+        // Primero verificar que el curso existe
+        var exists bool
+        if err := r.db.Table("mdl_course").
+                Select("1").
+                Where("id = ?", courseID).
+                Limit(1).
+                Find(&amp;exists).Error; err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov0" title="0">if !exists </span><span class="cov0" title="0">{
+                return gorm.ErrRecordNotFound
+        }</span>
+
+        // Obtener el formato del curso
+        <span class="cov0" title="0">var format string
+        if err := r.db.Table("mdl_course").
+                Select("format").
+                Where("id = ?", courseID).
+                Scan(&amp;format).Error; err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        // Procesar cada opción de formato
+        <span class="cov0" title="0">for _, option := range options </span><span class="cov0" title="0">{
+                // Verificar si la opción ya existe
+                var existingID int
+                err := r.db.Table("mdl_course_format_options").
+                        Select("id").
+                        Where("courseid = ? AND format = ? AND name = ?", courseID, format, option.Name).
+                        Scan(&amp;existingID).Error
+
+                if err == gorm.ErrRecordNotFound || existingID == 0 </span><span class="cov0" title="0">{
+                        // Insertar nueva opción
+                        if err := r.db.Exec(`
+                                INSERT INTO mdl_course_format_options (courseid, format, sectionid, name, value)
+                                VALUES (?, ?, 0, ?, ?)
+                        `, courseID, format, option.Name, option.Value).Error; err != nil </span><span class="cov0" title="0">{
+                                return err
+                        }</span>
+                } else<span class="cov0" title="0"> {
+                        // Actualizar opción existente
+                        if err := r.db.Table("mdl_course_format_options").
+                                Where("id = ?", existingID).
+                                Update("value", option.Value).Error; err != nil </span><span class="cov0" title="0">{
+                                return err
+                        }</span>
+                }
+        }
+
+        <span class="cov0" title="0">return nil</span>
+}
+
+// UpdateCourseCustomFields actualiza o inserta campos personalizados de curso
+func (r *CourseRepository) UpdateCourseCustomFields(courseID int, fields []request.CustomField) error <span class="cov0" title="0">{
+        // Primero verificar que el curso existe
+        var exists bool
+        if err := r.db.Table("mdl_course").
+                Select("1").
+                Where("id = ?", courseID).
+                Limit(1).
+                Find(&amp;exists).Error; err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov0" title="0">if !exists </span><span class="cov0" title="0">{
+                return gorm.ErrRecordNotFound
+        }</span>
+
+        // Obtener el context ID del curso
+        <span class="cov0" title="0">var contextID int
+        if err := r.db.Table("mdl_context").
+                Select("id").
+                Where("contextlevel = 50 AND instanceid = ?", courseID).
+                Scan(&amp;contextID).Error; err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        // Procesar cada campo personalizado
+        <span class="cov0" title="0">for _, field := range fields </span><span class="cov0" title="0">{
+                // Buscar el ID del campo personalizado por shortname
+                var fieldID int
+                err := r.db.Table("mdl_customfield_field").
+                        Select("id").
+                        Where("shortname = ?", field.ShortName).
+                        Scan(&amp;fieldID).Error
+
+                if err == gorm.ErrRecordNotFound || fieldID == 0 </span><span class="cov0" title="0">{
+                        // El campo personalizado no existe, continuar con el siguiente
+                        continue</span>
+                }
+
+                // Verificar si ya existe un valor para este campo y curso
+                <span class="cov0" title="0">var existingDataID int
+                err = r.db.Table("mdl_customfield_data").
+                        Select("id").
+                        Where("fieldid = ? AND instanceid = ? AND contextid = ?", fieldID, courseID, contextID).
+                        Scan(&amp;existingDataID).Error
+
+                if err == gorm.ErrRecordNotFound || existingDataID == 0 </span><span class="cov0" title="0">{
+                        // Insertar nuevo valor
+                        if err := r.db.Exec(`
+                                INSERT INTO mdl_customfield_data (fieldid, instanceid, contextid, value, valueformat, timecreated, timemodified)
+                                VALUES (?, ?, ?, ?, 0, EXTRACT(EPOCH FROM NOW())::INTEGER, EXTRACT(EPOCH FROM NOW())::INTEGER)
+                        `, fieldID, courseID, contextID, field.Value).Error; err != nil </span><span class="cov0" title="0">{
+                                return err
+                        }</span>
+                } else<span class="cov0" title="0"> {
+                        // Actualizar valor existente
+                        if err := r.db.Exec(`
+                                UPDATE mdl_customfield_data
+                                SET value = ?, timemodified = EXTRACT(EPOCH FROM NOW())::INTEGER
+                                WHERE id = ?
+                        `, field.Value, existingDataID).Error; err != nil </span><span class="cov0" title="0">{
+                                return err
+                        }</span>
+                }
+        }
+
+        <span class="cov0" title="0">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file24" style="display: none">package mocks
+
+import (
+        "zajunaApi/internal/models"
+
+        "github.com/stretchr/testify/mock"
+)
+
+// MockCategoryRepository es un mock del CategoryRepository para testing
+type MockCategoryRepository struct {
+        mock.Mock
+}
+
+func (m *MockCategoryRepository) GetAllCategories() ([]models.Category, error) <span class="cov0" title="0">{
+        args := m.Called()
+        if args.Get(0) == nil </span><span class="cov0" title="0">{
+                return nil, args.Error(1)
+        }</span>
+        <span class="cov0" title="0">return args.Get(0).([]models.Category), args.Error(1)</span>
+}
+</pre>
+		
+		<pre class="file" id="file25" style="display: none">package mocks
+
+import (
+        "zajunaApi/internal/dto/request"
+        "zajunaApi/internal/models"
+        "zajunaApi/internal/repository"
+
+        "github.com/stretchr/testify/mock"
+)
+
+// MockCourseRepository es un mock del CourseRepository para testing
+type MockCourseRepository struct {
+        mock.Mock
+}
+
+func (m *MockCourseRepository) GetAllCourses() ([]models.Course, error) <span class="cov0" title="0">{
+        args := m.Called()
+        if args.Get(0) == nil </span><span class="cov0" title="0">{
+                return nil, args.Error(1)
+        }</span>
+        <span class="cov0" title="0">return args.Get(0).([]models.Course), args.Error(1)</span>
+}
+
+func (m *MockCourseRepository) GetCoursesByCategory(categoryID uint) ([]models.Course, error) <span class="cov0" title="0">{
+        args := m.Called(categoryID)
+        if args.Get(0) == nil </span><span class="cov0" title="0">{
+                return nil, args.Error(1)
+        }</span>
+        <span class="cov0" title="0">return args.Get(0).([]models.Course), args.Error(1)</span>
+}
+
+func (m *MockCourseRepository) GetCourseByID(id uint) (*models.Course, error) <span class="cov0" title="0">{
+        args := m.Called(id)
+        if args.Get(0) == nil </span><span class="cov0" title="0">{
+                return nil, args.Error(1)
+        }</span>
+        <span class="cov0" title="0">return args.Get(0).(*models.Course), args.Error(1)</span>
+}
+
+func (m *MockCourseRepository) GetCourseByIDNumber(idnumber string) (*models.Course, error) <span class="cov0" title="0">{
+        args := m.Called(idnumber)
+        if args.Get(0) == nil </span><span class="cov0" title="0">{
+                return nil, args.Error(1)
+        }</span>
+        <span class="cov0" title="0">return args.Get(0).(*models.Course), args.Error(1)</span>
+}
+
+func (m *MockCourseRepository) GetCourseDetails(idnumber string) (*repository.CourseDetails, error) <span class="cov0" title="0">{
+        args := m.Called(idnumber)
+        if args.Get(0) == nil </span><span class="cov0" title="0">{
+                return nil, args.Error(1)
+        }</span>
+        <span class="cov0" title="0">return args.Get(0).(*repository.CourseDetails), args.Error(1)</span>
+}
+
+func (m *MockCourseRepository) DeleteCourses(courseIDs []int) ([]models.Warning, error) <span class="cov0" title="0">{
+        args := m.Called(courseIDs)
+        if args.Get(0) == nil </span><span class="cov0" title="0">{
+                return nil, args.Error(1)
+        }</span>
+        <span class="cov0" title="0">return args.Get(0).([]models.Warning), args.Error(1)</span>
+}
+
+func (m *MockCourseRepository) UpdateCourse(id int, updates map[string]interface{}) error <span class="cov0" title="0">{
+        args := m.Called(id, updates)
+        return args.Error(0)
+}</span>
+
+func (m *MockCourseRepository) SearchCourses(criteriaName, criteriaValue string, page, perPage int) ([]models.Course, int64, error) <span class="cov0" title="0">{
+        args := m.Called(criteriaName, criteriaValue, page, perPage)
+        if args.Get(0) == nil </span><span class="cov0" title="0">{
+                return nil, args.Get(1).(int64), args.Error(2)
+        }</span>
+        <span class="cov0" title="0">return args.Get(0).([]models.Course), args.Get(1).(int64), args.Error(2)</span>
+}
+
+func (m *MockCourseRepository) UpdateCourseFormatOptions(courseID int, options []request.CourseFormatOption) error <span class="cov0" title="0">{
+        args := m.Called(courseID, options)
+        return args.Error(0)
+}</span>
+
+func (m *MockCourseRepository) UpdateCourseCustomFields(courseID int, fields []request.CustomField) error <span class="cov0" title="0">{
+        args := m.Called(courseID, fields)
+        return args.Error(0)
+}</span>
+</pre>
+		
+		<pre class="file" id="file26" style="display: none">package mocks
+
+import (
+        "zajunaApi/internal/models"
+        "zajunaApi/internal/repository"
+
+        "github.com/stretchr/testify/mock"
+)
+
+// MockUserRepository es un mock del UserRepository para testing
+type MockUserRepository struct {
+        mock.Mock
+}
+
+func (m *MockUserRepository) FindByFilters(filters map[string]string, page, limit int) ([]models.User, int64, error) <span class="cov0" title="0">{
+        args := m.Called(filters, page, limit)
+        if args.Get(0) == nil </span><span class="cov0" title="0">{
+                return nil, args.Get(1).(int64), args.Error(2)
+        }</span>
+        <span class="cov0" title="0">return args.Get(0).([]models.User), args.Get(1).(int64), args.Error(2)</span>
+}
+
+func (m *MockUserRepository) DeleteUsers(userIDs []int) error <span class="cov0" title="0">{
+        args := m.Called(userIDs)
+        return args.Error(0)
+}</span>
+
+func (m *MockUserRepository) UpdateUsers(users []models.User) (int64, error) <span class="cov0" title="0">{
+        args := m.Called(users)
+        return args.Get(0).(int64), args.Error(1)
+}</span>
+
+func (m *MockUserRepository) GetEnrolledUsers(courseID int, options map[string]interface{}) ([]repository.EnrolledUserDetail, int, error) <span class="cov0" title="0">{
+        args := m.Called(courseID, options)
+        if args.Get(0) == nil </span><span class="cov0" title="0">{
+                return nil, args.Get(1).(int), args.Error(2)
+        }</span>
+        <span class="cov0" title="0">return args.Get(0).([]repository.EnrolledUserDetail), args.Get(1).(int), args.Error(2)</span>
+}
+
+func (m *MockUserRepository) GetUserGroupsInCourse(userID, courseID int) ([]map[string]interface{}, error) <span class="cov0" title="0">{
+        args := m.Called(userID, courseID)
+        if args.Get(0) == nil </span><span class="cov0" title="0">{
+                return nil, args.Error(1)
+        }</span>
+        <span class="cov0" title="0">return args.Get(0).([]map[string]interface{}), args.Error(1)</span>
+}
+
+func (m *MockUserRepository) GetUserRolesInCourse(userID, courseID int) ([]map[string]interface{}, error) <span class="cov0" title="0">{
+        args := m.Called(userID, courseID)
+        if args.Get(0) == nil </span><span class="cov0" title="0">{
+                return nil, args.Error(1)
+        }</span>
+        <span class="cov0" title="0">return args.Get(0).([]map[string]interface{}), args.Error(1)</span>
+}
+
+func (m *MockUserRepository) GetUserCustomFields(userID int) ([]map[string]interface{}, error) <span class="cov0" title="0">{
+        args := m.Called(userID)
+        if args.Get(0) == nil </span><span class="cov0" title="0">{
+                return nil, args.Error(1)
+        }</span>
+        <span class="cov0" title="0">return args.Get(0).([]map[string]interface{}), args.Error(1)</span>
+}
+
+func (m *MockUserRepository) GetUserPreferences(userID int) ([]map[string]interface{}, error) <span class="cov0" title="0">{
+        args := m.Called(userID)
+        if args.Get(0) == nil </span><span class="cov0" title="0">{
+                return nil, args.Error(1)
+        }</span>
+        <span class="cov0" title="0">return args.Get(0).([]map[string]interface{}), args.Error(1)</span>
+}
+
+func (m *MockUserRepository) GetUserEnrolledCourses(userID int) ([]map[string]interface{}, error) <span class="cov0" title="0">{
+        args := m.Called(userID)
+        if args.Get(0) == nil </span><span class="cov0" title="0">{
+                return nil, args.Error(1)
+        }</span>
+        <span class="cov0" title="0">return args.Get(0).([]map[string]interface{}), args.Error(1)</span>
+}
+</pre>
+		
+		<pre class="file" id="file27" style="display: none">package repository
+
+import (
+        "zajunaApi/internal/models"
+
+        "gorm.io/gorm"
+)
+
+type UserRepository struct {
+        DB *gorm.DB
+}
+
+func NewUserRepository(db *gorm.DB) *UserRepository <span class="cov0" title="0">{
+        return &amp;UserRepository{DB: db}
+}</span>
+
+// FindByFilters busca usuarios con filtros dinámicos
+func (r *UserRepository) FindByFilters(filters map[string]string, page, limit int) ([]models.User, int64, error) <span class="cov0" title="0">{
+        var users []models.User
+        var total int64
+
+        query := r.DB.Model(&amp;models.User{})
+
+        // Aplicar filtros solo si vienen con datos
+        if firstname := filters["firstname"]; firstname != "" </span><span class="cov0" title="0">{
+                query = query.Where("firstname ILIKE ?", "%"+firstname+"%")
+        }</span>
+        <span class="cov0" title="0">if lastname := filters["lastname"]; lastname != "" </span><span class="cov0" title="0">{
+                query = query.Where("lastname ILIKE ?", "%"+lastname+"%")
+        }</span>
+        <span class="cov0" title="0">if username := filters["username"]; username != "" </span><span class="cov0" title="0">{
+                query = query.Where("username ILIKE ?", "%"+username+"%")
+        }</span>
+        <span class="cov0" title="0">if email := filters["email"]; email != "" </span><span class="cov0" title="0">{
+                query = query.Where("email ILIKE ?", "%"+email+"%")
+        }</span>
+
+        // Contar total antes de paginar
+        <span class="cov0" title="0">query.Count(&amp;total)
+
+        // Ordenar alfabéticamente por firstname, luego por lastname
+        query = query.Order("firstname ASC, lastname ASC")
+
+        // Aplicar paginación
+        offset := (page - 1) * limit
+        if err := query.Offset(offset).Limit(limit).Find(&amp;users).Error; err != nil </span><span class="cov0" title="0">{
+                return nil, 0, err
+        }</span>
+
+        <span class="cov0" title="0">return users, total, nil</span>
+}
+
+// DeleteUsers suspende usuarios por sus IDs
+func (r *UserRepository) DeleteUsers(userIDs []int) error <span class="cov0" title="0">{
+        return r.DB.Table("mdl_user").
+                Where("id IN ?", userIDs).
+                Update("suspended", 1).Error
+}</span>
+
+func (r *UserRepository) UpdateUsers(users []models.User) (int64, error) <span class="cov0" title="0">{
+        var total int64
+        for _, u := range users </span><span class="cov0" title="0">{
+                if err := r.DB.Model(&amp;models.User{}).
+                        Where("id = ?", u.ID).
+                        Updates(map[string]interface{}{
+                                "firstname": u.FirstName,
+                                "lastname":  u.LastName,
+                                "email":     u.Email,
+                                "city":      u.City,
+                                "country":   u.Country,
+                                "lang":      u.Lang,
+                                "timezone":  u.Timezone,
+                                "phone1":    u.Phone1,
+                        }).Error; err != nil </span><span class="cov0" title="0">{
+                        return total, err
+                }</span>
+                <span class="cov0" title="0">total++</span>
+        }
+        <span class="cov0" title="0">return total, nil</span>
+}
+
+// EnrolledUserDetail representa los detalles completos de un usuario matriculado
+type EnrolledUserDetail struct {
+        models.User
+        LastCourseAccess int64 `gorm:"column:lastcourseaccess"`
+}
+
+// GetEnrolledUsers obtiene usuarios matriculados en un curso con opciones de filtrado
+func (r *UserRepository) GetEnrolledUsers(courseID int, options map[string]interface{}) ([]EnrolledUserDetail, int, error) <span class="cov0" title="0">{
+        var users []EnrolledUserDetail
+
+        // Query base: usuarios matriculados en el curso
+        query := r.DB.Table("mdl_user u").
+                Select("u.*, COALESCE(ula.timeaccess, 0) as lastcourseaccess").
+                Joins("JOIN mdl_user_enrolments ue ON ue.userid = u.id").
+                Joins("JOIN mdl_enrol e ON e.id = ue.enrolid").
+                Joins("LEFT JOIN mdl_user_lastaccess ula ON ula.userid = u.id AND ula.courseid = ?", courseID).
+                Where("e.courseid = ? AND u.deleted = 0", courseID)
+
+        // Filtro onlyactive: solo usuarios con matriculaciones activas
+        if onlyActive, ok := options["onlyactive"].(int); ok &amp;&amp; onlyActive == 1 </span><span class="cov0" title="0">{
+                query = query.Where("ue.status = 0") // 0 = active
+                // Filtrar por restricciones de tiempo si aplica
+                query = query.Where("(ue.timestart = 0 OR ue.timestart &lt;= EXTRACT(EPOCH FROM NOW()))")
+                query = query.Where("(ue.timeend = 0 OR ue.timeend &gt;= EXTRACT(EPOCH FROM NOW()))")
+        }</span>
+
+        // Filtro onlysuspended: solo usuarios suspendidos
+        <span class="cov0" title="0">if onlySuspended, ok := options["onlysuspended"].(int); ok &amp;&amp; onlySuspended == 1 </span><span class="cov0" title="0">{
+                query = query.Where("ue.status = 1") // 1 = suspended
+        }</span>
+
+        // Filtro por grupo
+        <span class="cov0" title="0">if groupID, ok := options["groupid"].(int); ok &amp;&amp; groupID &gt; 0 </span><span class="cov0" title="0">{
+                query = query.Joins("JOIN mdl_groups_members gm ON gm.userid = u.id").
+                        Where("gm.groupid = ?", groupID)
+        }</span>
+
+        // Filtro por capacidad (requiere verificar role capabilities)
+        <span class="cov0" title="0">if withCapability, ok := options["withcapability"].(string); ok &amp;&amp; withCapability != "" </span><span class="cov0" title="0">{
+                // Obtener el contexto del curso
+                query = query.Joins(`
+                        JOIN mdl_role_assignments ra ON ra.userid = u.id
+                        JOIN mdl_context ctx ON ctx.id = ra.contextid
+                        JOIN mdl_role_capabilities rc ON rc.roleid = ra.roleid
+                `).Where("ctx.contextlevel = 50 AND ctx.instanceid = ?", courseID).
+                        Where("rc.capability = ? AND rc.permission = 1", withCapability)
+        }</span>
+
+        // Contar total antes de aplicar límites
+        <span class="cov0" title="0">var total int64
+        query.Count(&amp;total)
+
+        // Ordenamiento
+        sortBy := "u.id"
+        sortDirection := "ASC"
+        if sb, ok := options["sortby"].(string); ok &amp;&amp; sb != "" </span><span class="cov0" title="0">{
+                switch sb </span>{
+                case "firstname":<span class="cov0" title="0">
+                        sortBy = "u.firstname"</span>
+                case "lastname":<span class="cov0" title="0">
+                        sortBy = "u.lastname"</span>
+                case "siteorder":<span class="cov0" title="0">
+                        sortBy = "u.id"</span> // Moodle usa ID para siteorder por defecto
+                default:<span class="cov0" title="0">
+                        sortBy = "u.id"</span>
+                }
+        }
+        <span class="cov0" title="0">if sd, ok := options["sortdirection"].(string); ok &amp;&amp; (sd == "DESC" || sd == "ASC") </span><span class="cov0" title="0">{
+                sortDirection = sd
+        }</span>
+        <span class="cov0" title="0">query = query.Order(sortBy + " " + sortDirection)
+
+        // Paginación
+        if limitFrom, ok := options["limitfrom"].(int); ok &amp;&amp; limitFrom &gt; 0 </span><span class="cov0" title="0">{
+                query = query.Offset(limitFrom)
+        }</span>
+        <span class="cov0" title="0">if limitNumber, ok := options["limitnumber"].(int); ok &amp;&amp; limitNumber &gt; 0 </span><span class="cov0" title="0">{
+                query = query.Limit(limitNumber)
+        }</span>
+
+        // Ejecutar query
+        <span class="cov0" title="0">if err := query.Find(&amp;users).Error; err != nil </span><span class="cov0" title="0">{
+                return nil, 0, err
+        }</span>
+
+        <span class="cov0" title="0">return users, int(total), nil</span>
+}
+
+// GetUserGroupsInCourse obtiene los grupos de un usuario en un curso específico
+func (r *UserRepository) GetUserGroupsInCourse(userID, courseID int) ([]map[string]interface{}, error) <span class="cov0" title="0">{
+        var groups []map[string]interface{}
+
+        err := r.DB.Table("mdl_groups g").
+                Select("g.id, g.name, g.description, g.descriptionformat").
+                Joins("JOIN mdl_groups_members gm ON gm.groupid = g.id").
+                Where("gm.userid = ? AND g.courseid = ?", userID, courseID).
+                Scan(&amp;groups).Error
+
+        return groups, err
+}</span>
+
+// GetUserRolesInCourse obtiene los roles de un usuario en un curso específico
+func (r *UserRepository) GetUserRolesInCourse(userID, courseID int) ([]map[string]interface{}, error) <span class="cov0" title="0">{
+        var roles []map[string]interface{}
+
+        err := r.DB.Table("mdl_role r").
+                Select("r.id as roleid, r.name, r.shortname, r.sortorder").
+                Joins("JOIN mdl_role_assignments ra ON ra.roleid = r.id").
+                Joins("JOIN mdl_context ctx ON ctx.id = ra.contextid").
+                Where("ra.userid = ? AND ctx.contextlevel = 50 AND ctx.instanceid = ?", userID, courseID).
+                Scan(&amp;roles).Error
+
+        return roles, err
+}</span>
+
+// GetUserCustomFields obtiene los campos personalizados de un usuario
+func (r *UserRepository) GetUserCustomFields(userID int) ([]map[string]interface{}, error) <span class="cov0" title="0">{
+        var customFields []map[string]interface{}
+
+        err := r.DB.Table("mdl_user_info_data uid").
+                Select("uif.datatype as type, uid.data as value, uif.name, uif.shortname").
+                Joins("JOIN mdl_user_info_field uif ON uif.id = uid.fieldid").
+                Where("uid.userid = ?", userID).
+                Scan(&amp;customFields).Error
+
+        return customFields, err
+}</span>
+
+// GetUserPreferences obtiene las preferencias de un usuario
+func (r *UserRepository) GetUserPreferences(userID int) ([]map[string]interface{}, error) <span class="cov0" title="0">{
+        var preferences []map[string]interface{}
+
+        err := r.DB.Table("mdl_user_preferences").
+                Select("name, value").
+                Where("userid = ?", userID).
+                Scan(&amp;preferences).Error
+
+        return preferences, err
+}</span>
+
+// GetUserEnrolledCourses obtiene los cursos en los que está matriculado un usuario
+func (r *UserRepository) GetUserEnrolledCourses(userID int) ([]map[string]interface{}, error) <span class="cov0" title="0">{
+        var courses []map[string]interface{}
+
+        err := r.DB.Table("mdl_course c").
+                Select("c.id, c.fullname, c.shortname").
+                Joins("JOIN mdl_enrol e ON e.courseid = c.id").
+                Joins("JOIN mdl_user_enrolments ue ON ue.enrolid = e.id").
+                Where("ue.userid = ? AND ue.status = 0", userID).
+                Scan(&amp;courses).Error
+
+        return courses, err
+}</span>
+</pre>
+		
+		<pre class="file" id="file28" style="display: none">package routes
+
+import (
+        "github.com/gin-gonic/gin"
+        "gorm.io/gorm"
+
+        "zajunaApi/internal/handlers"
+        "zajunaApi/internal/repository"
+        "zajunaApi/internal/services"
+)
+
+func RegisterRoutes(router *gin.Engine, db *gorm.DB) <span class="cov0" title="0">{
+        api := router.Group("/api")
+
+        // --- Categorías ---
+        categoryRepo := repository.NewCategoryRepository(db)
+        categoryService := services.NewCategoryService(categoryRepo)
+        categoryHandler := handlers.NewCategoryHandler(categoryService)
+
+        // --- Cursos ---
+        courseRepo := repository.NewCourseRepository(db)
+        courseService := services.NewCourseService(courseRepo)
+        courseHandler := handlers.NewCourseHandler(courseService)
+
+        // --- Usuarios ---
+        userRepo := repository.NewUserRepository(db)
+        userService := services.NewUserService(userRepo)
+        userHandler := handlers.NewUserHandler(userService)
+
+        // --- Rutas API ---
+        api.GET("/categories", categoryHandler.GetCategories)
+        // api.GET("/courses/search", courseHandler.SearchCourses) // TODO: Implementar SearchCourses
+        api.GET("/courses/:idnumber/details", courseHandler.GetCourseDetails)
+        api.GET("/courses", courseHandler.GetCourses)
+        api.DELETE("/courses", courseHandler.DeleteCourses)
+        api.PUT("/courses", courseHandler.UpdateCourses)
+        api.GET("/enrollments/course/:courseid", userHandler.GetEnrolledUsers)
+        api.GET("/users", userHandler.GetUsers)
+        api.DELETE("/users", userHandler.DeleteUsers)
+        api.PUT("/users/update", userHandler.UpdateUsers)
+}</span>
+</pre>
+		
+		<pre class="file" id="file29" style="display: none">package server
+
+import (
+        "fmt"
+        "log"
+
+        "github.com/gin-gonic/gin"
+        "gorm.io/driver/postgres"
+        "gorm.io/gorm"
+
+        "zajunaApi/internal/config"
+        "zajunaApi/internal/middleware"
+        "zajunaApi/internal/routes"
+)
+
+type Server struct {
+        router *gin.Engine
+        db     *gorm.DB
+        cfg    *config.Config
+}
+
+func New() *Server <span class="cov0" title="0">{
+        cfg := config.LoadConfig()
+
+        // Conectar BD
+        db, err := gorm.Open(postgres.Open(cfg.DSN), &amp;gorm.Config{})
+        if err != nil </span><span class="cov0" title="0">{
+                log.Fatalf("Error conectando a la BD: %v", err)
+        }</span>
+        <span class="cov0" title="0">log.Println("Conexión a la base de datos exitosa")
+
+        // Inicializar Gin
+        router := gin.Default()
+        router.Use(middleware.EnableCORS())
+
+        // Registrar rutas
+        routes.RegisterRoutes(router, db)
+
+        return &amp;Server{
+                router: router,
+                db:     db,
+                cfg:    cfg,
+        }</span>
+}
+
+func (s *Server) Run() error <span class="cov0" title="0">{
+        addr := fmt.Sprintf(":%s", s.cfg.AppPort)
+        log.Printf("Servidor corriendo en http://localhost%s", addr)
+        return s.router.Run(addr)
+}</span>
+</pre>
+		
+		<pre class="file" id="file30" style="display: none">package services
 
 import (
         "zajunaApi/internal/models"
@@ -82,21 +2841,21 @@ import (
 
 // CategoryService maneja la lógica de categorías
 type CategoryService struct {
-        repo *repository.CategoryRepository
+        repo repository.CategoryRepositoryInterface
 }
 
 // NewCategoryService crea un nuevo servicio de categorías
-func NewCategoryService(repo *repository.CategoryRepository) *CategoryService <span class="cov0" title="0">{
+func NewCategoryService(repo repository.CategoryRepositoryInterface) *CategoryService <span class="cov10" title="5">{
         return &amp;CategoryService{repo: repo}
 }</span>
 
 // GetCategories devuelve todas las categorías
-func (s *CategoryService) GetCategories() ([]models.Category, error) <span class="cov0" title="0">{
+func (s *CategoryService) GetCategories() ([]models.Category, error) <span class="cov8" title="4">{
         return s.repo.GetAllCategories()
 }</span>
 </pre>
 		
-		<pre class="file" id="file1" style="display: none">package services
+		<pre class="file" id="file31" style="display: none">package services
 
 import (
         "fmt"
@@ -109,124 +2868,523 @@ type CourseService struct {
         repo repository.CourseRepositoryInterface
 }
 
-func NewCourseService(repo repository.CourseRepositoryInterface) *CourseService <span class="cov8" title="1">{
+func NewCourseService(repo repository.CourseRepositoryInterface) *CourseService <span class="cov10" title="14">{
         return &amp;CourseService{repo: repo}
 }</span>
 
-func (s *CourseService) GetAllCourses() ([]models.Course, error) <span class="cov8" title="1">{
+func (s *CourseService) GetAllCourses() ([]models.Course, error) <span class="cov3" title="2">{
         return s.repo.GetAllCourses()
 }</span>
 
-func (s *CourseService) GetCoursesByCategory(categoryID uint) ([]models.Course, error) <span class="cov8" title="1">{
+func (s *CourseService) GetCoursesByCategory(categoryID uint) ([]models.Course, error) <span class="cov3" title="2">{
         return s.repo.GetCoursesByCategory(categoryID)
 }</span>
 
 //func (s *CourseService) GetCourseRoles(courseID int) (map[string]int64, error) {
 //return s.repo.GetRoleAssignments(courseID)}
 
-func (s *CourseService) GetCourseDetails(courseID int) (*repository.CourseDetails, error) <span class="cov8" title="1">{
-        return s.repo.GetCourseDetails(courseID)
+func (s *CourseService) GetCourseDetails(idnumber string) (*repository.CourseDetails, error) <span class="cov3" title="2">{
+        return s.repo.GetCourseDetails(idnumber)
 }</span>
 
-func (s *CourseService) DeleteCourses(courseIDs []int) (*models.DeleteCoursesResponse, error) <span class="cov8" title="1">{
+func (s *CourseService) DeleteCourses(courseIDs []int) (*models.DeleteCoursesResponse, error) <span class="cov4" title="3">{
         warnings, err := s.repo.DeleteCourses(courseIDs)
-        if err != nil </span><span class="cov8" title="1">{
+        if err != nil </span><span class="cov1" title="1">{
                 return nil, err
         }</span>
-        <span class="cov8" title="1">return &amp;models.DeleteCoursesResponse{Warnings: warnings}, nil</span>
+        <span class="cov3" title="2">return &amp;models.DeleteCoursesResponse{Warnings: warnings}, nil</span>
 }
 
-// UpdateCourses actualiza múltiples cursos
-func (s *CourseService) UpdateCourses(courses []request.UpdateCourseRequest) (*models.UpdateCoursesResponse, error) <span class="cov8" title="1">{
+// UpdateCourses actualiza múltiples cursos (compatible con Moodle)
+func (s *CourseService) UpdateCourses(courses []request.UpdateCourseRequest) (*models.UpdateCoursesResponse, error) <span class="cov6" title="5">{
         var warnings []models.Warning
 
-        for _, course := range courses </span><span class="cov8" title="1">{
-                // Construir map de updates solo con campos no vacíos
+        for _, course := range courses </span><span class="cov7" title="7">{
+                // Construir map de updates solo con campos no vacíos/nil
                 updates := make(map[string]interface{})
 
-                if course.FullName != "" </span><span class="cov8" title="1">{
+                // Campos de texto
+                if course.FullName != "" </span><span class="cov5" title="4">{
                         updates["fullname"] = course.FullName
                 }</span>
-                <span class="cov8" title="1">if course.ShortName != "" </span><span class="cov8" title="1">{
+                <span class="cov7" title="7">if course.ShortName != "" </span><span class="cov4" title="3">{
                         updates["shortname"] = course.ShortName
                 }</span>
-                <span class="cov8" title="1">if course.CategoryID != nil </span><span class="cov8" title="1">{
-                        updates["category"] = *course.CategoryID
-                }</span>
-                <span class="cov8" title="1">if course.IDNumber != "" </span><span class="cov8" title="1">{
+                <span class="cov7" title="7">if course.IDNumber != "" </span><span class="cov1" title="1">{
                         updates["idnumber"] = course.IDNumber
                 }</span>
-                <span class="cov8" title="1">if course.Summary != "" </span><span class="cov8" title="1">{
+                <span class="cov7" title="7">if course.Summary != "" </span><span class="cov1" title="1">{
                         updates["summary"] = course.Summary
                 }</span>
-                <span class="cov8" title="1">if course.SummaryFormat != nil </span><span class="cov8" title="1">{
-                        updates["summaryformat"] = *course.SummaryFormat
-                }</span>
-                <span class="cov8" title="1">if course.Format != "" </span><span class="cov8" title="1">{
+                <span class="cov7" title="7">if course.Format != "" </span><span class="cov1" title="1">{
                         updates["format"] = course.Format
                 }</span>
-                <span class="cov8" title="1">if course.StartDate != nil </span><span class="cov8" title="1">{
+                <span class="cov7" title="7">if course.Lang != "" </span><span class="cov0" title="0">{
+                        updates["lang"] = course.Lang
+                }</span>
+                <span class="cov7" title="7">if course.ForceTheme != "" </span><span class="cov0" title="0">{
+                        updates["theme"] = course.ForceTheme
+                }</span>
+
+                // Campos punteros (int)
+                <span class="cov7" title="7">if course.CategoryID != nil </span><span class="cov4" title="3">{
+                        updates["category"] = *course.CategoryID
+                }</span>
+                <span class="cov7" title="7">if course.SummaryFormat != nil </span><span class="cov1" title="1">{
+                        updates["summaryformat"] = *course.SummaryFormat
+                }</span>
+                <span class="cov7" title="7">if course.ShowGrades != nil </span><span class="cov0" title="0">{
+                        updates["showgrades"] = *course.ShowGrades
+                }</span>
+                <span class="cov7" title="7">if course.NewsItems != nil </span><span class="cov0" title="0">{
+                        updates["newsitems"] = *course.NewsItems
+                }</span>
+                <span class="cov7" title="7">if course.NumSections != nil </span><span class="cov0" title="0">{
+                        updates["numsections"] = *course.NumSections
+                }</span>
+                <span class="cov7" title="7">if course.MaxBytes != nil </span><span class="cov0" title="0">{
+                        updates["maxbytes"] = *course.MaxBytes
+                }</span>
+                <span class="cov7" title="7">if course.ShowReports != nil </span><span class="cov0" title="0">{
+                        updates["showreports"] = *course.ShowReports
+                }</span>
+                <span class="cov7" title="7">if course.Visible != nil </span><span class="cov1" title="1">{
+                        updates["visible"] = *course.Visible
+                }</span>
+                <span class="cov7" title="7">if course.HiddenSections != nil </span><span class="cov0" title="0">{
+                        updates["hiddensections"] = *course.HiddenSections
+                }</span>
+                <span class="cov7" title="7">if course.GroupMode != nil </span><span class="cov0" title="0">{
+                        updates["groupmode"] = *course.GroupMode
+                }</span>
+                <span class="cov7" title="7">if course.GroupModeForce != nil </span><span class="cov0" title="0">{
+                        updates["groupmodeforce"] = *course.GroupModeForce
+                }</span>
+                <span class="cov7" title="7">if course.DefaultGroupingID != nil </span><span class="cov0" title="0">{
+                        updates["defaultgroupingid"] = *course.DefaultGroupingID
+                }</span>
+                <span class="cov7" title="7">if course.EnableCompletion != nil </span><span class="cov0" title="0">{
+                        updates["enablecompletion"] = *course.EnableCompletion
+                }</span>
+                <span class="cov7" title="7">if course.CompletionNotify != nil </span><span class="cov0" title="0">{
+                        updates["completionnotify"] = *course.CompletionNotify
+                }</span>
+
+                // Campos punteros (int64)
+                <span class="cov7" title="7">if course.StartDate != nil </span><span class="cov1" title="1">{
                         updates["startdate"] = *course.StartDate
                 }</span>
-                <span class="cov8" title="1">if course.EndDate != nil </span><span class="cov8" title="1">{
+                <span class="cov7" title="7">if course.EndDate != nil </span><span class="cov1" title="1">{
                         updates["enddate"] = *course.EndDate
-                }</span>
-                <span class="cov8" title="1">if course.Visible != nil </span><span class="cov8" title="1">{
-                        updates["visible"] = *course.Visible
                 }</span>
 
                 // Si no hay campos para actualizar, agregar warning
-                <span class="cov8" title="1">if len(updates) == 0 </span><span class="cov8" title="1">{
+                <span class="cov7" title="7">if len(updates) == 0 </span><span class="cov3" title="2">{
                         warnings = append(warnings, models.Warning{
                                 Item:        "course",
                                 ItemID:      course.ID,
-                                WarningCode: "nofieldstouptate",
+                                WarningCode: "nofieldstoupdate",
                                 Message:     fmt.Sprintf("No fields provided to update course %d", course.ID),
                         })
                         continue</span>
                 }
 
                 // Intentar actualizar el curso
-                <span class="cov8" title="1">err := s.repo.UpdateCourse(course.ID, updates)
-                if err != nil </span><span class="cov8" title="1">{
+                <span class="cov6" title="5">err := s.repo.UpdateCourse(course.ID, updates)
+                if err != nil </span><span class="cov3" title="2">{
                         warnings = append(warnings, models.Warning{
                                 Item:        "course",
                                 ItemID:      course.ID,
                                 WarningCode: "updatefailed",
                                 Message:     fmt.Sprintf("Failed to update course %d: %s", course.ID, err.Error()),
                         })
-                }</span>
+                        continue</span>
+                }
+
+                // Procesar courseformatoptions si están presentes
+                <span class="cov4" title="3">if len(course.CourseFormatOptions) &gt; 0 </span><span class="cov0" title="0">{
+                        if err := s.repo.UpdateCourseFormatOptions(course.ID, course.CourseFormatOptions); err != nil </span><span class="cov0" title="0">{
+                                warnings = append(warnings, models.Warning{
+                                        Item:        "course",
+                                        ItemID:      course.ID,
+                                        WarningCode: "formatoptionsfailed",
+                                        Message:     fmt.Sprintf("Failed to update format options for course %d: %s", course.ID, err.Error()),
+                                })
+                        }</span>
+                }
+
+                // Procesar customfields si están presentes
+                <span class="cov4" title="3">if len(course.CustomFields) &gt; 0 </span><span class="cov0" title="0">{
+                        if err := s.repo.UpdateCourseCustomFields(course.ID, course.CustomFields); err != nil </span><span class="cov0" title="0">{
+                                warnings = append(warnings, models.Warning{
+                                        Item:        "course",
+                                        ItemID:      course.ID,
+                                        WarningCode: "customfieldsfailed",
+                                        Message:     fmt.Sprintf("Failed to update custom fields for course %d: %s", course.ID, err.Error()),
+                                })
+                        }</span>
+                }
         }
 
-        <span class="cov8" title="1">return &amp;models.UpdateCoursesResponse{Warnings: warnings}, nil</span>
+        <span class="cov6" title="5">return &amp;models.UpdateCoursesResponse{Warnings: warnings}, nil</span>
+}
+
+// SearchCourses busca cursos según criterio y valor
+func (s *CourseService) SearchCourses(criteriaName, criteriaValue string, page, perPage int) ([]models.Course, int64, error) <span class="cov0" title="0">{
+        return s.repo.SearchCourses(criteriaName, criteriaValue, page, perPage)
+}</span>
+</pre>
+		
+		<pre class="file" id="file32" style="display: none">package mocks
+
+import (
+        "zajunaApi/internal/models"
+
+        "github.com/stretchr/testify/mock"
+)
+
+// MockCategoryService es un mock del CategoryService para testing
+type MockCategoryService struct {
+        mock.Mock
+}
+
+func (m *MockCategoryService) GetCategories() ([]models.Category, error) <span class="cov0" title="0">{
+        args := m.Called()
+        if args.Get(0) == nil </span><span class="cov0" title="0">{
+                return nil, args.Error(1)
+        }</span>
+        <span class="cov0" title="0">return args.Get(0).([]models.Category), args.Error(1)</span>
 }
 </pre>
 		
-		<pre class="file" id="file2" style="display: none">package services
+		<pre class="file" id="file33" style="display: none">package mocks
 
 import (
+        "zajunaApi/internal/dto/request"
+        "zajunaApi/internal/models"
+        "zajunaApi/internal/repository"
+
+        "github.com/stretchr/testify/mock"
+)
+
+// MockCourseService es un mock del CourseService para testing
+type MockCourseService struct {
+        mock.Mock
+}
+
+// GetAllCourses mockea el método GetAllCourses
+func (m *MockCourseService) GetAllCourses() ([]models.Course, error) <span class="cov0" title="0">{
+        args := m.Called()
+        if args.Get(0) == nil </span><span class="cov0" title="0">{
+                return nil, args.Error(1)
+        }</span>
+        <span class="cov0" title="0">return args.Get(0).([]models.Course), args.Error(1)</span>
+}
+
+// GetCoursesByCategory mockea el método GetCoursesByCategory
+func (m *MockCourseService) GetCoursesByCategory(categoryID uint) ([]models.Course, error) <span class="cov0" title="0">{
+        args := m.Called(categoryID)
+        if args.Get(0) == nil </span><span class="cov0" title="0">{
+                return nil, args.Error(1)
+        }</span>
+        <span class="cov0" title="0">return args.Get(0).([]models.Course), args.Error(1)</span>
+}
+
+// GetCourseDetails mockea el método GetCourseDetails
+func (m *MockCourseService) GetCourseDetails(idnumber string) (*repository.CourseDetails, error) <span class="cov0" title="0">{
+        args := m.Called(idnumber)
+        if args.Get(0) == nil </span><span class="cov0" title="0">{
+                return nil, args.Error(1)
+        }</span>
+        <span class="cov0" title="0">return args.Get(0).(*repository.CourseDetails), args.Error(1)</span>
+}
+
+// DeleteCourses mockea el método DeleteCourses
+func (m *MockCourseService) DeleteCourses(courseIDs []int) (*models.DeleteCoursesResponse, error) <span class="cov0" title="0">{
+        args := m.Called(courseIDs)
+        if args.Get(0) == nil </span><span class="cov0" title="0">{
+                return nil, args.Error(1)
+        }</span>
+        <span class="cov0" title="0">return args.Get(0).(*models.DeleteCoursesResponse), args.Error(1)</span>
+}
+
+// UpdateCourses mockea el método UpdateCourses
+func (m *MockCourseService) UpdateCourses(courses []request.UpdateCourseRequest) (*models.UpdateCoursesResponse, error) <span class="cov0" title="0">{
+        args := m.Called(courses)
+        if args.Get(0) == nil </span><span class="cov0" title="0">{
+                return nil, args.Error(1)
+        }</span>
+        <span class="cov0" title="0">return args.Get(0).(*models.UpdateCoursesResponse), args.Error(1)</span>
+}
+
+// SearchCourses mockea el método SearchCourses
+func (m *MockCourseService) SearchCourses(criteriaName, criteriaValue string, page, perPage int) ([]models.Course, int64, error) <span class="cov0" title="0">{
+        args := m.Called(criteriaName, criteriaValue, page, perPage)
+        if args.Get(0) == nil </span><span class="cov0" title="0">{
+                return nil, args.Get(1).(int64), args.Error(2)
+        }</span>
+        <span class="cov0" title="0">return args.Get(0).([]models.Course), args.Get(1).(int64), args.Error(2)</span>
+}
+</pre>
+		
+		<pre class="file" id="file34" style="display: none">package mocks
+
+import (
+        "zajunaApi/internal/dto/response"
+        "zajunaApi/internal/models"
+
+        "github.com/stretchr/testify/mock"
+)
+
+// MockUserService es un mock del UserService para testing
+type MockUserService struct {
+        mock.Mock
+}
+
+// GetUsers mockea el método GetUsers
+func (m *MockUserService) GetUsers(filters map[string]string, page, limit int) ([]models.User, int64, error) <span class="cov0" title="0">{
+        args := m.Called(filters, page, limit)
+        if args.Get(0) == nil </span><span class="cov0" title="0">{
+                return nil, args.Get(1).(int64), args.Error(2)
+        }</span>
+        <span class="cov0" title="0">return args.Get(0).([]models.User), args.Get(1).(int64), args.Error(2)</span>
+}
+
+// DeleteUsers mockea el método DeleteUsers
+func (m *MockUserService) DeleteUsers(userIDs []int) error <span class="cov0" title="0">{
+        args := m.Called(userIDs)
+        return args.Error(0)
+}</span>
+
+// UpdateUsers mockea el método UpdateUsers
+func (m *MockUserService) UpdateUsers(users []models.User) (int64, error) <span class="cov0" title="0">{
+        args := m.Called(users)
+        return args.Get(0).(int64), args.Error(1)
+}</span>
+
+// GetEnrolledUsers mockea el método GetEnrolledUsers
+func (m *MockUserService) GetEnrolledUsers(courseID int, options map[string]interface{}) ([]response.EnrolledUserResponse, int, error) <span class="cov0" title="0">{
+        args := m.Called(courseID, options)
+        if args.Get(0) == nil </span><span class="cov0" title="0">{
+                return nil, args.Get(1).(int), args.Error(2)
+        }</span>
+        <span class="cov0" title="0">return args.Get(0).([]response.EnrolledUserResponse), args.Get(1).(int), args.Error(2)</span>
+}
+</pre>
+		
+		<pre class="file" id="file35" style="display: none">package services
+
+import (
+        "zajunaApi/internal/dto/mapper"
+        "zajunaApi/internal/dto/response"
         "zajunaApi/internal/models"
         "zajunaApi/internal/repository"
 )
 
 type UserService struct {
-        repo *repository.UserRepository
+        repo repository.UserRepositoryInterface
 }
 
-func NewUserService(repo *repository.UserRepository) *UserService <span class="cov0" title="0">{
+func NewUserService(repo repository.UserRepositoryInterface) *UserService <span class="cov10" title="17">{
         return &amp;UserService{repo: repo}
 }</span>
 
-func (s *UserService) GetUsers(filters map[string]string, page, limit int) ([]models.User, int64, error) <span class="cov0" title="0">{
+func (s *UserService) GetUsers(filters map[string]string, page, limit int) ([]models.User, int64, error) <span class="cov6" title="6">{
         return s.repo.FindByFilters(filters, page, limit)
 }</span>
 
-func (s *UserService) DeleteUsers(userIDs []int) error <span class="cov0" title="0">{
+func (s *UserService) DeleteUsers(userIDs []int) error <span class="cov5" title="4">{
         return s.repo.DeleteUsers(userIDs)
 }</span>
 
-func (s *UserService) UpdateUsers(users []models.User) (int64, error) <span class="cov0" title="0">{
+func (s *UserService) UpdateUsers(users []models.User) (int64, error) <span class="cov6" title="6">{
         return s.repo.UpdateUsers(users)
+}</span>
+
+// GetEnrolledUsers obtiene usuarios matriculados en un curso con todas sus relaciones
+func (s *UserService) GetEnrolledUsers(courseID int, options map[string]interface{}) ([]response.EnrolledUserResponse, int, error) <span class="cov0" title="0">{
+        // Obtener usuarios matriculados del repository
+        users, total, err := s.repo.GetEnrolledUsers(courseID, options)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, 0, err
+        }</span>
+
+        // Construir respuestas con todos los datos relacionados
+        <span class="cov0" title="0">responses := make([]response.EnrolledUserResponse, 0, len(users))
+        for _, user := range users </span><span class="cov0" title="0">{
+                userID := int(user.ID)
+
+                // Obtener datos relacionados de cada usuario
+                groups, _ := s.repo.GetUserGroupsInCourse(userID, courseID)
+                roles, _ := s.repo.GetUserRolesInCourse(userID, courseID)
+                customFields, _ := s.repo.GetUserCustomFields(userID)
+                preferences, _ := s.repo.GetUserPreferences(userID)
+                enrolledCourses, _ := s.repo.GetUserEnrolledCourses(userID)
+
+                // Convertir a DTO usando el mapper
+                userResp := mapper.EnrolledUserDetailToResponse(
+                        &amp;user,
+                        groups,
+                        roles,
+                        customFields,
+                        preferences,
+                        enrolledCourses,
+                )
+
+                if userResp != nil </span><span class="cov0" title="0">{
+                        responses = append(responses, *userResp)
+                }</span>
+        }
+
+        <span class="cov0" title="0">return responses, total, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file36" style="display: none">package validator
+
+import (
+        "fmt"
+        "reflect"
+        "strings"
+
+        "github.com/go-playground/validator/v10"
+)
+
+var validate *validator.Validate
+
+// Init inicializa el validador con validaciones personalizadas
+func Init() <span class="cov0" title="0">{
+        validate = validator.New()
+
+        // Usar el nombre del tag json como nombre del campo en los errores
+        validate.RegisterTagNameFunc(func(fld reflect.StructField) string </span><span class="cov0" title="0">{
+                name := strings.SplitN(fld.Tag.Get("json"), ",", 2)[0]
+                if name == "-" </span><span class="cov0" title="0">{
+                        return ""
+                }</span>
+                <span class="cov0" title="0">return name</span>
+        })
+
+        // Registrar validaciones personalizadas
+        <span class="cov0" title="0">validate.RegisterValidation("moodle_username", validateMoodleUsername)
+        validate.RegisterValidation("moodle_shortname", validateMoodleShortname)</span>
+}
+
+// Validate valida una estructura
+func Validate(s interface{}) error <span class="cov0" title="0">{
+        if validate == nil </span><span class="cov0" title="0">{
+                Init()
+        }</span>
+
+        <span class="cov0" title="0">err := validate.Struct(s)
+        if err != nil </span><span class="cov0" title="0">{
+                return FormatValidationErrors(err)
+        }</span>
+        <span class="cov0" title="0">return nil</span>
+}
+
+// ValidateVar valida una variable individual
+func ValidateVar(field interface{}, tag string) error <span class="cov0" title="0">{
+        if validate == nil </span><span class="cov0" title="0">{
+                Init()
+        }</span>
+
+        <span class="cov0" title="0">err := validate.Var(field, tag)
+        if err != nil </span><span class="cov0" title="0">{
+                return FormatValidationErrors(err)
+        }</span>
+        <span class="cov0" title="0">return nil</span>
+}
+
+// FormatValidationErrors formatea los errores de validación
+func FormatValidationErrors(err error) error <span class="cov0" title="0">{
+        if err == nil </span><span class="cov0" title="0">{
+                return nil
+        }</span>
+
+        <span class="cov0" title="0">validationErrors, ok := err.(validator.ValidationErrors)
+        if !ok </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov0" title="0">var messages []string
+        for _, e := range validationErrors </span><span class="cov0" title="0">{
+                messages = append(messages, formatFieldError(e))
+        }</span>
+
+        <span class="cov0" title="0">return &amp;ValidationError{
+                Errors: messages,
+        }</span>
+}
+
+// formatFieldError formatea un error de campo individual
+func formatFieldError(e validator.FieldError) string <span class="cov0" title="0">{
+        field := e.Field()
+
+        switch e.Tag() </span>{
+        case "required":<span class="cov0" title="0">
+                return fmt.Sprintf("El campo '%s' es requerido", field)</span>
+        case "email":<span class="cov0" title="0">
+                return fmt.Sprintf("El campo '%s' debe ser un email válido", field)</span>
+        case "min":<span class="cov0" title="0">
+                return fmt.Sprintf("El campo '%s' debe tener al menos %s caracteres", field, e.Param())</span>
+        case "max":<span class="cov0" title="0">
+                return fmt.Sprintf("El campo '%s' no debe exceder %s caracteres", field, e.Param())</span>
+        case "len":<span class="cov0" title="0">
+                return fmt.Sprintf("El campo '%s' debe tener exactamente %s caracteres", field, e.Param())</span>
+        case "oneof":<span class="cov0" title="0">
+                return fmt.Sprintf("El campo '%s' debe ser uno de: %s", field, e.Param())</span>
+        case "moodle_username":<span class="cov0" title="0">
+                return fmt.Sprintf("El campo '%s' contiene caracteres no válidos", field)</span>
+        case "moodle_shortname":<span class="cov0" title="0">
+                return fmt.Sprintf("El campo '%s' debe ser un nombre corto válido de Moodle", field)</span>
+        default:<span class="cov0" title="0">
+                return fmt.Sprintf("El campo '%s' es inválido", field)</span>
+        }
+}
+
+// validateMoodleUsername valida un username
+// Solo permite alfanuméricos, guiones, underscores, puntos y @
+func validateMoodleUsername(fl validator.FieldLevel) bool <span class="cov0" title="0">{
+        username := fl.Field().String()
+        if len(username) &lt; 2 || len(username) &gt; 100 </span><span class="cov0" title="0">{
+                return false
+        }</span>
+
+        // Moodle username: alfanuméricos, -, _, ., @
+        <span class="cov0" title="0">for _, char := range username </span><span class="cov0" title="0">{
+                if !isValidMoodleUsernameChar(char) </span><span class="cov0" title="0">{
+                        return false
+                }</span>
+        }
+        <span class="cov0" title="0">return true</span>
+}
+
+// validateMoodleShortname valida un shortname
+func validateMoodleShortname(fl validator.FieldLevel) bool <span class="cov0" title="0">{
+        shortname := fl.Field().String()
+        if len(shortname) &lt; 1 || len(shortname) &gt; 100 </span><span class="cov0" title="0">{
+                return false
+        }</span>
+        // No debe contener espacios
+        <span class="cov0" title="0">return !strings.Contains(shortname, " ")</span>
+}
+
+// isValidMoodleUsernameChar verifica si un carácter es válido para username
+func isValidMoodleUsernameChar(char rune) bool <span class="cov0" title="0">{
+        return (char &gt;= 'a' &amp;&amp; char &lt;= 'z') ||
+                (char &gt;= 'A' &amp;&amp; char &lt;= 'Z') ||
+                (char &gt;= '0' &amp;&amp; char &lt;= '9') ||
+                char == '-' || char == '_' || char == '.' || char == '@'
+}</span>
+
+// ValidationError representa un error de validación
+type ValidationError struct {
+        Errors []string
+}
+
+func (e *ValidationError) Error() string <span class="cov0" title="0">{
+        return strings.Join(e.Errors, "; ")
 }</span>
 </pre>
 		

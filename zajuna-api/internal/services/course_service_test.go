@@ -101,11 +101,12 @@ func TestGetCourseDetails_Success(t *testing.T) {
 	mockRepo := new(mocks.MockCourseRepository)
 	service := NewCourseService(mockRepo)
 
-	courseID := 10
+	idNumber := "COURSE-001"
 	expectedDetails := &repository.CourseDetails{
-		ID:        int64(courseID),
+		ID:        10,
 		FullName:  "Test Course",
 		ShortName: "TC",
+		IDNumber:  idNumber,
 		Category:  "Category 1",
 		Groups:    5,
 		Groupings: 2,
@@ -115,10 +116,10 @@ func TestGetCourseDetails_Success(t *testing.T) {
 		},
 	}
 
-	mockRepo.On("GetCourseDetails", courseID).Return(expectedDetails, nil)
+	mockRepo.On("GetCourseDetails", idNumber).Return(expectedDetails, nil)
 
 	// Act
-	result, err := service.GetCourseDetails(courseID)
+	result, err := service.GetCourseDetails(idNumber)
 
 	// Assert
 	assert.NoError(t, err)
@@ -134,12 +135,12 @@ func TestGetCourseDetails_Error(t *testing.T) {
 	mockRepo := new(mocks.MockCourseRepository)
 	service := NewCourseService(mockRepo)
 
-	courseID := 999
+	idNumber := "NONEXISTENT"
 	expectedError := errors.New("course not found")
-	mockRepo.On("GetCourseDetails", courseID).Return(nil, expectedError)
+	mockRepo.On("GetCourseDetails", idNumber).Return(nil, expectedError)
 
 	// Act
-	result, err := service.GetCourseDetails(courseID)
+	result, err := service.GetCourseDetails(idNumber)
 
 	// Assert
 	assert.Error(t, err)
@@ -265,7 +266,7 @@ func TestUpdateCourses_NoFieldsToUpdate(t *testing.T) {
 	assert.NoError(t, err)
 	assert.NotNil(t, result)
 	assert.Equal(t, 1, len(result.Warnings))
-	assert.Equal(t, "nofieldstouptate", result.Warnings[0].WarningCode)
+	assert.Equal(t, "nofieldstoupdate", result.Warnings[0].WarningCode)
 	assert.Equal(t, 2, result.Warnings[0].ItemID)
 	assert.Contains(t, result.Warnings[0].Message, "No fields provided")
 	mockRepo.AssertNotCalled(t, "UpdateCourse")
@@ -338,7 +339,7 @@ func TestUpdateCourses_MultipleCourses_MixedResults(t *testing.T) {
 	for _, w := range result.Warnings {
 		warningCodes[w.WarningCode]++
 	}
-	assert.Equal(t, 1, warningCodes["nofieldstouptate"])
+	assert.Equal(t, 1, warningCodes["nofieldstoupdate"])
 	assert.Equal(t, 1, warningCodes["updatefailed"])
 
 	mockRepo.AssertExpectations(t)

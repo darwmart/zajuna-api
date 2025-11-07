@@ -81,8 +81,13 @@ type UpdateCourseResponse struct {
 // UpdateCoursesResponse representa la respuesta de actualización múltiple (Moodle format)
 type UpdateCoursesResponse struct {
 	Warnings []Warning `json:"warnings,omitempty"`
-	//WarningsCount int       `json:"warningscount"`
 }
+
+// Códigos de warning posibles en UpdateCoursesResponse:
+// - "nofieldstoupdate": No se proporcionaron campos para actualizar
+// - "updatefailed": Falló la actualización del curso (ej: curso no encontrado)
+// - "formatoptionsfailed": Falló la actualización de opciones de formato
+// - "customfieldsfailed": Falló la actualización de campos personalizados
 
 /*
 1

@@ -1,6 +1,7 @@
 package mocks
 
 import (
+	"zajunaApi/internal/dto/request"
 	"zajunaApi/internal/models"
 	"zajunaApi/internal/repository"
 
@@ -71,4 +72,14 @@ func (m *MockCourseRepository) SearchCourses(criteriaName, criteriaValue string,
 		return nil, args.Get(1).(int64), args.Error(2)
 	}
 	return args.Get(0).([]models.Course), args.Get(1).(int64), args.Error(2)
+}
+
+func (m *MockCourseRepository) UpdateCourseFormatOptions(courseID int, options []request.CourseFormatOption) error {
+	args := m.Called(courseID, options)
+	return args.Error(0)
+}
+
+func (m *MockCourseRepository) UpdateCourseCustomFields(courseID int, fields []request.CustomField) error {
+	args := m.Called(courseID, fields)
+	return args.Error(0)
 }
