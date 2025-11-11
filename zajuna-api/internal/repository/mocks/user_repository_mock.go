@@ -30,6 +30,11 @@ func (m *MockUserRepository) UpdateUsers(users []models.User) (int64, error) {
 	return args.Get(0).(int64), args.Error(1)
 }
 
+func (m *MockUserRepository) ToggleUserStatus(userID uint) (int, error) {
+	args := m.Called(userID)
+	return args.Get(0).(int), args.Error(1)
+}
+
 func (m *MockUserRepository) GetEnrolledUsers(courseID int, options map[string]interface{}) ([]repository.EnrolledUserDetail, int, error) {
 	args := m.Called(courseID, options)
 	if args.Get(0) == nil {

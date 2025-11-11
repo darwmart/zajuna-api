@@ -107,17 +107,45 @@ func (h *UserHandler) UpdateUsers(c *gin.Context) {
 	// 2. Convertir DTOs a modelos
 	usersToUpdate := make([]models.User, len(req.Users))
 	for i, userReq := range req.Users {
-		usersToUpdate[i] = models.User{
+		user := models.User{
 			ID:        userReq.ID,
-			FirstName: userReq.FirstName,
-			LastName:  userReq.LastName,
-			Email:     userReq.Email,
-			City:      userReq.City,
-			Country:   userReq.Country,
-			Lang:      userReq.Lang,
-			Timezone:  userReq.Timezone,
-			Phone1:    userReq.Phone1,
+			Suspended: -1, // Marca para indicar "no enviado"
+			Deleted:   -1, // Marca para indicar "no enviado"
 		}
+
+		// Solo copiar campos que no son nil (fueron enviados en el request)
+		if userReq.FirstName != nil {
+			user.FirstName = *userReq.FirstName
+		}
+		if userReq.LastName != nil {
+			user.LastName = *userReq.LastName
+		}
+		if userReq.Email != nil {
+			user.Email = *userReq.Email
+		}
+		if userReq.City != nil {
+			user.City = *userReq.City
+		}
+		if userReq.Country != nil {
+			user.Country = *userReq.Country
+		}
+		if userReq.Lang != nil {
+			user.Lang = *userReq.Lang
+		}
+		if userReq.Timezone != nil {
+			user.Timezone = *userReq.Timezone
+		}
+		if userReq.Phone1 != nil {
+			user.Phone1 = *userReq.Phone1
+		}
+		if userReq.Suspended != nil {
+			user.Suspended = *userReq.Suspended
+		}
+		if userReq.Deleted != nil {
+			user.Deleted = *userReq.Deleted
+		}
+
+		usersToUpdate[i] = user
 	}
 
 	// 3. Llamar al servicio
@@ -188,6 +216,71 @@ func (h *UserHandler) DeleteUsers(c *gin.Context) {
 		Message: "Usuarios suspendidos correctamente",
 		Deleted: len(req.UserIDs),
 		Errors:  []string{},
+	})
+}
+
+// ToggleUserStatus cambia el estado suspended de un usuario (activo <-> suspendido)
+// @Summary      Cambiar estado de usuario
+// @Description  Alterna el estado suspended de un usuario entre 0 (activo) y 1 (suspendido)
+// @Tags         users
+// @Accept       json
+// @Produce      json
+// @Param        id   path      int  true  "ID del usuario"
+// @Success      200  {object}  response.ToggleUserStatusResponse
+// @Failure      400  {object}  response.ErrorResponse
+// @Failure      404  {object}  response.ErrorResponse
+// @Failure      500  {object}  response.ErrorResponse
+// @Router       /users/{id}/toggle-status [put]
+func (h *UserHandler) ToggleUserStatus(c *gin.Context) {
+	// 1. Obtener el ID del usuario desde la URL
+	var uriParam struct {
+		ID uint `uri:"id" binding:"required,min=1"`
+	}
+
+	if err := c.ShouldBindUri(&uriParam); err != nil {
+		c.JSON(http.StatusBadRequest, response.NewErrorResponse(
+			"INVALID_USER_ID",
+			"ID de usuario inválido",
+			err.Error(),
+		))
+		return
+	}
+
+	// 2. Llamar al servicio para cambiar el estado
+	newStatus, err := h.service.ToggleUserStatus(uriParam.ID)
+	if err != nil {
+		// Verificar si es error de "no encontrado"
+		if err.Error() == "record not found" {
+			c.JSON(http.StatusNotFound, response.NewErrorResponse(
+				"USER_NOT_FOUND",
+				"Usuario no encontrado",
+				err.Error(),
+			))
+			return
+		}
+
+		// Otros errores de base de datos
+		c.JSON(http.StatusInternalServerError, response.NewErrorResponse(
+			"TOGGLE_STATUS_FAILED",
+			"Error al cambiar el estado del usuario",
+			err.Error(),
+		))
+		return
+	}
+
+	// 3. Construir respuesta
+	statusText := "activo"
+	message := "Usuario activado correctamente"
+	if newStatus == 1 {
+		statusText = "suspendido"
+		message = "Usuario suspendido correctamente"
+	}
+
+	c.JSON(http.StatusOK, response.ToggleUserStatusResponse{
+		Message:    message,
+		UserID:     uriParam.ID,
+		NewStatus:  newStatus,
+		StatusText: statusText,
 	})
 }
 

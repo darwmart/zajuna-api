@@ -18,6 +18,7 @@ type User struct {
 	LastAccess        int64             `gorm:"column:lastaccess" json:"lastaccess"`
 	Auth              string            `gorm:"column:auth" json:"auth"`
 	Suspended         int               `gorm:"column:suspended" json:"suspended"`
+	Deleted           int               `gorm:"column:deleted" json:"deleted"`
 	Confirmed         int               `gorm:"column:confirmed" json:"confirmed"`
 	Lang              string            `gorm:"column:lang" json:"lang"`
 	Theme             string            `gorm:"column:theme" json:"theme"`

@@ -68,3 +68,11 @@ type DeleteUserResponse struct {
 	Deleted int      `json:"deleted"`
 	Errors  []string `json:"errors,omitempty"`
 }
+
+// ToggleUserStatusResponse representa la respuesta al cambiar el estado de un usuario
+type ToggleUserStatusResponse struct {
+	Message   string `json:"message"`
+	UserID    uint   `json:"user_id"`
+	NewStatus int    `json:"new_status"`
+	StatusText string `json:"status_text"`
+}

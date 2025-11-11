@@ -27,6 +27,10 @@ func (s *UserService) UpdateUsers(users []models.User) (int64, error) {
 	return s.repo.UpdateUsers(users)
 }
 
+func (s *UserService) ToggleUserStatus(userID uint) (int, error) {
+	return s.repo.ToggleUserStatus(userID)
+}
+
 // GetEnrolledUsers obtiene usuarios matriculados en un curso con todas sus relaciones
 func (s *UserService) GetEnrolledUsers(courseID int, options map[string]interface{}) ([]response.EnrolledUserResponse, int, error) {
 	// Obtener usuarios matriculados del repository

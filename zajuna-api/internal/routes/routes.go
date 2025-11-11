@@ -38,4 +38,5 @@ func RegisterRoutes(router *gin.Engine, db *gorm.DB) {
 	api.GET("/users", userHandler.GetUsers)
 	api.DELETE("/users", userHandler.DeleteUsers)
 	api.PUT("/users/update", userHandler.UpdateUsers)
+	api.PUT("/users/:id/toggle-status", userHandler.ToggleUserStatus)
 }

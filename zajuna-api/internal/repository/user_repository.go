@@ -60,23 +60,85 @@ func (r *UserRepository) DeleteUsers(userIDs []int) error {
 func (r *UserRepository) UpdateUsers(users []models.User) (int64, error) {
 	var total int64
 	for _, u := range users {
+		// Construir mapa dinámico solo con los campos que fueron enviados
+		updates := make(map[string]interface{})
+
+		// El handler solo asigna campos desde punteros no-nil,
+		// por lo que solo los campos enviados en el request tendrán valores
+		if u.FirstName != "" {
+			updates["firstname"] = u.FirstName
+		}
+		if u.LastName != "" {
+			updates["lastname"] = u.LastName
+		}
+		if u.Email != "" {
+			updates["email"] = u.Email
+		}
+		if u.City != "" {
+			updates["city"] = u.City
+		}
+		if u.Country != "" {
+			updates["country"] = u.Country
+		}
+		if u.Lang != "" {
+			updates["lang"] = u.Lang
+		}
+		if u.Timezone != "" {
+			updates["timezone"] = u.Timezone
+		}
+		if u.Phone1 != "" {
+			updates["phone1"] = u.Phone1
+		}
+
+		// Para suspended: siempre incluir si fue enviado (handler lo copia solo si no es nil)
+		// Como models.User tiene Suspended como int (no puntero), necesitamos
+		// verificar indirectamente. El handler marca suspended=-1 cuando NO se envió.
+		if u.Suspended >= 0 && u.Suspended <= 1 {
+			updates["suspended"] = u.Suspended
+		}
+
+		if u.Deleted >= 0 && u.Deleted <= 1 {
+			updates["deleted"] = u.Deleted
+		}
+
+		// Si no hay campos para actualizar, saltar
+		if len(updates) == 0 {
+			continue
+		}
+
 		if err := r.DB.Model(&models.User{}).
 			Where("id = ?", u.ID).
-			Updates(map[string]interface{}{
-				"firstname": u.FirstName,
-				"lastname":  u.LastName,
-				"email":     u.Email,
-				"city":      u.City,
-				"country":   u.Country,
-				"lang":      u.Lang,
-				"timezone":  u.Timezone,
-				"phone1":    u.Phone1,
-			}).Error; err != nil {
+			Updates(updates).Error; err != nil {
 			return total, err
 		}
 		total++
 	}
 	return total, nil
+}
+
+// ToggleUserStatus cambia el estado suspended de un usuario (0 <-> 1)
+func (r *UserRepository) ToggleUserStatus(userID uint) (int, error) {
+	var user models.User
+
+	// Buscar el usuario
+	if err := r.DB.Where("id = ?", userID).First(&user).Error; err != nil {
+		return -1, err
+	}
+
+	// Cambiar el estado al opuesto
+	newStatus := 0
+	if user.Suspended == 0 {
+		newStatus = 1
+	}
+
+	// Actualizar en la base de datos
+	if err := r.DB.Model(&models.User{}).
+		Where("id = ?", userID).
+		Update("suspended", newStatus).Error; err != nil {
+		return -1, err
+	}
+
+	return newStatus, nil
 }
 
 // EnrolledUserDetail representa los detalles completos de un usuario matriculado
