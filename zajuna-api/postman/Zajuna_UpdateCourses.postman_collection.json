@@ -1,0 +1,361 @@
+{
+	"info": {
+		"_postman_id": "zajuna-update-courses-2024",
+		"name": "Zajuna API - Update Courses (Mejorado)",
+		"description": "Colección completa para probar la funcionalidad mejorada de UpdateCourses compatible con Moodle",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Actualización Simple",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"courses\": [\n    {\n      \"id\": 2,\n      \"fullname\": \"Curso Actualizado desde Postman\"\n    }\n  ]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/courses",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"courses"
+					]
+				},
+				"description": "Actualiza solo el nombre completo de un curso"
+			},
+			"response": []
+		},
+		{
+			"name": "2. Actualización con Varios Campos",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"courses\": [\n    {\n      \"id\": 2,\n      \"fullname\": \"Curso de Programación Web Moderna\",\n      \"shortname\": \"WEB-2024\",\n      \"summary\": \"Aprende HTML, CSS, JavaScript y React\",\n      \"summaryformat\": 1,\n      \"visible\": 1,\n      \"startdate\": 1704067200,\n      \"enddate\": 1735689600\n    }\n  ]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/courses",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"courses"
+					]
+				},
+				"description": "Actualiza múltiples campos básicos de un curso"
+			},
+			"response": []
+		},
+		{
+			"name": "3. Actualización Completa",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"courses\": [\n    {\n      \"id\": 2,\n      \"fullname\": \"Curso Completo de Desarrollo Web Full Stack\",\n      \"shortname\": \"FULLSTACK-2024\",\n      \"categoryid\": 3,\n      \"idnumber\": \"FS-2024-001\",\n      \"summary\": \"Domina frontend y backend con las últimas tecnologías\",\n      \"summaryformat\": 1,\n      \"format\": \"topics\",\n      \"showgrades\": 1,\n      \"newsitems\": 5,\n      \"startdate\": 1704067200,\n      \"enddate\": 1735689600,\n      \"numsections\": 15,\n      \"maxbytes\": 52428800,\n      \"showreports\": 1,\n      \"visible\": 1,\n      \"hiddensections\": 0,\n      \"groupmode\": 1,\n      \"groupmodeforce\": 0,\n      \"defaultgroupingid\": 0,\n      \"enablecompletion\": 1,\n      \"completionnotify\": 1,\n      \"lang\": \"es\",\n      \"forcetheme\": \"boost\"\n    }\n  ]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/courses",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"courses"
+					]
+				},
+				"description": "Actualiza todos los campos soportados de un curso"
+			},
+			"response": []
+		},
+		{
+			"name": "4. Con Course Format Options",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"courses\": [\n    {\n      \"id\": 2,\n      \"format\": \"topics\",\n      \"courseformatoptions\": [\n        {\n          \"name\": \"hiddensections\",\n          \"value\": \"0\"\n        },\n        {\n          \"name\": \"coursedisplay\",\n          \"value\": \"1\"\n        },\n        {\n          \"name\": \"numsections\",\n          \"value\": \"10\"\n        }\n      ]\n    }\n  ]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/courses",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"courses"
+					]
+				},
+				"description": "Actualiza un curso con opciones de formato personalizadas"
+			},
+			"response": []
+		},
+		{
+			"name": "5. Con Custom Fields",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"courses\": [\n    {\n      \"id\": 2,\n      \"fullname\": \"Curso con Campos Personalizados\",\n      \"customfields\": [\n        {\n          \"shortname\": \"department\",\n          \"value\": \"Ingeniería de Software\"\n        },\n        {\n          \"shortname\": \"level\",\n          \"value\": \"Intermedio\"\n        },\n        {\n          \"shortname\": \"duration\",\n          \"value\": \"12 semanas\"\n        }\n      ]\n    }\n  ]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/courses",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"courses"
+					]
+				},
+				"description": "Actualiza un curso con campos personalizados"
+			},
+			"response": []
+		},
+		{
+			"name": "6. Actualización Múltiple",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"courses\": [\n    {\n      \"id\": 2,\n      \"fullname\": \"Matemáticas Avanzadas 2024\",\n      \"visible\": 1\n    },\n    {\n      \"id\": 3,\n      \"fullname\": \"Física Cuántica 2024\",\n      \"startdate\": 1704067200,\n      \"enddate\": 1735689600\n    },\n    {\n      \"id\": 4,\n      \"fullname\": \"Química Orgánica\",\n      \"enablecompletion\": 1\n    }\n  ]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/courses",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"courses"
+					]
+				},
+				"description": "Actualiza múltiples cursos en una sola petición"
+			},
+			"response": []
+		},
+		{
+			"name": "7. Premium con Format Options y Custom Fields",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"courses\": [\n    {\n      \"id\": 2,\n      \"fullname\": \"Curso Premium de Data Science\",\n      \"shortname\": \"DS-PREMIUM-2024\",\n      \"categoryid\": 4,\n      \"summary\": \"Curso avanzado de ciencia de datos con Python, ML y DL\",\n      \"summaryformat\": 1,\n      \"format\": \"topics\",\n      \"showgrades\": 1,\n      \"newsitems\": 10,\n      \"startdate\": 1704067200,\n      \"enddate\": 1735689600,\n      \"numsections\": 15,\n      \"maxbytes\": 104857600,\n      \"visible\": 1,\n      \"enablecompletion\": 1,\n      \"completionnotify\": 1,\n      \"lang\": \"es\",\n      \"courseformatoptions\": [\n        {\n          \"name\": \"hiddensections\",\n          \"value\": \"0\"\n        },\n        {\n          \"name\": \"coursedisplay\",\n          \"value\": \"1\"\n        }\n      ],\n      \"customfields\": [\n        {\n          \"shortname\": \"level\",\n          \"value\": \"Advanced\"\n        },\n        {\n          \"shortname\": \"duration\",\n          \"value\": \"12 weeks\"\n        },\n        {\n          \"shortname\": \"instructor\",\n          \"value\": \"Dr. Juan Pérez\"\n        }\n      ]\n    }\n  ]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/courses",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"courses"
+					]
+				},
+				"description": "Actualización completa con format options y custom fields"
+			},
+			"response": []
+		},
+		{
+			"name": "8. TEST: Curso No Encontrado (Error)",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"courses\": [\n    {\n      \"id\": 99999,\n      \"fullname\": \"Curso Inexistente\"\n    }\n  ]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/courses",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"courses"
+					]
+				},
+				"description": "Prueba de error: intenta actualizar un curso que no existe"
+			},
+			"response": []
+		},
+		{
+			"name": "9. TEST: Sin Campos (Warning)",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"courses\": [\n    {\n      \"id\": 2\n    }\n  ]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/courses",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"courses"
+					]
+				},
+				"description": "Prueba de warning: no se proporcionan campos para actualizar"
+			},
+			"response": []
+		},
+		{
+			"name": "10. TEST: Curso Site ID=1 (Error)",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"courses\": [\n    {\n      \"id\": 1,\n      \"fullname\": \"Intento actualizar site\"\n    }\n  ]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/courses",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"courses"
+					]
+				},
+				"description": "Prueba de validación: no se puede actualizar el curso site (ID=1)"
+			},
+			"response": []
+		},
+		{
+			"name": "GET: Listar Todos los Cursos",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/courses",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"courses"
+					]
+				},
+				"description": "Obtiene la lista de todos los cursos para verificar IDs válidos"
+			},
+			"response": []
+		},
+		{
+			"name": "GET: Detalles de Curso por IDNumber",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/courses/:idnumber/details",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"courses",
+						":idnumber",
+						"details"
+					],
+					"variable": [
+						{
+							"key": "idnumber",
+							"value": "FS-2024-001",
+							"description": "ID Number del curso"
+						}
+					]
+				},
+				"description": "Obtiene los detalles completos de un curso por su idnumber"
+			},
+			"response": []
+		}
+	]
+}

@@ -43,14 +43,16 @@ func (r *GetUsersRequest) ToFilterMap() map[string]string {
 // UpdateUserRequest representa la solicitud de actualización de un usuario
 type UpdateUserRequest struct {
 	ID        uint   `json:"id" binding:"required,min=1"`
-	FirstName string `json:"firstname" binding:"required,min=2,max=100"`
-	LastName  string `json:"lastname" binding:"required,min=2,max=100"`
-	Email     string `json:"email" binding:"required,email"`
+	FirstName string `json:"firstname" binding:"omitempty,min=2,max=100"`
+	LastName  string `json:"lastname" binding:"omitempty,min=2,max=100"`
+	Email     string `json:"email" binding:"omitempty,email"`
 	City      string `json:"city" binding:"omitempty,max=120"`
 	Country   string `json:"country" binding:"omitempty,len=2"`
 	Lang      string `json:"lang" binding:"omitempty,min=2,max=30"`
 	Timezone  string `json:"timezone" binding:"omitempty,max=100"`
 	Phone1    string `json:"phone1" binding:"omitempty,max=20"`
+	Suspended int    `json:"suspended" binding:"omitempty,min=0,max=1"`
+	Deleted   int    `json:"deleted" binding:"omitempty,min=0,max=1"`
 }
 
 // UpdateUsersRequest representa la solicitud de actualización de múltiples usuarios

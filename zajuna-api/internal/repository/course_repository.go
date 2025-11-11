@@ -34,7 +34,7 @@ func (r *CourseRepository) GetAllCourses() ([]models.Course, error) {
 	var courses []models.Course
 
 	if err := r.db.Table("mdl_course").
-		Order("fullname").
+		Order("sortorder ASC").
 		Find(&courses).Error; err != nil {
 		return nil, err
 	}
@@ -48,7 +48,7 @@ func (r *CourseRepository) GetCoursesByCategory(categoryID uint) ([]models.Cours
 
 	if err := r.db.Table("mdl_course").
 		Where("category = ?", categoryID).
-		Order("fullname").
+		Order("sortorder ASC").
 		Find(&courses).Error; err != nil {
 		return nil, err
 	}
@@ -231,8 +231,8 @@ func (r *CourseRepository) SearchCourses(criteriaName, criteriaValue string, pag
 	// Contar total
 	query.Count(&total)
 
-	// Ordenar alfabéticamente
-	query = query.Order("fullname ASC")
+	// Ordenar por sortorder (orden definido en Moodle)
+	query = query.Order("sortorder ASC")
 
 	// Aplicar paginación si perPage > 0
 	if perPage > 0 {
