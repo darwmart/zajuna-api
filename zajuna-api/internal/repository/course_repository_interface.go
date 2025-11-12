@@ -17,4 +17,5 @@ type CourseRepositoryInterface interface {
 	UpdateCourseFormatOptions(courseID int, options []request.CourseFormatOption) error
 	UpdateCourseCustomFields(courseID int, fields []request.CustomField) error
 	SearchCourses(criteriaName, criteriaValue string, page, perPage int) ([]models.Course, int64, error)
+	CountUserCourses(userID int) (int, error)
 }

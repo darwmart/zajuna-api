@@ -5,12 +5,19 @@ import (
 	"gorm.io/gorm"
 
 	"zajunaApi/internal/handlers"
+	"zajunaApi/internal/middleware"
 	"zajunaApi/internal/repository"
 	"zajunaApi/internal/services"
 )
 
 func RegisterRoutes(router *gin.Engine, db *gorm.DB) {
 	api := router.Group("/api")
+
+	// --- Config ---
+	configRepo := repository.NewConfigRepository(db)
+
+	// --- RoleCapability ---
+	roleCapabilityRepo := repository.NewRoleCapabilityRepository(db)
 
 	// --- Categorías ---
 	categoryRepo := repository.NewCategoryRepository(db)
@@ -22,21 +29,29 @@ func RegisterRoutes(router *gin.Engine, db *gorm.DB) {
 	courseService := services.NewCourseService(courseRepo)
 	courseHandler := handlers.NewCourseHandler(courseService)
 
+	// --- Sessions ---
+	sessionRepo := repository.NewSessionsRepository(db)
+
 	// --- Usuarios ---
 	userRepo := repository.NewUserRepository(db)
-	userService := services.NewUserService(userRepo)
+	userService := services.NewUserService(userRepo, sessionRepo, courseRepo)
 	userHandler := handlers.NewUserHandler(userService)
 
+	authMiddleware := middleware.RequireAuth(sessionRepo)
+
 	// --- Rutas API ---
-	api.GET("/categories", categoryHandler.GetCategories)
-	// api.GET("/courses/search", courseHandler.SearchCourses) // TODO: Implementar SearchCourses
+	api.GET("/categories", authMiddleware, middleware.HasCapability(configRepo, sessionRepo, roleCapabilityRepo, "moodle/site:readallmessages"), categoryHandler.GetCategories)
 	api.GET("/courses/:idnumber/details", courseHandler.GetCourseDetails)
 	api.GET("/courses", courseHandler.GetCourses)
-	api.DELETE("/courses", courseHandler.DeleteCourses)
+	api.DELETE("/courses", authMiddleware, courseHandler.DeleteCourses)
+
+	// api.GET("/courses/search", courseHandler.SearchCourses) // TODO: Implementar SearchCourses
 	api.PUT("/courses", courseHandler.UpdateCourses)
 	api.GET("/enrollments/course/:courseid", userHandler.GetEnrolledUsers)
-	api.GET("/users", userHandler.GetUsers)
-	api.DELETE("/users", userHandler.DeleteUsers)
-	api.PUT("/users/update", userHandler.UpdateUsers)
+	api.GET("/users", authMiddleware, userHandler.GetUsers)
+	api.DELETE("/users", authMiddleware, userHandler.DeleteUsers)
+	api.PUT("/users/update", authMiddleware, userHandler.UpdateUsers)
 	api.PUT("/users/:id/toggle-status", userHandler.ToggleUserStatus)
+	api.POST("/login", userHandler.Login)
+	api.POST("/logout", userHandler.Logout)
 }

@@ -82,3 +82,14 @@ func (m *MockUserRepository) GetUserEnrolledCourses(userID int) ([]map[string]in
 	}
 	return args.Get(0).([]map[string]interface{}), args.Error(1)
 }
+
+func (m *MockUserRepository) FindByUsername(username string) (*models.User, error) {
+	args := m.Called(username)
+
+	// Si el primer argumento es nil, devolvemos nil directamente
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+
+	return args.Get(0).(*models.User), args.Error(1)
+}

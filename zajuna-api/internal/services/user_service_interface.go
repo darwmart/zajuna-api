@@ -1,6 +1,7 @@
 package services
 
 import (
+	"net/http"
 	"zajunaApi/internal/dto/response"
 	"zajunaApi/internal/models"
 )
@@ -12,4 +13,6 @@ type UserServiceInterface interface {
 	UpdateUsers(users []models.User) (int64, error)
 	ToggleUserStatus(userID uint) (int, error)
 	GetEnrolledUsers(courseID int, options map[string]interface{}) ([]response.EnrolledUserResponse, int, error)
+	Login(r *http.Request, username, password string) (string, error)
+	Logout(sid string) (string, error)
 }

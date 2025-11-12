@@ -1,6 +1,7 @@
 package mocks
 
 import (
+	"net/http"
 	"zajunaApi/internal/dto/response"
 	"zajunaApi/internal/models"
 
@@ -40,4 +41,13 @@ func (m *MockUserService) GetEnrolledUsers(courseID int, options map[string]inte
 		return nil, args.Get(1).(int), args.Error(2)
 	}
 	return args.Get(0).([]response.EnrolledUserResponse), args.Get(1).(int), args.Error(2)
+}
+func (m *MockUserService) Login(r *http.Request, username, password string) (string, error) {
+	args := m.Called(r, username, password)
+	return args.String(0), args.Error(1)
+}
+
+func (m *MockUserService) Logout(sid string) (string, error) {
+	args := m.Called(sid)
+	return args.String(0), args.Error(1)
 }

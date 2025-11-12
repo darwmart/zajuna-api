@@ -14,4 +14,5 @@ type UserRepositoryInterface interface {
 	GetUserCustomFields(userID int) ([]map[string]interface{}, error)
 	GetUserPreferences(userID int) ([]map[string]interface{}, error)
 	GetUserEnrolledCourses(userID int) ([]map[string]interface{}, error)
+	FindByUsername(username string) (*models.User, error)
 }

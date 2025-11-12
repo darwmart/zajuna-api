@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"net/http"
+	"time"
 	"zajunaApi/internal/dto/mapper"
 	"zajunaApi/internal/dto/request"
 	"zajunaApi/internal/dto/response"
@@ -378,5 +379,104 @@ func (h *UserHandler) GetEnrolledUsers(c *gin.Context) {
 	c.JSON(http.StatusOK, response.EnrolledUsersListResponse{
 		Users: users,
 		Total: total,
+	})
+}
+
+// Login autentica a un usuario y genera una cookie de sesión.
+//
+// @Summary      Iniciar sesión
+// @Description  Valida credenciales del usuario, genera un token y lo almacena como cookie HttpOnly.
+// @Tags         auth
+// @Accept       json
+// @Produce      json
+//
+// @Param        body   body      object  true   "Credenciales del usuario"
+// @Success      200    {object}  map[string]interface{}   "Inicio de sesión exitoso"
+// @Failure      400    {object}  map[string]string         "Error en credenciales o body inválido"
+// @Failure      401    {object}  map[string]string         "No autorizado"
+// @Router       /login [post]
+func (h *UserHandler) Login(c *gin.Context) {
+	var body struct {
+		Username string
+		Password string
+	}
+
+	if c.Bind(&body) != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Failed to read body",
+		})
+		return
+	}
+
+	token, err := h.service.Login(c.Request, body.Username, body.Password)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	if token == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Invalid username",
+		})
+		return
+	}
+
+	c.SetSameSite(http.SameSiteLaxMode)
+	//c.SetCookie("Authorization", token, 3600*3, "", "", false, true)
+	http.SetCookie(c.Writer, &http.Cookie{
+		Name:     "Authorization",
+		Value:    token,
+		Expires:  time.Now().Add(3 * time.Hour),
+		HttpOnly: true,
+		Path:     "/",
+		Domain:   "",
+		Secure:   true,
+	})
+
+	c.JSON(http.StatusOK, gin.H{})
+}
+
+// Logout elimina la sesión del usuario y limpia la cookie Authorization.
+//
+// @Summary      Cerrar sesión
+// @Description  Borra la cookie de autenticación y elimina la sesión en base de datos.
+// @Tags         auth
+// @Produce      json
+// @Security     CookieAuth
+//
+// @Success      200    {object}  map[string]string    "Sesión eliminada correctamente"
+// @Failure      400    {object}  map[string]string    "Error eliminando la sesión"
+// @Failure      401    {object}  map[string]string    "No autorizado"
+// @Router       /logout [post]
+func (h *UserHandler) Logout(c *gin.Context) {
+
+	token, err := c.Cookie("Authorization")
+	if err != nil {
+		c.AbortWithStatus(http.StatusUnauthorized)
+		return
+	}
+
+	res, err := h.service.Logout(token)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	//c.SetCookie("Authorization", "", -1, "", "", false, true)
+	http.SetCookie(c.Writer, &http.Cookie{
+		Name:     "Authorization",
+		Value:    "",
+		Path:     "/", // o el path con el que se creó
+		Domain:   "",
+		MaxAge:   -1,
+		Expires:  time.Unix(0, 0),
+		HttpOnly: true,
+		Secure:   true, // debe coincidir con el original
+	})
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": res,
 	})
 }

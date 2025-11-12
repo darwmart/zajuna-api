@@ -4,6 +4,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<title>server: Go Coverage Report</title>
+		<title>server: Go Coverage Report</title>
 		<style>
 			body {
 				background: black;
@@ -2842,6 +2843,7 @@ import (
 // CategoryService maneja la lógica de categorías
 type CategoryService struct {
         repo repository.CategoryRepositoryInterface
+        repo repository.CategoryRepositoryInterface
 }
 
 // NewCategoryService crea un nuevo servicio de categorías
@@ -3179,6 +3181,125 @@ import (
         "zajunaApi/internal/dto/response"
         "zajunaApi/internal/models"
         "zajunaApi/internal/repository"
+
+        "github.com/stretchr/testify/mock"
+)
+
+// MockCourseService es un mock del CourseService para testing
+type MockCourseService struct {
+        mock.Mock
+}
+
+// GetAllCourses mockea el método GetAllCourses
+func (m *MockCourseService) GetAllCourses() ([]models.Course, error) <span class="cov0" title="0">{
+        args := m.Called()
+        if args.Get(0) == nil </span><span class="cov0" title="0">{
+                return nil, args.Error(1)
+        }</span>
+        <span class="cov0" title="0">return args.Get(0).([]models.Course), args.Error(1)</span>
+}
+
+// GetCoursesByCategory mockea el método GetCoursesByCategory
+func (m *MockCourseService) GetCoursesByCategory(categoryID uint) ([]models.Course, error) <span class="cov0" title="0">{
+        args := m.Called(categoryID)
+        if args.Get(0) == nil </span><span class="cov0" title="0">{
+                return nil, args.Error(1)
+        }</span>
+        <span class="cov0" title="0">return args.Get(0).([]models.Course), args.Error(1)</span>
+}
+
+// GetCourseDetails mockea el método GetCourseDetails
+func (m *MockCourseService) GetCourseDetails(courseID int) (*repository.CourseDetails, error) <span class="cov0" title="0">{
+        args := m.Called(courseID)
+        if args.Get(0) == nil </span><span class="cov0" title="0">{
+                return nil, args.Error(1)
+        }</span>
+        <span class="cov0" title="0">return args.Get(0).(*repository.CourseDetails), args.Error(1)</span>
+}
+
+// DeleteCourses mockea el método DeleteCourses
+func (m *MockCourseService) DeleteCourses(courseIDs []int) (*models.DeleteCoursesResponse, error) <span class="cov0" title="0">{
+        args := m.Called(courseIDs)
+        if args.Get(0) == nil </span><span class="cov0" title="0">{
+                return nil, args.Error(1)
+        }</span>
+        <span class="cov0" title="0">return args.Get(0).(*models.DeleteCoursesResponse), args.Error(1)</span>
+}
+
+// UpdateCourses mockea el método UpdateCourses
+func (m *MockCourseService) UpdateCourses(courses []request.UpdateCourseRequest) (*models.UpdateCoursesResponse, error) <span class="cov0" title="0">{
+        args := m.Called(courses)
+        if args.Get(0) == nil </span><span class="cov0" title="0">{
+                return nil, args.Error(1)
+        }</span>
+        <span class="cov0" title="0">return args.Get(0).(*models.UpdateCoursesResponse), args.Error(1)</span>
+}
+</pre>
+		
+		<pre class="file" id="file46" style="display: none">package mocks
+
+import (
+        "net/http"
+        "zajunaApi/internal/models"
+
+        "github.com/stretchr/testify/mock"
+)
+
+// MockUserService es un mock del UserService para testing
+type MockUserService struct {
+        mock.Mock
+}
+
+// GetUsers mockea el método GetUsers
+func (m *MockUserService) GetUsers(filters map[string]string, page, limit int) ([]models.User, int64, error) <span class="cov0" title="0">{
+        args := m.Called(filters, page, limit)
+        if args.Get(0) == nil </span><span class="cov0" title="0">{
+                return nil, args.Get(1).(int64), args.Error(2)
+        }</span>
+        <span class="cov0" title="0">return args.Get(0).([]models.User), args.Get(1).(int64), args.Error(2)</span>
+}
+
+// DeleteUsers mockea el método DeleteUsers
+func (m *MockUserService) DeleteUsers(userIDs []int) error <span class="cov0" title="0">{
+        args := m.Called(userIDs)
+        return args.Error(0)
+}</span>
+
+// UpdateUsers mockea el método UpdateUsers
+func (m *MockUserService) UpdateUsers(users []models.User) (int64, error) <span class="cov0" title="0">{
+        args := m.Called(users)
+        return args.Get(0).(int64), args.Error(1)
+}</span>
+func (m *MockUserService) Login(r *http.Request, username, password string) (string, error) <span class="cov0" title="0">{
+        args := m.Called(r, username, password)
+        return args.String(0), args.Error(1)
+}</span>
+
+func (m *MockUserService) Logout(sid string) (string, error) <span class="cov0" title="0">{
+        args := m.Called(sid)
+        return args.String(0), args.Error(1)
+}</span>
+</pre>
+		
+		<pre class="file" id="file47" style="display: none">package services
+
+import (
+        "errors"
+        "fmt"
+        "net"
+        "net/http"
+        "os"
+        "strings"
+        "time"
+        "zajunaApi/internal/models"
+        "zajunaApi/internal/repository"
+        "zajunaApi/internal/services/auth"
+
+        "github.com/golang-jwt/jwt/v5"
+        "golang.org/x/crypto/bcrypt"
+
+        "github.com/amoghe/go-crypt"
+        log "github.com/sirupsen/logrus"
 )
 
 type UserService struct {

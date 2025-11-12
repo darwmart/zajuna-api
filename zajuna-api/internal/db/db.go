@@ -12,7 +12,7 @@ const (
 	port     = 5432
 	user     = "postgres"
 	password = "12345"
-	dbname   = "zajuna"
+	dbname   = "moodle"
 )
 
 func Connect() (*sql.DB, error) {
