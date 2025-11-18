@@ -19,3 +19,8 @@ func NewCategoryService(repo repository.CategoryRepositoryInterface) *CategorySe
 func (s *CategoryService) GetCategories() ([]models.Category, error) {
 	return s.repo.GetAllCategories()
 }
+
+// MoveCategory mueve una categoría antes de otra y/o cambia su padre
+func (s *CategoryService) MoveCategory(id uint, beforeid uint, parentid *uint) error {
+	return s.repo.MoveCategory(id, beforeid, parentid)
+}

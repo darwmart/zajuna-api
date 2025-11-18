@@ -120,6 +120,12 @@ type UpdateCoursesResponse struct {
 1
 1
 */
+// MoveCoursesResponse representa la respuesta al mover cursos
+type MoveCoursesResponse struct {
+	Message string `json:"message"`
+	Moved   int    `json:"moved"`
+}
+
 const (
 	// CourseFormatWeeks representa el formato de curso "weeks"
 	CourseFormatWeeks = "weeks"

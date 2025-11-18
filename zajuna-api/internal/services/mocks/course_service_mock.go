@@ -66,3 +66,9 @@ func (m *MockCourseService) SearchCourses(criteriaName, criteriaValue string, pa
 	}
 	return args.Get(0).([]models.Course), args.Get(1).(int64), args.Error(2)
 }
+
+// MoveCourses mockea el método MoveCourses
+func (m *MockCourseService) MoveCourses(courses []request.MoveCourseRequest) error {
+	args := m.Called(courses)
+	return args.Error(0)
+}

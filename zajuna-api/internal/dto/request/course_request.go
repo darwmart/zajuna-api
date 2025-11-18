@@ -120,6 +120,7 @@ type UpdateCourseRequest struct {
 	CompletionNotify    *int                 `json:"completionnotify" binding:"omitempty,oneof=0 1"`
 	Lang                string               `json:"lang" binding:"omitempty,max=30"`
 	ForceTheme          string               `json:"forcetheme" binding:"omitempty,max=50"`
+	SortOrder           *int                 `json:"sortorder" binding:"omitempty,min=0"`
 	CourseFormatOptions []CourseFormatOption `json:"courseformatoptions" binding:"omitempty,dive"`
 	CustomFields        []CustomField        `json:"customfields" binding:"omitempty,dive"`
 }
@@ -176,4 +177,38 @@ func (r *UpdateCoursesRequest) Validate() error {
 		}
 	}
 	return nil
+}
+
+// MoveCourseRequest representa la solicitud de mover un curso
+// Compatible con core_course_move_courses de Moodle
+type MoveCourseRequest struct {
+	ID         int  `json:"id" binding:"required,min=1"`
+	CategoryID int  `json:"categoryid" binding:"required,min=0"`
+	BeforeID   *int `json:"beforeid"` // Opcional: ID del curso antes del cual se debe insertar (nil o 0 = al final)
+}
+
+// Validate valida la solicitud de mover curso
+func (r *MoveCourseRequest) Validate() error {
+	// No se puede mover el curso site (ID=1)
+	if r.ID == 1 {
+		return &ValidationError{
+			Field:   "id",
+			Message: "No se puede mover el curso site (ID=1)",
+		}
+	}
+
+	// No se puede mover un curso antes de sí mismo
+	if r.BeforeID != nil && *r.BeforeID == r.ID {
+		return &ValidationError{
+			Field:   "beforeid",
+			Message: "No se puede mover un curso antes de sí mismo",
+		}
+	}
+
+	return nil
+}
+
+// MoveCoursesRequest representa la solicitud de mover múltiples cursos
+type MoveCoursesRequest struct {
+	Courses []MoveCourseRequest `json:"courses" binding:"required,min=1,dive"`
 }

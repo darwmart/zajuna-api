@@ -112,6 +112,9 @@ func (s *CourseService) UpdateCourses(courses []request.UpdateCourseRequest) (*m
 		if course.CompletionNotify != nil {
 			updates["completionnotify"] = *course.CompletionNotify
 		}
+		if course.SortOrder != nil {
+			updates["sortorder"] = *course.SortOrder
+		}
 
 		// Campos punteros (int64)
 		if course.StartDate != nil {
@@ -175,4 +178,15 @@ func (s *CourseService) UpdateCourses(courses []request.UpdateCourseRequest) (*m
 // SearchCourses busca cursos según criterio y valor
 func (s *CourseService) SearchCourses(criteriaName, criteriaValue string, page, perPage int) ([]models.Course, int64, error) {
 	return s.repo.SearchCourses(criteriaName, criteriaValue, page, perPage)
+}
+
+// MoveCourses mueve múltiples cursos a nuevas categorías
+// Compatible con core_course_move_courses de Moodle 4.3
+func (s *CourseService) MoveCourses(courses []request.MoveCourseRequest) error {
+	for _, course := range courses {
+		if err := s.repo.MoveCourse(course.ID, course.CategoryID, course.BeforeID); err != nil {
+			return err
+		}
+	}
+	return nil
 }

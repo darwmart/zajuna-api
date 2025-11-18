@@ -70,3 +70,10 @@ type CategoryTreeResponse struct {
 	Depth       int                     `json:"depth"`
 	Children    []CategoryTreeResponse  `json:"children,omitempty"`
 }
+
+// MoveCategoryResponse representa la respuesta de mover una categoría
+type MoveCategoryResponse struct {
+	Message    string `json:"message"`
+	CategoryID uint   `json:"category_id"`
+	NewParent  uint   `json:"new_parent"`
+}

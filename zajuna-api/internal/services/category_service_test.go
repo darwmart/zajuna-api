@@ -130,3 +130,4 @@ func TestNewCategoryService(t *testing.T) {
 	assert.NotNil(t, service)
 	assert.Equal(t, mockRepo, service.repo)
 }
+

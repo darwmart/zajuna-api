@@ -393,3 +393,137 @@ func (r *CourseRepository) UpdateCourseCustomFields(courseID int, fields []reque
 
 	return nil
 }
+
+// MoveCourse mueve un curso a una nueva categoría y opcionalmente lo posiciona antes de otro curso
+func (r *CourseRepository) MoveCourse(id int, categoryID int, beforeID *int) error {
+	// 1. Verificar que el curso a mover existe
+	var courseToMove models.Course
+	if err := r.db.Table("mdl_course").
+		Where("id = ?", id).
+		First(&courseToMove).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return gorm.ErrRecordNotFound
+		}
+		return err
+	}
+
+	// No permitir mover el curso site (ID=1)
+	if id == 1 {
+		return gorm.ErrInvalidValue
+	}
+
+	// 2. Verificar que la categoría destino existe (si no es 0)
+	if categoryID > 0 {
+		var category models.Category
+		if err := r.db.Table("mdl_course_categories").
+			Where("id = ?", categoryID).
+			First(&category).Error; err != nil {
+			if err == gorm.ErrRecordNotFound {
+				return gorm.ErrRecordNotFound
+			}
+			return err
+		}
+	}
+
+	// 3. Si beforeID está especificado, verificar que existe y está en la misma categoría destino
+	if beforeID != nil && *beforeID > 0 {
+		var targetCourse models.Course
+		if err := r.db.Table("mdl_course").
+			Where("id = ?", *beforeID).
+			First(&targetCourse).Error; err != nil {
+			if err == gorm.ErrRecordNotFound {
+				return gorm.ErrRecordNotFound
+			}
+			return err
+		}
+
+		// Verificar que el curso objetivo está en la categoría destino
+		if targetCourse.Category != categoryID {
+			return gorm.ErrInvalidValue
+		}
+	}
+
+	// 4. Obtener todos los cursos de la categoría destino, ordenados por sortorder
+	var siblings []models.Course
+	if err := r.db.Table("mdl_course").
+		Where("category = ?", categoryID).
+		Order("sortorder ASC, id ASC").
+		Find(&siblings).Error; err != nil {
+		return err
+	}
+
+	// 5. Construir la nueva lista de cursos reordenados
+	var reordered []models.Course
+
+	if beforeID == nil || *beforeID == 0 {
+		// Mover al final
+		for _, course := range siblings {
+			if course.ID != id {
+				reordered = append(reordered, course)
+			}
+		}
+		reordered = append(reordered, courseToMove)
+	} else {
+		// Encontrar la posición actual del curso a mover
+		var currentIndex int
+		for i, course := range siblings {
+			if course.ID == id {
+				currentIndex = i
+				break
+			}
+		}
+
+		// Encontrar la posición del beforeID
+		var beforeIndex int
+		for i, course := range siblings {
+			if course.ID == *beforeID {
+				beforeIndex = i
+				break
+			}
+		}
+
+		// Determinar el curso adyacente con el que intercambiar
+		var adjacentIndex int
+		if beforeIndex < currentIndex {
+			// Mover hacia arriba: intercambiar con el anterior (currentIndex - 1)
+			adjacentIndex = currentIndex - 1
+		} else {
+			// Mover hacia abajo: intercambiar con el siguiente (currentIndex + 1)
+			adjacentIndex = currentIndex + 1
+		}
+
+		// Construir el nuevo array intercambiando posiciones
+		for i, course := range siblings {
+			if i == currentIndex {
+				// En la posición del curso a mover, poner el adyacente
+				reordered = append(reordered, siblings[adjacentIndex])
+			} else if i == adjacentIndex {
+				// En la posición del adyacente, poner el curso a mover
+				reordered = append(reordered, courseToMove)
+			} else {
+				// Los demás se mantienen igual
+				reordered = append(reordered, course)
+			}
+		}
+	}
+
+	// 6. Si cambió de categoría, actualizar el campo category
+	if courseToMove.Category != categoryID {
+		if err := r.db.Table("mdl_course").
+			Where("id = ?", id).
+			Update("category", categoryID).Error; err != nil {
+			return err
+		}
+	}
+
+	// 7. Actualizar sortorder secuencialmente para todos los cursos de la categoría destino
+	for i, course := range reordered {
+		newSortOrder := (i + 1) * 10000
+		if err := r.db.Table("mdl_course").
+			Where("id = ?", course.ID).
+			Update("sortorder", newSortOrder).Error; err != nil {
+			return err
+		}
+	}
+	return nil
+}

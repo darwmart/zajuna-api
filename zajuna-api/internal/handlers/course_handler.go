@@ -232,3 +232,82 @@ func (h *CourseHandler) UpdateCourses(c *gin.Context) {
 		Warnings: warningsResponse,
 	})
 }
+
+// MoveCourses mueve múltiples cursos a nuevas categorías
+// @Summary      Mover cursos
+// @Description  Mueve uno o más cursos a nuevas categorías (compatible con core_course_move_courses de Moodle)
+// @Tags         courses
+// @Accept       json
+// @Produce      json
+// @Param        request body request.MoveCoursesRequest true "Cursos a mover"
+// @Success      200 {object} response.MoveCoursesResponse
+// @Failure      400 {object} response.ErrorResponse
+// @Failure      404 {object} response.ErrorResponse
+// @Failure      500 {object} response.ErrorResponse
+// @Router       /courses/move [post]
+func (h *CourseHandler) MoveCourses(c *gin.Context) {
+
+	// 1. Parsear request
+	var req request.MoveCoursesRequest
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, response.NewErrorResponse(
+			"INVALID_JSON",
+			"JSON inválido o campos requeridos faltantes",
+			err.Error(),
+		))
+		return
+	}
+
+	// 2. Validar cada curso individualmente
+	for i, course := range req.Courses {
+		if err := course.Validate(); err != nil {
+			valErr := err.(*request.ValidationError)
+			c.JSON(http.StatusBadRequest, response.NewErrorResponse(
+				"VALIDATION_ERROR",
+				valErr.Message,
+				map[string]interface{}{
+					"field": "courses[" + string(rune(i)) + "]." + valErr.Field,
+				},
+			))
+			return
+		}
+	}
+
+	// 3. Llamar al servicio
+	if err := h.service.MoveCourses(req.Courses); err != nil {
+		// Verificar si es error de "no encontrado"
+		if err.Error() == "record not found" {
+			c.JSON(http.StatusNotFound, response.NewErrorResponse(
+				"COURSE_NOT_FOUND",
+				"Curso o categoría no encontrada",
+				err.Error(),
+			))
+			return
+		}
+
+		// Verificar si es error de validación
+		if err.Error() == "invalid value" {
+			c.JSON(http.StatusBadRequest, response.NewErrorResponse(
+				"INVALID_OPERATION",
+				"Operación inválida: verifica que el beforeid exista en la categoría destino",
+				err.Error(),
+			))
+			return
+		}
+
+		// Otros errores de base de datos
+		c.JSON(http.StatusInternalServerError, response.NewErrorResponse(
+			"MOVE_FAILED",
+			"Error al mover cursos",
+			err.Error(),
+		))
+		return
+	}
+
+	// 4. Responder
+	c.JSON(http.StatusOK, response.MoveCoursesResponse{
+		Message: "Cursos movidos correctamente",
+		Moved:   len(req.Courses),
+	})
+}

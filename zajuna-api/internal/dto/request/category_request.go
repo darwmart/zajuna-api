@@ -82,3 +82,31 @@ func (r *DeleteCategoriesRequest) Validate() error {
 
 	return nil
 }
+
+// MoveCategoryRequest representa la solicitud de mover una categoría
+type MoveCategoryRequest struct {
+	ID       uint  `json:"id" binding:"required,min=1"`
+	BeforeID uint  `json:"beforeid"`
+	ParentID *uint `json:"parentid"` // Opcional: nuevo padre (nil = mantener padre actual)
+}
+
+// Validate valida la solicitud de mover categoría
+func (r *MoveCategoryRequest) Validate() error {
+	// No se puede mover una categoría antes de sí misma
+	if r.ID == r.BeforeID && r.BeforeID != 0 {
+		return &ValidationError{
+			Field:   "beforeid",
+			Message: "No se puede mover una categoría antes de sí misma",
+		}
+	}
+
+	// No se puede ser su propio padre
+	if r.ParentID != nil && r.ID == *r.ParentID {
+		return &ValidationError{
+			Field:   "parentid",
+			Message: "Una categoría no puede ser su propio padre",
+		}
+	}
+
+	return nil
+}

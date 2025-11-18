@@ -29,14 +29,17 @@ func RegisterRoutes(router *gin.Engine, db *gorm.DB) {
 
 	// --- Rutas API ---
 	api.GET("/categories", categoryHandler.GetCategories)
+	api.POST("/categories/move", categoryHandler.MoveCategory)
 	// api.GET("/courses/search", courseHandler.SearchCourses) // TODO: Implementar SearchCourses
 	api.GET("/courses/:idnumber/details", courseHandler.GetCourseDetails)
 	api.GET("/courses", courseHandler.GetCourses)
 	api.DELETE("/courses", courseHandler.DeleteCourses)
 	api.PUT("/courses", courseHandler.UpdateCourses)
+	api.POST("/courses/move", courseHandler.MoveCourses)
 	api.GET("/enrollments/course/:courseid", userHandler.GetEnrolledUsers)
 	api.GET("/users", userHandler.GetUsers)
 	api.DELETE("/users", userHandler.DeleteUsers)
 	api.PUT("/users/update", userHandler.UpdateUsers)
 	api.PUT("/users/:id/toggle-status", userHandler.ToggleUserStatus)
+	
 }

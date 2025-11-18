@@ -18,3 +18,8 @@ func (m *MockCategoryService) GetCategories() ([]models.Category, error) {
 	}
 	return args.Get(0).([]models.Category), args.Error(1)
 }
+
+func (m *MockCategoryService) MoveCategory(id uint, beforeid uint, parentid *uint) error {
+	args := m.Called(id, beforeid, parentid)
+	return args.Error(0)
+}

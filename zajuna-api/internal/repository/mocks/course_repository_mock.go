@@ -83,3 +83,8 @@ func (m *MockCourseRepository) UpdateCourseCustomFields(courseID int, fields []r
 	args := m.Called(courseID, fields)
 	return args.Error(0)
 }
+
+func (m *MockCourseRepository) MoveCourse(id int, categoryID int, beforeID *int) error {
+	args := m.Called(id, categoryID, beforeID)
+	return args.Error(0)
+}

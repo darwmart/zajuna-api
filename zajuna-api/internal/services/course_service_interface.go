@@ -14,4 +14,5 @@ type CourseServiceInterface interface {
 	DeleteCourses(courseIDs []int) (*models.DeleteCoursesResponse, error)
 	UpdateCourses(courses []request.UpdateCourseRequest) (*models.UpdateCoursesResponse, error)
 	SearchCourses(criteriaName, criteriaValue string, page, perPage int) ([]models.Course, int64, error)
+	MoveCourses(courses []request.MoveCourseRequest) error
 }
