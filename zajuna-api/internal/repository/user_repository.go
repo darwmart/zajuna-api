@@ -78,15 +78,16 @@ func (r *UserRepository) UpdateUsers(users []models.User) (int64, error) {
 }
 
 func (r *UserRepository) FindByUsername(username string) (*models.User, error) {
-
 	var user models.User
-	result := r.DB.First(&user, "username = ?", username)
+	result := r.DB.Where("username = ?", username).First(&user)
 
 	if result.Error != nil {
 		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-			return nil, nil // no es un error real, solo que no existe el usuario
+			// No se encontró el usuario: no es un error para la capa superior
+			return nil, nil
 		}
-		return nil, result.Error // otro tipo de error (de conexión, SQL, etc.)
+		// Otro tipo de error (conexión, SQL, etc.)
+		return nil, result.Error
 	}
 
 	return &user, nil

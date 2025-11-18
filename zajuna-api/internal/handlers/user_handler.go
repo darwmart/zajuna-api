@@ -226,7 +226,7 @@ func (h *UserHandler) Login(c *gin.Context) {
 		return
 	}
 	if token == "" {
-		c.JSON(http.StatusBadRequest, gin.H{
+		c.JSON(http.StatusUnauthorized, gin.H{
 			"error": "Invalid username",
 		})
 		return
