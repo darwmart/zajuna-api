@@ -37,6 +37,11 @@ func RegisterRoutes(router *gin.Engine, db *gorm.DB) {
 	userService := services.NewUserService(userRepo, sessionRepo, courseRepo)
 	userHandler := handlers.NewUserHandler(userService)
 
+	// --- Competencies ---
+	competencyRepo := repository.NewCompetencyRepository(db)
+	competencyService := services.NewCompetencyService(competencyRepo, sessionRepo)
+	competencyHandler := handlers.NewCompetencyHandler(competencyService)
+
 	authMiddleware := middleware.RequireAuth(sessionRepo)
 
 	// --- Rutas API ---
@@ -52,6 +57,9 @@ func RegisterRoutes(router *gin.Engine, db *gorm.DB) {
 	api.DELETE("/users", authMiddleware, userHandler.DeleteUsers)
 	api.PUT("/users/update", authMiddleware, userHandler.UpdateUsers)
 	api.PUT("/users/:id/toggle-status", userHandler.ToggleUserStatus)
+
+	api.POST("/competency/create", competencyHandler.CreateCompetency)
+
 	api.POST("/login", userHandler.Login)
 	api.POST("/logout", userHandler.Logout)
 }
