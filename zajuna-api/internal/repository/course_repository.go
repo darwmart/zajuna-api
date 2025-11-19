@@ -516,14 +516,25 @@ func (r *CourseRepository) MoveCourse(id int, categoryID int, beforeID *int) err
 		}
 	}
 
-	// 7. Actualizar sortorder secuencialmente para todos los cursos de la categoría destino
+	// 7. Obtener el sortorder de la categoría destino
+	var category models.Category
+	if err := r.db.Table("mdl_course_categories").
+		Where("id = ?", categoryID).
+		First(&category).Error; err != nil {
+		return err
+	}
+
+	// 8. Actualizar sortorder secuencialmente para todos los cursos de la categoría destino
+	// usando la misma lógica que las categorías:
+	// sortorder = sortorder_categoria + posición (autoincremental por unidad)
 	for i, course := range reordered {
-		newSortOrder := (i + 1) * 10000
+		newSortOrder := category.SortOrder + (i + 1)
 		if err := r.db.Table("mdl_course").
 			Where("id = ?", course.ID).
 			Update("sortorder", newSortOrder).Error; err != nil {
 			return err
 		}
 	}
+
 	return nil
 }
