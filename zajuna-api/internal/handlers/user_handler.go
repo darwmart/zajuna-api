@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"errors"
 	"net/http"
 	"time"
 	"zajunaApi/internal/dto/mapper"
@@ -10,6 +11,7 @@ import (
 	"zajunaApi/internal/services"
 
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 )
 
 type UserHandler struct {
@@ -212,28 +214,27 @@ func (h *UserHandler) Login(c *gin.Context) {
 	}
 
 	if c.Bind(&body) != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Failed to read body",
-		})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to read body"})
 		return
 	}
 
 	token, err := h.service.Login(c.Request, body.Username, body.Password)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
-		})
+		if errors.Is(err, services.ErrUserNotFound) {
+			logrus.Info("Usuario no encontrado dentro")
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "credenciales inválidas"})
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+
 	if token == "" {
-		c.JSON(http.StatusUnauthorized, gin.H{
-			"error": "Invalid username",
-		})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid username"})
 		return
 	}
 
 	c.SetSameSite(http.SameSiteLaxMode)
-	//c.SetCookie("Authorization", token, 3600*3, "", "", false, true)
 	http.SetCookie(c.Writer, &http.Cookie{
 		Name:     "Authorization",
 		Value:    token,

@@ -44,7 +44,7 @@ func (s *UserService) Login(r *http.Request, username, password string) (string,
 		return "", err
 	}
 	if user == nil {
-		return "", fmt.Errorf("usuario no encontrado")
+		return "", ErrUserNotFound
 	}
 
 	//VALIDACION SI EL USUARIO ESTA SUSPENDIDO
@@ -75,7 +75,7 @@ func (s *UserService) Login(r *http.Request, username, password string) (string,
 	}
 	success, err := plugin.Login(username, password)
 	if err != nil || !success {
-		return "", errors.New("credenciales inválidas")
+		return "", ErrInvalidCredentials
 	}
 	log.Info("Autenticación exitosa con método:", user.Auth)
 
@@ -180,3 +180,8 @@ func (s *UserService) UpdateUsers(users []models.User) (int64, error) {
 var signToken = func(token *jwt.Token, secret string) (string, error) {
 	return token.SignedString([]byte(secret))
 }
+
+var (
+	ErrUserNotFound       = errors.New("user not found")
+	ErrInvalidCredentials = errors.New("invalid credentials")
+)
