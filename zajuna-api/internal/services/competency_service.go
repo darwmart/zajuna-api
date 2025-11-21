@@ -1,6 +1,7 @@
 package services
 
 import (
+	"fmt"
 	"strconv"
 	"time"
 	"zajunaApi/internal/models"
@@ -10,8 +11,10 @@ import (
 )
 
 type CompetencyService struct {
-	repo        repository.CompetencyRepositoryInterface
-	sessionRepo repository.SessionsRepositoryInterface
+	repo          repository.CompetencyRepositoryInterface
+	sessionRepo   repository.SessionsRepositoryInterface
+	frameworkRepo repository.CompetencyFrameworkRepositoryInterface
+	courseRepo    repository.CourseRepositoryInterface
 }
 
 // NewCategoryService crea un nuevo servicio de categorías
@@ -25,7 +28,15 @@ func (s *CompetencyService) CreateCompetency(sid string, competency *models.Comp
 	if err != nil {
 		return nil, err
 	}
-	log.Info(session.UserID)
+
+	framework, err := s.frameworkRepo.FindByID(competency.CompetencyFrameworkID)
+	if err != nil {
+		return nil, err
+	}
+	if framework == nil {
+		return nil, fmt.Errorf("competencyframeworkid no existe")
+	}
+
 	competency.UserModified = session.UserID
 	competency.TimeCreated = time.Now().Unix()  // timestamp actual (segundos)
 	competency.TimeModified = time.Now().Unix() // timestamp actual (segundos)
@@ -52,4 +63,11 @@ func (s *CompetencyService) CreateCompetency(sid string, competency *models.Comp
 	}
 
 	return competencyFinal, nil
+}
+
+func (s *CompetencyService) AddCompetencyToCourse(idCompetency int, idCourse int) error {
+
+	s.repo.FindByID(uint(idCompetency))
+
+	return nil
 }

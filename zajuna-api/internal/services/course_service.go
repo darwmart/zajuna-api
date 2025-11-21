@@ -176,7 +176,3 @@ func (s *CourseService) UpdateCourses(courses []request.UpdateCourseRequest) (*m
 func (s *CourseService) SearchCourses(criteriaName, criteriaValue string, page, perPage int) ([]models.Course, int64, error) {
 	return s.repo.SearchCourses(criteriaName, criteriaValue, page, perPage)
 }
-
-func (s *CourseService) AddCompetencyToCourse() {
-
-}

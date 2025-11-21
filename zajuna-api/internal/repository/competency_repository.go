@@ -41,9 +41,12 @@ func (r *CompetencyRepository) Update(competency *models.Competency) (*models.Co
 
 func (r *CompetencyRepository) FindByID(id uint) (*models.Competency, error) {
 	var competency models.Competency
-	err := r.DB.Table("mdl_competency").First(&competency, id).Error
-	if err != nil {
-		return nil, err
+	result := r.DB.Table("mdl_competency").First(&competency, id)
+	if result.Error != nil {
+		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			return nil, nil // no es un error real, solo que no existe el usuario
+		}
+		return nil, result.Error // otro tipo de error (de conexión, SQL, etc.)
 	}
 	return &competency, nil
 }

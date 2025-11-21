@@ -73,3 +73,20 @@ func (h *CompetencyHandler) CreateCompetency(c *gin.Context) {
 		Message:  "Competency created successfully",
 	})
 }
+
+func (h *CompetencyHandler) AddCompetencyToCourse(c *gin.Context) {
+
+	var body struct {
+		CourseID     int `json:"courseid" binding:"required,min=1"`
+		CompetencyID int `json:"competencyid" binding:"required,min=1"`
+	}
+	if err := c.ShouldBindJSON(&body); err != nil {
+		c.JSON(http.StatusBadRequest, response.NewErrorResponse(
+			"INVALID_JSON",
+			"JSON inválido o campos requeridos faltantes",
+			err.Error(),
+		))
+		return
+	}
+
+}
