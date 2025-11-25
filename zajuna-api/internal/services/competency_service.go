@@ -14,10 +14,9 @@ type CompetencyService struct {
 	repo          repository.CompetencyRepositoryInterface
 	sessionRepo   repository.SessionsRepositoryInterface
 	frameworkRepo repository.CompetencyFrameworkRepositoryInterface
-	courseRepo    repository.CourseRepositoryInterface
 }
 
-// NewCategoryService crea un nuevo servicio de categorías
+// NewCompetencyService crea un nuevo servicio de categorías
 func NewCompetencyService(repo repository.CompetencyRepositoryInterface, sessionRepo repository.SessionsRepositoryInterface) *CompetencyService {
 	return &CompetencyService{repo: repo, sessionRepo: sessionRepo}
 }
@@ -63,11 +62,4 @@ func (s *CompetencyService) CreateCompetency(sid string, competency *models.Comp
 	}
 
 	return competencyFinal, nil
-}
-
-func (s *CompetencyService) AddCompetencyToCourse(idCompetency int, idCourse int) error {
-
-	s.repo.FindByID(uint(idCompetency))
-
-	return nil
 }

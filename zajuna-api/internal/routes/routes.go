@@ -47,6 +47,11 @@ func RegisterRoutes(router *gin.Engine, db *gorm.DB) {
 	competencyFrameworkService := services.NewCompetencyFrameworkService(competencyFrameworkRepo, sessionRepo)
 	competencyFrameworkHandler := handlers.NewCompetencyFrameworkHandler(competencyFrameworkService)
 
+	// --- Course Competencies ---
+	courseCompetencyRepo := repository.NewCourseCompetencyRepository(db)
+	courseCompetencyService := services.NewCourseCompetencyService(courseCompetencyRepo, competencyRepo, sessionRepo, competencyFrameworkRepo, courseRepo)
+	courseCompetencyHandler := handlers.NewCourseCompetencyHandler(courseCompetencyService)
+
 	authMiddleware := middleware.RequireAuth(sessionRepo)
 
 	// --- Rutas API ---
@@ -65,8 +70,9 @@ func RegisterRoutes(router *gin.Engine, db *gorm.DB) {
 
 	//api.POST("/competency/create",middleware.HasCapability(configRepo, sessionRepo, roleCapabilityRepo, "moodle/competency:competencymanage"), competencyHandler.CreateCompetency)
 	api.POST("/competency/create", competencyHandler.CreateCompetency)
-	//api.POST("/competency/add-to-course", middleware.HasCapability(configRepo, sessionRepo, roleCapabilityRepo, "moodle/competency:coursecompetencymanage"), competencyHandler.AddCompetencyToCourse)
-	api.POST("/competency/add-to-course", competencyHandler.AddCompetencyToCourse)
+
+	//api.POST("/competency/add-to-course", middleware.HasCapability(configRepo, sessionRepo, roleCapabilityRepo, "moodle/competency:coursecompetencymanage"), courseCompetencyHandler.AddCompetencyToCourse)
+	api.POST("/competency/add-to-course", courseCompetencyHandler.AddCompetencyToCourse)
 
 	//api.POST("/competency-framework/create",middleware.HasCapability(configRepo, sessionRepo, roleCapabilityRepo, "moodle/competency:competencymanage"), competencyFrameworkHandler.CreateCompetencyFramework)
 	api.POST("/competency-framework/create", competencyFrameworkHandler.CreateCompetencyFramework)
