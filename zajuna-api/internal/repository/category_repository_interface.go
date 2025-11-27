@@ -6,4 +6,5 @@ import "zajunaApi/internal/models"
 type CategoryRepositoryInterface interface {
 	GetAllCategories() ([]models.Category, error)
 	MoveCategory(id uint, beforeid uint, parentid *uint) error
+	CreateCategories(categories []models.Category) ([]models.Category, error)
 }

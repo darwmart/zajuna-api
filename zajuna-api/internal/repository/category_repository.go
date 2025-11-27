@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"fmt"
 	"zajunaApi/internal/models"
 
 	"gorm.io/gorm"
@@ -203,4 +204,79 @@ func (r *CategoryRepository) UpdateCoursesSortOrderForCategories(categories []mo
 	}
 
 	return nil
+}
+
+// CreateCategories crea una o más categorías siguiendo las reglas de Moodle 4.3
+func (r *CategoryRepository) CreateCategories(categories []models.Category) ([]models.Category, error) {
+	var createdCategories []models.Category
+
+	for _, category := range categories {
+		// 1. Validar que el padre existe (si parent > 0)
+		if category.Parent > 0 {
+			var parentCategory models.Category
+			if err := r.db.Table("mdl_course_categories").
+				Where("id = ?", category.Parent).
+				First(&parentCategory).Error; err != nil {
+				if err == gorm.ErrRecordNotFound {
+					return nil, gorm.ErrRecordNotFound
+				}
+				return nil, err
+			}
+			// Calcular depth y path basados en el padre
+			category.Depth = parentCategory.Depth + 1
+			category.Path = parentCategory.Path + "/" + "0" // Será actualizado después de la creación
+		} else {
+			// Categoría de nivel superior
+			category.Depth = 1
+			category.Path = "/0" // Será actualizado después de la creación
+		}
+
+		// 2. Establecer valores por defecto
+		if category.Visible == 0 && category.Visible != 1 {
+			category.Visible = 1 // Por defecto visible
+		}
+		if category.DescriptionFormat == 0 {
+			category.DescriptionFormat = 1 // HTML por defecto
+		}
+
+		// 3. Calcular el sortorder: obtener el máximo sortorder de las categorías hermanas + 10000
+		var maxSortOrder int
+		err := r.db.Table("mdl_course_categories").
+			Where("parent = ?", category.Parent).
+			Select("COALESCE(MAX(sortorder), 0)").
+			Scan(&maxSortOrder).Error
+		if err != nil {
+			return nil, err
+		}
+		category.SortOrder = maxSortOrder + 10000
+
+		// 4. Crear la categoría en la base de datos
+		if err := r.db.Table("mdl_course_categories").Create(&category).Error; err != nil {
+			return nil, err
+		}
+
+		// 5. Actualizar el path con el ID real
+		if category.Parent > 0 {
+			// Obtener el path del padre y concatenar el ID de la nueva categoría
+			var parentPath string
+			r.db.Table("mdl_course_categories").
+				Where("id = ?", category.Parent).
+				Select("path").
+				Scan(&parentPath)
+			category.Path = fmt.Sprintf("%s/%d", parentPath, category.ID)
+		} else {
+			category.Path = fmt.Sprintf("/%d", category.ID)
+		}
+
+		// 6. Actualizar el path en la base de datos
+		if err := r.db.Table("mdl_course_categories").
+			Where("id = ?", category.ID).
+			Update("path", category.Path).Error; err != nil {
+			return nil, err
+		}
+
+		createdCategories = append(createdCategories, category)
+	}
+
+	return createdCategories, nil
 }

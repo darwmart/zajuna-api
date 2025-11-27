@@ -110,3 +110,8 @@ func (r *MoveCategoryRequest) Validate() error {
 
 	return nil
 }
+
+// CreateCategoriesRequest representa una lista de categorías a crear
+type CreateCategoriesRequest struct {
+	Categories []CreateCategoryRequest `json:"categories" binding:"required,min=1,dive"`
+}

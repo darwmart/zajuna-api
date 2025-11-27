@@ -24,3 +24,8 @@ func (s *CategoryService) GetCategories() ([]models.Category, error) {
 func (s *CategoryService) MoveCategory(id uint, beforeid uint, parentid *uint) error {
 	return s.repo.MoveCategory(id, beforeid, parentid)
 }
+
+// CreateCategories crea una o más categorías
+func (s *CategoryService) CreateCategories(categories []models.Category) ([]models.Category, error) {
+	return s.repo.CreateCategories(categories)
+}

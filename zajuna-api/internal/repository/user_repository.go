@@ -294,3 +294,4 @@ func (r *UserRepository) GetUserEnrolledCourses(userID int) ([]map[string]interf
 
 	return courses, err
 }
+

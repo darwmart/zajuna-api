@@ -33,6 +33,12 @@ func (m *MockUserService) UpdateUsers(users []models.User) (int64, error) {
 	return args.Get(0).(int64), args.Error(1)
 }
 
+// ToggleUserStatus mockea el método ToggleUserStatus
+func (m *MockUserService) ToggleUserStatus(userID uint) (int, error) {
+	args := m.Called(userID)
+	return args.Get(0).(int), args.Error(1)
+}
+
 // GetEnrolledUsers mockea el método GetEnrolledUsers
 func (m *MockUserService) GetEnrolledUsers(courseID int, options map[string]interface{}) ([]response.EnrolledUserResponse, int, error) {
 	args := m.Called(courseID, options)

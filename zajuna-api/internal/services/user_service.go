@@ -41,7 +41,8 @@ func (s *UserService) GetEnrolledUsers(courseID int, options map[string]interfac
 
 	// Construir respuestas con todos los datos relacionados
 	responses := make([]response.EnrolledUserResponse, 0, len(users))
-	for _, user := range users {
+	for i := range users {
+		user := &users[i]
 		userID := int(user.ID)
 
 		// Obtener datos relacionados de cada usuario
@@ -53,7 +54,7 @@ func (s *UserService) GetEnrolledUsers(courseID int, options map[string]interfac
 
 		// Convertir a DTO usando el mapper
 		userResp := mapper.EnrolledUserDetailToResponse(
-			&user,
+			user,
 			groups,
 			roles,
 			customFields,

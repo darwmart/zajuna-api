@@ -5,6 +5,7 @@ import (
 	"zajunaApi/internal/dto/mapper"
 	"zajunaApi/internal/dto/request"
 	"zajunaApi/internal/dto/response"
+	"zajunaApi/internal/models"
 	"zajunaApi/internal/services"
 
 	"github.com/gin-gonic/gin"
@@ -143,4 +144,88 @@ func (h *CategoryHandler) MoveCategory(c *gin.Context) {
 		CategoryID: req.ID,
 		NewParent:  newParent,
 	})
+}
+
+// CreateCategories crea una o más categorías siguiendo las reglas de Moodle 4.3
+// @Summary      Crear categorías
+// @Description  Crea una o más categorías de cursos con jerarquía automática
+// @Tags         categories
+// @Accept       json
+// @Produce      json
+// @Param        request body request.CreateCategoriesRequest true "Datos de las categorías a crear"
+// @Success      200  {object}  response.CategoryListResponse
+// @Failure      400  {object}  response.ErrorResponse
+// @Failure      404  {object}  response.ErrorResponse
+// @Failure      500  {object}  response.ErrorResponse
+// @Router       /categories [post]
+func (h *CategoryHandler) CreateCategories(c *gin.Context) {
+	// 1. Parsear y validar request
+	var req request.CreateCategoriesRequest
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, response.NewErrorResponse(
+			"INVALID_JSON",
+			"JSON inválido o campos requeridos faltantes",
+			err.Error(),
+		))
+		return
+	}
+
+	// 2. Convertir request a modelos
+	var categories []models.Category
+	for _, catReq := range req.Categories {
+		category := models.Category{
+			Name:              catReq.Name,
+			Parent:            catReq.Parent,
+			IDNumber:          catReq.IDNumber,
+			Description:       catReq.Description,
+			DescriptionFormat: catReq.DescriptionFormat,
+			Theme:             catReq.Theme,
+		}
+		categories = append(categories, category)
+	}
+
+	// 3. Llamar al servicio
+	createdCategories, err := h.service.CreateCategories(categories)
+	if err != nil {
+		// Verificar si es error de "no encontrado" (padre no existe)
+		if err.Error() == "record not found" {
+			c.JSON(http.StatusNotFound, response.NewErrorResponse(
+				"PARENT_NOT_FOUND",
+				"La categoría padre especificada no existe",
+				err.Error(),
+			))
+			return
+		}
+
+		// Otros errores de base de datos
+		c.JSON(http.StatusInternalServerError, response.NewErrorResponse(
+			"CREATE_FAILED",
+			"Error al crear las categorías",
+			err.Error(),
+		))
+		return
+	}
+
+	// 4. Obtener el listado completo actualizado de categorías después de crear
+	allCategories, err := h.service.GetCategories()
+	if err != nil {
+		// Si falla al obtener la lista completa, devolver solo las creadas
+		categoriesResponse := mapper.CategoriesToResponse(createdCategories)
+		c.JSON(http.StatusOK, response.CategoryListResponse{
+			Categories: categoriesResponse,
+		})
+		return
+	}
+
+	// 5. Convertir todas las categorías a DTOs
+	categoriesResponse := mapper.CategoriesToResponse(allCategories)
+
+	// 6. Crear respuesta con la lista completa
+	listResponse := response.CategoryListResponse{
+		Categories: categoriesResponse,
+	}
+
+	// 7. Responder con la lista completa para que el frontend pueda actualizar su estado
+	c.JSON(http.StatusOK, listResponse)
 }

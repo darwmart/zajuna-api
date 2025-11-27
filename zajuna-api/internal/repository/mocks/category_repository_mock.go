@@ -23,3 +23,11 @@ func (m *MockCategoryRepository) MoveCategory(id uint, beforeid uint, parentid *
 	args := m.Called(id, beforeid, parentid)
 	return args.Error(0)
 }
+
+func (m *MockCategoryRepository) CreateCategories(categories []models.Category) ([]models.Category, error) {
+	args := m.Called(categories)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).([]models.Category), args.Error(1)
+}

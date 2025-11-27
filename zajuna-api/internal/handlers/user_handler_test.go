@@ -201,7 +201,7 @@ func TestUpdateUsers_Success(t *testing.T) {
 	}
 
 	mockService.On("UpdateUsers", []models.User{
-		{ID: 1, FirstName: "UpdatedJohn", LastName: "UpdatedDoe", Email: "updated@test.com"},
+		{ID: 1, FirstName: "UpdatedJohn", LastName: "UpdatedDoe", Email: "updated@test.com", Suspended: -1, Deleted: -1},
 	}).Return(int64(1), nil)
 
 	router := gin.New()
@@ -302,7 +302,7 @@ func TestUpdateUsers_ServiceError(t *testing.T) {
 
 	expectedError := errors.New("database update failed")
 	mockService.On("UpdateUsers", []models.User{
-		{ID: 1, FirstName: "Test", LastName: "User", Email: "test@test.com"},
+		{ID: 1, FirstName: "Test", LastName: "User", Email: "test@test.com", Suspended: -1, Deleted: -1},
 	}).Return(int64(0), expectedError)
 
 	router := gin.New()
