@@ -70,6 +70,6 @@ func (h *CompetencyHandler) CreateCompetency(c *gin.Context) {
 	c.JSON(http.StatusOK, response.CreateCompetencyResponse{
 		ID:       competency.ID,
 		FullName: competency.ShortName,
-		Message:  "Competency created successfully",
+		Message:  "Competencia creada correctamente",
 	})
 }

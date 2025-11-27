@@ -18,6 +18,7 @@ func RegisterRoutes(router *gin.Engine, db *gorm.DB) {
 
 	// --- RoleCapability ---
 	roleCapabilityRepo := repository.NewRoleCapabilityRepository(db)
+	roleCapabilityService := services.NewRoleCapabilityService(roleCapabilityRepo)
 
 	// --- Categorías ---
 	categoryRepo := repository.NewCategoryRepository(db)
@@ -46,6 +47,11 @@ func RegisterRoutes(router *gin.Engine, db *gorm.DB) {
 	competencyFrameworkRepo := repository.NewCompetencyFrameworkRepository(db)
 	competencyFrameworkService := services.NewCompetencyFrameworkService(competencyFrameworkRepo, sessionRepo)
 	competencyFrameworkHandler := handlers.NewCompetencyFrameworkHandler(competencyFrameworkService)
+
+	// --- Competency Plans ---
+	competencyPlanRepo := repository.NewCompetencyPlanRepository(db)
+	competencyPlanService := services.NewCompetencyPlanService(competencyPlanRepo, sessionRepo, roleCapabilityService)
+	competencyPlanHandler := handlers.NewCompetencyPlanHandler(competencyPlanService)
 
 	// --- Course Competencies ---
 	courseCompetencyRepo := repository.NewCourseCompetencyRepository(db)
@@ -76,6 +82,8 @@ func RegisterRoutes(router *gin.Engine, db *gorm.DB) {
 
 	//api.POST("/competency-framework/create",middleware.HasCapability(configRepo, sessionRepo, roleCapabilityRepo, "moodle/competency:competencymanage"), competencyFrameworkHandler.CreateCompetencyFramework)
 	api.POST("/competency-framework/create", competencyFrameworkHandler.CreateCompetencyFramework)
+
+	api.POST("/competency-plan/create", competencyPlanHandler.CreateCompetencyPlan)
 
 	api.POST("/login", userHandler.Login)
 	api.POST("/logout", userHandler.Logout)
