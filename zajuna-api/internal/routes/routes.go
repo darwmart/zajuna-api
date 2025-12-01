@@ -18,7 +18,7 @@ func RegisterRoutes(router *gin.Engine, db *gorm.DB) {
 
 	// --- RoleCapability ---
 	roleCapabilityRepo := repository.NewRoleCapabilityRepository(db)
-	roleCapabilityService := services.NewRoleCapabilityService(roleCapabilityRepo)
+	roleCapabilityService := services.NewRoleCapabilityService(roleCapabilityRepo, configRepo)
 
 	// --- Categorías ---
 	categoryRepo := repository.NewCategoryRepository(db)
@@ -38,15 +38,15 @@ func RegisterRoutes(router *gin.Engine, db *gorm.DB) {
 	userService := services.NewUserService(userRepo, sessionRepo, courseRepo)
 	userHandler := handlers.NewUserHandler(userService)
 
-	// --- Competencies ---
-	competencyRepo := repository.NewCompetencyRepository(db)
-	competencyService := services.NewCompetencyService(competencyRepo, sessionRepo)
-	competencyHandler := handlers.NewCompetencyHandler(competencyService)
-
 	// --- Competency Frameworks ---
 	competencyFrameworkRepo := repository.NewCompetencyFrameworkRepository(db)
 	competencyFrameworkService := services.NewCompetencyFrameworkService(competencyFrameworkRepo, sessionRepo)
 	competencyFrameworkHandler := handlers.NewCompetencyFrameworkHandler(competencyFrameworkService)
+
+	// --- Competencies ---
+	competencyRepo := repository.NewCompetencyRepository(db)
+	competencyService := services.NewCompetencyService(competencyRepo, sessionRepo, competencyFrameworkRepo)
+	competencyHandler := handlers.NewCompetencyHandler(competencyService)
 
 	// --- Competency Plans ---
 	competencyPlanRepo := repository.NewCompetencyPlanRepository(db)
@@ -83,6 +83,7 @@ func RegisterRoutes(router *gin.Engine, db *gorm.DB) {
 	//api.POST("/competency-framework/create",middleware.HasCapability(configRepo, sessionRepo, roleCapabilityRepo, "moodle/competency:competencymanage"), competencyFrameworkHandler.CreateCompetencyFramework)
 	api.POST("/competency-framework/create", competencyFrameworkHandler.CreateCompetencyFramework)
 
+	//api.POST("/competency-plan/create",middleware.HasCapability(configRepo, sessionRepo, roleCapabilityRepo, "moodle/moodle/competency:planmanage"), competencyPlanHandler.CreateCompetencyPlan)
 	api.POST("/competency-plan/create", competencyPlanHandler.CreateCompetencyPlan)
 
 	api.POST("/login", userHandler.Login)

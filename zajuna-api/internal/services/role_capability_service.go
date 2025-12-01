@@ -16,8 +16,8 @@ type RoleCapabilityService struct {
 	configRepo repository.ConfigRepositoryInterface
 }
 
-func NewRoleCapabilityService(repo repository.RoleCapabilityRepositoryInterface) *RoleCapabilityService {
-	return &RoleCapabilityService{repo: repo}
+func NewRoleCapabilityService(repo repository.RoleCapabilityRepositoryInterface, configRepo repository.ConfigRepositoryInterface) *RoleCapabilityService {
+	return &RoleCapabilityService{repo: repo, configRepo: configRepo}
 }
 
 func (s *RoleCapabilityService) HasCapabilities(capabilities []string, userID uint) (bool, error) {

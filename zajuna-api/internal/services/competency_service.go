@@ -17,8 +17,8 @@ type CompetencyService struct {
 }
 
 // NewCompetencyService crea un nuevo servicio de categorías
-func NewCompetencyService(repo repository.CompetencyRepositoryInterface, sessionRepo repository.SessionsRepositoryInterface) *CompetencyService {
-	return &CompetencyService{repo: repo, sessionRepo: sessionRepo}
+func NewCompetencyService(repo repository.CompetencyRepositoryInterface, sessionRepo repository.SessionsRepositoryInterface, frameworkRepo repository.CompetencyFrameworkRepositoryInterface) *CompetencyService {
+	return &CompetencyService{repo: repo, sessionRepo: sessionRepo, frameworkRepo: frameworkRepo}
 }
 
 func (s *CompetencyService) CreateCompetency(sid string, competency *models.Competency) (*models.Competency, error) {
