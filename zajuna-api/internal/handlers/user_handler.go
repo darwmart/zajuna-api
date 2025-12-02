@@ -11,7 +11,6 @@ import (
 	"zajunaApi/internal/services"
 
 	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
 )
 
 type UserHandler struct {
@@ -221,7 +220,6 @@ func (h *UserHandler) Login(c *gin.Context) {
 	token, err := h.service.Login(c.Request, body.Username, body.Password)
 	if err != nil {
 		if errors.Is(err, services.ErrUserNotFound) {
-			logrus.Info("Usuario no encontrado dentro")
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "credenciales inválidas"})
 			return
 		}

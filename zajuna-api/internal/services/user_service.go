@@ -81,8 +81,8 @@ func (s *UserService) Login(r *http.Request, username, password string) (string,
 
 	// GENERAR Y FIRMAR EL TOKEN
 	token := jwt.NewWithClaims(jwt.SigningMethodHS512, jwt.MapClaims{
-		//"user": username,
-		//"exp":  time.Now().Add(time.Hour * 3).Unix(),
+		"user": username,
+		"exp":  time.Now().Add(time.Hour * 3).Unix(),
 	})
 
 	tokenString, err := signToken(token, os.Getenv("SECRET"))
