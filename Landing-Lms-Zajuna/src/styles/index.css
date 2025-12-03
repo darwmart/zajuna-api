@@ -1,0 +1,893 @@
+/* Imports */
+
+@import url(./themes.css);
+@import url(./layouts/navbar.css);
+@import url(./layouts/menu.css);
+@import url(./layouts/footer.css);
+@import url(./layouts/accesibilidad.css);
+@import url(./layouts/slider.css);
+@import url(./layouts/logos-institucionales.css);
+
+.landing {
+    max-width: var(--web-margin);
+    margin: auto;
+    display: grid;
+    grid-template-columns: max-content 1fr max-content;
+    grid-template-rows: auto;
+    gap: 0.75rem;
+    padding: 4rem 1.5rem;
+}
+
+.landing__item--0 {
+    grid-area: 1 / 1 / 3 / 2;
+}
+
+.landing__item--1 {
+    display: flex;
+    align-items: start;
+    justify-content: center;
+    grid-area: 1 / 2 / 2 / 3;
+
+
+}
+
+.landing__item-1--img {
+    width: 100%;
+    border-radius: 0.75rem;
+    box-shadow: var(--primary-shadow);
+}
+
+
+.landing__item--2 {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: flex-start;
+    min-height: fit-content;
+    gap: 1.5rem;
+    grid-area: 2 / 2 / 3 / 3;
+}
+
+.landing__item-2--img {
+    height: 7.1rem;
+}
+
+.landing__item--4 {
+    order: 1;
+    display: flex;
+    gap: var(--space-xs);
+    justify-content: center;
+    grid-area: 1 / 3 / 3 / 4;
+}
+
+.cursos-virtuales {
+    background-color: white;
+    width: 100%;
+}
+
+.cursos-virtuales__header {
+    background-color: var(--alternate-background);
+    box-shadow: var(--primary-shadow);
+    width: 100%;
+    max-width: 100vw;
+    padding: 1rem 0;
+    margin: 0;
+    position: relative;
+    box-sizing: border-box;
+    overflow-x: hidden;
+}
+
+.cursos-virtuales__header-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: auto;
+    max-width: var(--web-margin);
+    padding: 0 1.5rem;
+}
+
+.cursos-virtuales__header-icon {
+    width: 2rem;
+    height: 2rem;
+    flex-shrink: 0;
+}
+
+.cursos-virtuales__header h3 {
+    color: var(--color-info);
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: bold;
+    text-decoration: none;
+    font-family: var(--primary-font-family);
+}
+
+.cursos-virtuales__content-wrapper {
+    padding: 0.6875rem 0;
+    background-color: transparent;
+    min-height: 415px;
+}
+
+.cursos-virtuales__container {
+    margin: auto;
+    max-width: 1366px;
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 0.5rem;
+    align-items: center;
+    padding: 4em 1rem;
+    min-height: 393px;
+}
+
+.cursos-virtuales__graphic-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 400px;
+    height: 370px;
+    order: 1;
+    border-radius: 1rem;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.cursos-virtuales__banner-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 1rem;
+}
+
+.cursos-virtuales__carousel-container {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    order: 2;
+}
+
+
+.cursos-virtuales__carousel-wrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+}
+
+.cursos-virtuales__carousel-track {
+    display: flex;
+    gap: 0.5rem;
+    transition: var(--transition-transform);
+    width: 100%;
+    padding: 0;
+    justify-content: center;
+}
+
+.cursos-virtuales__video-container {
+    position: relative;
+    flex: 0 0 calc(33.333% - 0.5rem);
+    height: 393px;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: var(--transition-opacity), var(--transition-transform);
+    min-width: 300px;
+    opacity: 1;
+}
+
+.cursos-virtuales__video-container:hover,
+.cursos-virtuales__video-container.cursos-virtuales__card--hovered {
+    box-shadow: none;
+}
+
+.cursos-virtuales__carousel-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 1rem;
+}
+
+/* Course Card Styles */
+.cursos-virtuales__card {
+    position: relative;
+    background: center/cover no-repeat;
+    border-radius: 1rem;
+    height: 393px;
+    overflow: hidden;
+    transition: var(--transition-all);
+    flex: 0 0 calc(16.666% - 0.5rem);
+    min-width: 300px;
+}
+
+.cursos-virtuales__carousel-track .cursos-virtuales__video-container,
+.cursos-virtuales__carousel-track .cursos-virtuales__card {
+    box-shadow: none;
+}
+
+.cursos-virtuales__carousel-track .cursos-virtuales__card {
+    background: none;
+    background-color: transparent;
+}
+
+.cursos-virtuales__card:hover {
+    box-shadow: none;
+}
+
+.cursos-virtuales__video,
+.cursos-virtuales__carousel-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--transition-transform);
+}
+
+/* Efecto hover simplificado - menor especificidad */
+.cursos-virtuales__video-container:hover .cursos-virtuales__video,
+.cursos-virtuales__video-container:hover .cursos-virtuales__carousel-video,
+.cursos-virtuales__card--hovered .cursos-virtuales__video,
+.cursos-virtuales__card--hovered .cursos-virtuales__carousel-video {
+    transform: scale(1.05);
+}
+
+.cursos-virtuales__card-link {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+}
+
+.cursos-virtuales__card-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(4, 50, 77, 0.9) 0%, rgba(4, 50, 77, 0.5) 50%, transparent 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 1.5rem;
+    z-index: 20;
+    pointer-events: none;
+    transition: var(--transition-opacity), transform 0.5s ease-out;
+    transform: translateY(100%);
+    opacity: 0;
+    border-radius: inherit;
+    overflow: hidden;
+}
+
+.cursos-virtuales__card-overlay--visible {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.cursos-virtuales__card-content {
+    color: white;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.cursos-virtuales__badge {
+    transition: all 0.7s ease 0.1s;
+    transform: translateY(20px);
+    opacity: 0;
+}
+
+.cursos-virtuales__badge--visible {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.cursos-virtuales__badge-text {
+    background-color: var(--color-yellow-bright);
+    color: black;
+    border-radius: 10px;
+    padding: 0.5rem 0.75rem;
+    font-weight: bold;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    box-shadow: none;
+    margin: 0;
+}
+
+.cursos-virtuales__badge-icon {
+    width: 1rem;
+    height: 1rem;
+    flex-shrink: 0;
+}
+
+.cursos-virtuales__card-title {
+    color: white;
+    font-size: 1rem;
+    line-height: 1.2;
+    margin: 0.5rem 0;
+    text-align: center;
+    transition: all 0.7s ease 0.2s;
+    transform: translateY(20px);
+    opacity: 0;
+}
+
+.cursos-virtuales__card-title--visible {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.cursos-virtuales__card-button-container {
+    display: flex;
+    justify-content: flex-end;
+    transition: all 0.7s ease 0.3s;
+    transform: translateY(20px);
+    opacity: 0;
+}
+
+.cursos-virtuales__card-button-container--visible {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.cursos-virtuales__card-button {
+    background-color: #39a900;
+    color: white;
+    padding: 0.3125rem 0.625rem;
+    border-radius: 10px;
+    font-weight: bold;
+    text-decoration: none;
+    max-width: fit-content;
+    transition: var(--transition-background);
+}
+
+.cursos-virtuales__card-button:hover {
+    background-color: #2d7a00;
+}
+
+/* Floating Buttons on Cards */
+.cursos-virtuales__floating-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background-color: rgba(57, 169, 0, 0.9);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 2.5rem;
+    height: 2.5rem;
+    cursor: pointer;
+    font-size: 1.1875rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 30;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    transition: var(--transition-all);
+    font-family: sans-serif;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.cursos-virtuales__floating-btn span {
+    line-height: 1;
+}
+
+.cursos-virtuales__floating-btn svg {
+    width: 1.125rem;
+    height: 1.125rem;
+    stroke: white;
+    fill: none;
+}
+
+.cursos-virtuales__video-container:hover .cursos-virtuales__floating-btn {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.cursos-virtuales__floating-btn:hover {
+    background-color: rgba(45, 122, 0, 0.95);
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.landing__2 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.landing__redes {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.landing__redes-img {
+    width: 2.25rem;
+    height: 2.25rem;
+    padding: 0;
+    background-color: white;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    display: block;
+    object-fit: contain;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.landing__redes a {
+    display: block;
+    width: 2.25rem;
+    height: 2.25rem;
+    transition: var(--transition-all);
+}
+
+.landing__redes a:hover .landing__redes-img,
+.landing__redes-img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.login {
+    display: flex;
+    flex-direction: column;
+    width: 22.5rem;
+    background-color: var(--secondary-background);
+    border-radius: 2.563rem;
+    padding: 1.875rem 2.5rem 2.5rem;
+    box-shadow: 0.063rem 0.438rem 0.813rem -0188rem rgba(0, 0, 0, 0.36);
+    min-height: 510px;
+    height: 510px;
+}
+
+.login__ingresos {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: stretch;
+    height: 64.78px;
+}
+
+.login__ingreso-cursos {
+    position: relative;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+.login__ingreso-administrativo {
+    position: relative;
+    cursor: pointer;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+.login__ingreso-administrativo-btn {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+    overflow: visible;
+}
+
+.login__linea {
+    margin-top: 0.625rem;
+    border-left: 0.25rem solid var(--primary);
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    height: 60%;
+}
+
+.login__ingreso-p {
+    color: var(--alternate-background);
+    font-weight: bold;
+    font-size: 0.75rem;
+    cursor: pointer;
+    margin: 0;
+    line-height: 1.3;
+    padding: 0.5rem 0.25rem;
+    text-align: center;
+    border-bottom: 2px solid transparent;
+    transition: border-color var(--transition-fast);
+    white-space: normal;
+    word-wrap: break-word;
+    overflow: visible;
+    width: 100%;
+    box-sizing: border-box;
+    min-height: 64.78px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login__ingreso-p--activo {
+    border-bottom-color: var(--primary);
+}
+
+.login__error {
+    color: #c33;
+    font-size: 0.875rem;
+    font-weight: bold;
+    text-align: center;
+    padding: 0.5rem;
+    line-height: 1.4;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 10;
+}
+
+.login__form__container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 0.938rem;
+    min-height: 420px;
+    height: 420px;
+    flex: 1;
+    position: relative;
+}
+
+.login__form__container--has-error {
+    padding-top: 3rem;
+}
+
+.login__form__container form {
+    display: flex;
+    flex-direction: column;
+    margin-top: 0.938rem;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+}
+
+.login__form__container--has-error form {
+    top: 3rem;
+}
+
+/* Eliminación de botones spinner en inputs numéricos para mejor UX */
+.login__form--cursos input[type="number"]::-webkit-inner-spin-button,
+.login__form--cursos input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    appearance: none;
+    margin: 0;
+}
+.login__form--cursos input[type="number"]{
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+.login__form--inactivo {
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.login__form__administrativo {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0.625rem;
+}
+
+.login__label {
+    color: var(--primary);
+    font-size: 1.125rem;
+    font-weight: bold;
+    margin-bottom: 0.313rem;
+    display: block;
+}
+
+.login__input,
+.login__select {
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    outline: none;
+    background-color: var(--primary-background);
+    border: none;
+    margin-bottom: 0.938rem;
+    box-sizing: border-box;
+    font-size: 0.875rem;
+}
+
+.login__input:focus,
+.login__select:focus {
+    outline: none;
+    border-color: #d1d5db;
+    border-width: 1px;
+    padding: 0.75rem;
+    box-shadow: 0 0 0 2px var(--primary);
+    z-index: 1;
+}
+
+.login__select,
+.login__input::placeholder {
+    color: var(--primary-text);
+}
+
+.login__link {
+    color: #666666;
+    font-weight: normal;
+    font-size: 0.813rem;
+    margin-bottom: 0.375rem;
+    text-decoration: underline;
+    display: block;
+}
+
+.login__boton {
+    margin: auto;
+    width: 11.875rem;
+    background-color: var(--primary);
+    border: none;
+    padding: 0.438rem;
+    border-radius: 0.938rem;
+    color: var(--color-info);
+    font-weight: bold;
+    margin-top: 0.625rem;
+    cursor: pointer;
+}
+
+.login__boton:hover {
+    background-color: var(--alternate);
+}
+
+
+
+.text-informativo {
+    padding: 0.7rem 1.7rem;
+    background-color: var(--alternate-background);
+    color: var(--color-info);
+}
+
+.text-informativo__container {
+    gap: 0.625rem;
+    align-items: center;
+    display: flex;
+    margin: auto;
+    max-width: var(--web-margin);
+    justify-items: center;
+}
+
+.text-informativo__icon {
+    width: 2rem;
+    height: 2rem;
+    flex-shrink: 0;
+}
+
+.text-informativo__title {
+    color: var(--color-info);
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: bold;
+    font-family: var(--primary-font-family);
+}
+
+.post-information {
+    margin: auto;
+    max-width: var(--web-margin);
+    padding: 4em 0.7rem;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    justify-items: center;
+    align-items: center;
+}
+
+.post-information__url{
+    margin: 0.75rem;
+    transition: margin var(--transition-fast);
+}
+.post-information__url:hover{
+    margin: 0; 
+    transform: scale(1.01);
+}
+
+.post-information__img {
+    box-shadow: var(--primary-shadow);
+    width: 100%;
+    border-radius: 0.75rem;
+}
+
+
+/* Responsive */
+
+@media (max-width: 1200px) {
+    .landing {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        height: auto;
+        align-content: center;
+    }
+
+    .landing__item--0 {
+        grid-area: 1/1/2/2;
+        margin: auto;
+    }
+
+    .landing__item--1 {
+        grid-area: 2/1/3/2;
+
+    }
+
+    .landing__item--2 {
+        width: 100%;
+        display: grid;
+        justify-items: center;
+        overflow: auto;
+        justify-content: space-around;
+        grid-area: 4/1/5/2;
+    }
+
+    .landing__item-2--img {
+        width: 7rem;
+        height: auto;
+    }
+
+    .landing__item--4 {
+        grid-area: 3/1/4/2;
+        flex-direction: column;
+        margin: auto;
+    }
+
+    .landing__redes {
+        justify-content: center;
+        flex-direction: row;
+    }
+
+    .cursos-virtuales__container {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .cursos-virtuales__graphic-container {
+        width: 100%;
+        height: 393px;
+        margin: 0 auto;
+    }
+    
+    .cursos-virtuales__carousel-track {
+        width: 100%;
+    }
+    
+    .cursos-virtuales__video-container {
+        flex: 0 0 calc(33.333% - 0.34rem);
+        min-width: 280px;
+    }
+    
+    .cursos-virtuales__card {
+        min-width: 280px;
+    }
+
+    .landing__2 {
+        display: flex;
+        justify-content: center;
+    }
+
+
+}
+
+@media (max-width: 767px) {
+    .login {
+        width: 18.625rem;
+        padding: 1.25rem;
+        min-height: 480px;
+        height: 480px;
+    }
+    
+    .login__form__container {
+        min-height: 380px;
+        height: 380px;
+    }
+    
+    .login__form__container--has-error {
+        padding-top: 2.5rem;
+    }
+    
+    .login__form__container--has-error form {
+        top: 2.5rem;
+    }
+
+    .login__ingreso-p {
+        font-size: 0.625rem;
+    }
+
+    .login__form__administrativo {
+        height: 15.875rem;
+    }
+
+    .login__label {
+        color: var(--primary);
+        font-size: 0.938rem;
+        font-weight: bold;
+        margin-bottom: 0.625rem;
+    }
+
+    .login__input {
+        padding: 0.438rem;
+    }
+
+    .login__select {
+        padding: 0.5rem;
+    }
+
+    .login__link {
+        font-size: 0.75rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .login__boton {
+        margin: auto;
+        width: 8.75rem;
+        margin-top: 0.625rem;
+    }
+
+    .landing__redes-img {
+        width: 2rem;
+        height: 2rem;
+    }
+
+    .post-information{
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    
+    /* Responsive para cursos en móviles */
+    .cursos-virtuales__container {
+        padding: 1rem 0.5rem;
+        grid-template-columns: 1fr;
+    }
+    
+    .cursos-virtuales__graphic-container {
+        display: none; /* Ocultar la imagen/video en móviles */
+    }
+    
+    .cursos-virtuales__carousel-container {
+        width: 100%;
+    }
+    
+    .cursos-virtuales__carousel-track {
+        flex-wrap: wrap;
+        gap: 0.625rem;
+        width: 100%;
+    }
+    
+    .cursos-virtuales__video-container {
+        flex: 0 0 calc(50% - 0.3125rem);
+        min-width: calc(50% - 0.3125rem);
+        max-width: calc(50% - 0.3125rem);
+        height: 300px;
+    }
+    
+    .cursos-virtuales__card {
+        min-width: calc(50% - 0.3125rem);
+        height: 300px;
+    }
+    
+    .cursos-virtuales__carousel-btn {
+        width: 2rem;
+        height: 2rem;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 479px) {
+    .landing__redes-img {
+        width: 1.75rem;
+        height: 1.75rem;
+    }
+    
+    .cursos-virtuales__content-wrapper {
+        min-height: auto;
+    }
+    
+    .cursos-virtuales__video-container {
+        height: 250px;
+    }
+    
+    .cursos-virtuales__card {
+        height: 250px;
+    }
+}

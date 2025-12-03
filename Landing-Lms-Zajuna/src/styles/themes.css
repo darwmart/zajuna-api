@@ -1,0 +1,134 @@
+/* normalize included at app level or handled by browser defaults */
+
+@font-face {
+    font-family: 'Work Sans Regular';
+    src: url('/fonts/WorkSans-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap; /* Mejora el rendimiento de carga de fuentes */
+}
+
+@font-face {
+    font-family: 'Work Sans Bold';
+    src: url('/fonts/WorkSans-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Work Sans SemiBold';
+    src: url('/fonts/WorkSans-SemiBold.otf') format('opentype');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+
+:root {
+    /* Colors */
+    --primary: #39a900;
+    --secondary: #98fe58;
+    --tertiary: #f2ffe5;
+    --alternate: #29690b;
+    --primary-text: black;
+    --secondary-text: #5d5d5d;
+    --alternate-text: #919191;
+    --primary-background: #fff;
+    --secondary-background: #E6E6E6;
+    --alternate-background: #04324d;
+    --color-success: #52d726;
+    --color-error: #e74c3c;
+    --color-warning: #f1c40f;
+    --color-info: #ffffff;
+    --color-purple-dark: #7E1E7D;
+    --color-yellow-bright: #FFCD00;
+    
+    /* Shadows */
+    --primary-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+    
+    /* Typography */
+    --primary-font-family: 'Work Sans Regular', sans-serif;
+    --secondary-font-family: 'Work Sans Bold', sans-serif;
+    
+    /* Breakpoints */
+    --bp-small: 480px;
+    --bp-medium: 767px;
+    --bp-large: 1200px;
+    --web-margin: 1366px;
+    
+    /* Transitions - Duración y timing */
+    --transition-fast: 0.15s ease-in-out;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
+    
+    /* Transitions - Propiedades específicas */
+    --transition-background: background-color 0.25s ease-in-out;
+    --transition-transform: transform 0.4s ease;
+    --transition-opacity: opacity 0.5s ease;
+    --transition-all: all 0.3s ease;
+    
+    /* Spacing - Sistema de espaciado consistente */
+    --space-xs: 0.5rem;     /* 8px */
+    --space-sm: 0.75rem;    /* 12px */
+    --space-md: 1rem;       /* 16px */
+    --space-lg: 1.5rem;     /* 24px */
+    --space-xl: 2rem;       /* 32px */
+    --space-2xl: 3rem;      /* 48px */
+    --space-3xl: 4rem;      /* 64px */
+    
+}
+
+:root.contrast {
+    --primary: #000000;
+    --secondary: #98fe58;
+    --tertiary: #f2ffe5;
+    --alternate: #29690b;
+    --primary-text: #ffffff;
+    --secondary-text: #ffffff;
+    --alternate-text: #ffffff;
+    --primary-background: #000000;
+    --secondary-background: #E6E6E6;
+    --alternate-background: #39a900;
+    --color-success: #52d726;
+    --color-error: #e74c3c;
+    --color-warning: #f1c40f;
+    --color-info: #ffffff;
+
+
+    input{
+        color: var(--color-info);
+    }
+
+    p{
+        color: gray;
+    }
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    scroll-behavior: smooth;
+    box-sizing: border-box;
+}
+
+iframe,
+img,
+body,
+div,
+ul,
+li,
+nav{
+    transition: width 1s ease-in-out, color 1s ease-in-out, background-color 1s ease-in-out, filter 1s ease-in-out ;
+}
+
+
+
+body {
+    font-family: var(--primary-font-family);
+    background-color: var(--primary-background);
+}
+
+
+
+

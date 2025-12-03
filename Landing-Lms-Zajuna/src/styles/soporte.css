@@ -1,0 +1,337 @@
+@import url(./themes.css);
+@import url(./layouts/navbar.css);
+@import url(./layouts/footer.css);
+@import url(./layouts/accesibilidad.css);
+@import url(./layouts/slider.css);
+
+
+.soporte {
+    margin: auto;
+    display: flex;
+    max-width: var(--web-margin);
+    gap: 1.25rem;
+    flex-direction: column;
+    padding: 1.7rem;
+}
+
+.soporte__slider {
+    margin: auto;
+}
+
+.soporte__img {
+    inline-size: 100%;
+    block-size: auto;
+    border-radius: 12px;
+}
+
+.soporte__informativo{
+    width: 100%;
+    margin: auto;
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+
+
+.soporte__informativo-item{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+
+
+.soporte__informativo-container{
+    width: 70%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-info);
+    border: 0.938rem solid var(--secondary-background);
+    border-radius: 2.5rem;
+    height: 12.5rem;
+}
+
+/* Media queries con mayor especificidad natural */
+
+
+
+.soporte__informativo-text{
+    padding: 1.25rem;
+    text-align: center;
+    font-weight: 600;
+}
+
+
+
+
+.soporte__manual {
+    display: flex;
+    margin: auto;
+    width: 100%;
+    justify-content: center;
+    flex-direction: column;
+    gap: var(--space-md);
+
+}
+
+.soporte__manual-container {
+    display: flex;
+    justify-content: center;
+    margin: auto;
+    border-radius: 1.25rem;
+    color: var(--color-info);
+    width: 80%;
+    padding: 1.25rem;
+    background-color: var(--alternate-background);
+}
+
+.soporte__manual-text {
+    margin: 0;
+    font-weight: 600;
+    text-align: center;
+}
+
+
+.soporte__container-2 {
+    display: flex;
+    width: 100%;
+    margin: auto;
+    gap: 0.563rem;
+    
+}
+
+.soporte__cursos {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+  }
+  
+  .soporte__cursos-container {
+    display: flex;
+    justify-content: space-between;
+    justify-content: center;
+    color: var(--color-info);
+    padding: 1.25rem;
+    border-radius: 0.75rem;
+    background-color: var(--alternate-background);
+  }
+  
+  .soporte__cursos-text,
+  a.soporte__informativo-container {
+    display: flex;
+    font-weight: 600;
+    text-align: center;
+    color: black;
+    text-decoration: none;
+  }
+
+  .capsulas__informativas__margenes{
+    display: flex;
+    margin: auto;
+    width: 100%;
+    max-width: 75rem;
+    justify-content: center;
+}
+
+.capsulas__informativas__container{
+    margin: 3.125rem 6.25rem;
+    width: 100%;
+}
+.capsulas__informativas__navegacion{
+    display: flex;
+    width: 100%;
+}
+.capsulas__informativas__manual__instructor, .capsulas__informativas__manual__aprendiz,
+.capsulas__informativas__manual__sava{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px 20px 0px 0;
+    width: 25%;
+    max-width: 11.25rem;
+    min-width: 6.25rem;
+    height: 3.125rem;
+    color: var(--primary-background);
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.capsulas__informativas__manual__aprendiz{
+    background-color: var(--alternate-background);
+    opacity: .5;
+    
+}
+
+.capsulas__informativas__manual__instructor{
+    background-color: var(--primary);
+    opacity: .5;
+}
+.capsulas__informativas__manual__sava{
+    background-color: var(--primary);
+    opacity: .5;
+}
+
+.capsulas__informativas__manual__aprendiz--activo{
+    opacity: 1;
+    text-decoration: underline;
+}
+
+.capsulas__informativas__manual__instructor--activo{
+    opacity: 1;
+    text-decoration: underline;
+}
+
+.capsulas__informativas__manual__sava--activo{
+    opacity: 1;
+    text-decoration: underline;
+}
+
+.capsulas__informativas__videos{
+    background-color: var(--secondary-background);
+    border-radius: 0 20px 20px 20px
+}
+.capsulas__informativas__manuales__img{
+    width: 100%;
+    border-radius: 0 12px 12px 12px;
+}
+.capsulas__informativas__manuales__link{
+    position: absolute;
+    top: 10%;
+    right: 10%;
+    font-weight: bold;
+}
+.instructor__pdf,
+.aprendiz__pdf,
+.sava__pdf {
+    position: relative;
+    display: flex;
+    transition: opacity var(--transition-fast);
+}
+
+
+
+
+.manuales__container{
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.manual__pdf{
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+}
+
+.manual__ins__cont{
+    border-radius: 20px;
+    background-color: var(--primary-background);
+}
+
+.manuales__pdf p{
+    color: var(--alternate-background);
+    font-weight: bolder;
+    font-size: 16px;
+}
+.manuales__container--oculto{
+    display: none;
+}
+.soporte__informativo-img{
+    cursor: pointer;
+}
+
+@media (max-width:767px) {
+    .capsulas__informativas__container{
+        margin:  1.875rem;
+    }
+    .capsulas__informativas__manual__instructor, .capsulas__informativas__manual__aprendiz,.capsulas__informativas__manual__sava{
+        font-size: 10PX;
+    }
+    .instructor__pdf{
+        flex-direction: column;
+    }
+
+    .manuales__pdf p{
+        font-size: 12px;
+    }
+
+    /* Reorganizado sin !important - especificidad natural por media query */
+    .soporte__informativo-item .soporte__informativo-container {
+        height: 14.125rem;
+        width: 60%;
+    }
+}
+@media (max-width:479px) {
+    .capsulas__informativas__container{
+        margin:  0.625rem;
+    }
+    .capsulas__informativas__manual__instructor, .capsulas__informativas__manual__aprendiz,.capsulas__informativas__manual__sava{
+        height: 2.188rem;
+        width: 1.25rem;
+        border-radius:  10px 10px 0 0;
+    }
+
+    .capsulas__informativas__videos{
+        border-radius: 0 10px 10px 10px;
+        padding: 5px;
+    }
+    .instructor__pdf-input{
+        height: 0.438rem;
+        width: 5rem;
+        text-align: center;
+        font-size: 8px;
+        padding: 5px;
+    }
+
+    .manuales__pdf p{
+        font-size: 8px;
+    }
+
+    /* Reorganizado sin !important - especificidad natural por media query */
+    .soporte__informativo-item .soporte__informativo-container {
+        margin: 0;
+        padding: 0;
+        height: 14.125rem;
+        width: 60%;
+    }
+}
+
+  
+  @media (max-width: 1200px) {
+    .soporte__container-2 {
+        display: grid;
+        grid-template-columns: 1fr; /* Una sola columna */
+    }
+
+    .soporte__post{
+        gap: 6.25rem;
+        display: grid;
+        grid-template-columns: 1fr;
+
+    }
+
+    .soporte__informativo{
+        gap: 1.875rem;
+        display: grid;
+        justify-content: center;
+        grid-template-columns: 1fr;
+
+    }
+    .soporte__informativo-img{
+        height: auto;
+    }
+    .soporte__informativo-container{
+        height: 14.125rem;
+        width: 36%;
+    }
+    .soporte__informativo {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    
+  }
+  

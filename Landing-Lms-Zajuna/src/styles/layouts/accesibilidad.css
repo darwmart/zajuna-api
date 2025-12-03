@@ -1,0 +1,57 @@
+.accessibility{
+    position: fixed;
+    z-index: 3;
+    right: 0;
+    top: 219px;
+    gap: 4px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.accessibility__container{
+    display: flex;
+    align-items: center;
+}
+
+.accessibility__button{
+    background-color: #fbad20;
+    border: none;
+    border-radius: 12px 0 0 12px;
+    cursor: pointer;
+    display: flex;
+    transition: var(--transition-background);
+}
+
+.accessibility__text{
+    position: fixed;
+    background-color: var(--alternate-background);
+    color: var(--color-info);
+    border-radius: 6px 0 0 6px;
+    max-width: 0px;
+    text-align: center;
+    transition: max-width var(--transition-slow);
+    overflow: hidden;
+    right: 1.5rem;
+    padding: 8px 0px;
+    white-space: nowrap;
+    width: 200px;
+    z-index: -1;
+}
+
+.accessibility__icon{
+    width: 42px;
+    height: 42px;
+}
+
+.accessibility__button:hover{
+    background-color: var(--primary);
+    transition: var(--transition-background);
+}
+
+.accessibility__button:hover ~ .accessibility__text{
+    padding: 8px 5px;
+    max-width: 200px;
+    transition: max-width var(--transition-slow);
+}

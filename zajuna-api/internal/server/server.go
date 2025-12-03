@@ -33,6 +33,10 @@ func New() *Server {
 	router := gin.Default()
 	router.Use(middleware.EnableCORS())
 
+	// IMPORTANTE: NO aplicar AuthMiddleware globalmente
+	// El middleware de autenticación se aplica selectivamente en routes.go
+	// Las rutas públicas (como /api/login) NO deben tener autenticación
+
 	// Registrar rutas
 	routes.RegisterRoutes(router, db)
 
