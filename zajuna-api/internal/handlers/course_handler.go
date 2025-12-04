@@ -382,7 +382,29 @@ func (h *CourseHandler) GetMyCourses(c *gin.Context) {
 // @Failure      500 {object} response.ErrorResponse
 // @Router       /courses/{id}/content [get]
 func (h *CourseHandler) GetCourseContent(c *gin.Context) {
-	// 1. Obtener courseID del path parameter
+	// 1. Obtener userID del contexto (establecido por AuthMiddleware)
+	userID, exists := c.Get("userID")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, response.NewErrorResponse(
+			"UNAUTHORIZED",
+			"Usuario no autenticado",
+			"",
+		))
+		return
+	}
+
+	// Convertir a int
+	userIDInt, ok := userID.(int)
+	if !ok {
+		c.JSON(http.StatusInternalServerError, response.NewErrorResponse(
+			"INTERNAL_ERROR",
+			"Error al obtener ID de usuario",
+			"",
+		))
+		return
+	}
+
+	// 2. Obtener courseID del path parameter
 	courseIDStr := c.Param("id")
 	courseID, err := strconv.Atoi(courseIDStr)
 	if err != nil {
@@ -394,8 +416,8 @@ func (h *CourseHandler) GetCourseContent(c *gin.Context) {
 		return
 	}
 
-	// 2. Obtener contenido del curso desde el servicio
-	sections, err := h.service.GetCourseContent(courseID)
+	// 3. Obtener contenido del curso desde el servicio (filtrado por permisos)
+	sections, err := h.service.GetCourseContent(courseID, userIDInt)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, response.NewErrorResponse(
 			"FETCH_ERROR",
@@ -405,6 +427,6 @@ func (h *CourseHandler) GetCourseContent(c *gin.Context) {
 		return
 	}
 
-	// 3. Responder con las secciones
+	// 4. Responder con las secciones
 	c.JSON(http.StatusOK, sections)
 }

@@ -32,6 +32,9 @@ func RegisterRoutes(router *gin.Engine, db *gorm.DB) {
 	permRepo := repository.NewPermissionRepository(db)
 	permService := services.NewPermissionService(permRepo)
 
+	// Inyectar el repositorio de permisos en el servicio de cursos
+	courseService.SetPermissionRepository(permRepo)
+
 	// Autenticación
 	authHandler := handlers.NewAuthHandler(userRepo, permService)
 

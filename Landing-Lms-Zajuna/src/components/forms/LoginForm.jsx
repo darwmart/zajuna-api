@@ -87,10 +87,11 @@ function LoginForm() {
         setSuccess(true);
         setError(null);
 
-        // Solo redirigir al dashboard si el usuario tiene permisos
-        if (canAccessDashboard) {
-            const zajunaUrl = import.meta.env.VITE_ZAJUNA_DASHBOARD_URL || 'http://localhost:3000';
+        // Redirigir según los permisos del usuario
+        const zajunaUrl = import.meta.env.VITE_ZAJUNA_DASHBOARD_URL || 'http://localhost:3000';
 
+        if (canAccessDashboard) {
+            // Usuario con permisos administrativos - redirigir al dashboard de admin
             setTimeout(() => {
                 console.log('Usuario con permisos administrativos. Redirigiendo al dashboard:', zajunaUrl);
 
@@ -102,10 +103,10 @@ function LoginForm() {
                 window.location.href = zajunaUrl;
             }, 1500); // 1.5 segundos para mostrar el mensaje de éxito
         } else {
-            // Usuario sin permisos administrativos - mostrar mensaje y no redirigir
+            // Usuario estudiante - redirigir al StudentDashboard
             setTimeout(() => {
-                setSuccess(false);
-                setError('Login exitoso, pero no tienes permisos para acceder al panel administrativo. Accede a tus cursos desde Moodle.');
+                console.log('Usuario estudiante. Redirigiendo al dashboard de estudiante:', zajunaUrl + '/student-dashboard');
+                window.location.href = zajunaUrl + '/student-dashboard';
             }, 1500);
         }
     };

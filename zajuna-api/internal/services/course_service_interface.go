@@ -16,5 +16,6 @@ type CourseServiceInterface interface {
 	SearchCourses(criteriaName, criteriaValue string, page, perPage int) ([]models.Course, int64, error)
 	MoveCourses(courses []request.MoveCourseRequest) error
 	GetCoursesWhereUserIsTeacher(userID int) ([]models.Course, error)
-	GetCourseContent(courseID int) ([]repository.CourseSection, error)
+	GetCourseContent(courseID int, userID int) ([]repository.CourseSection, error)
+	SetPermissionRepository(permRepo *repository.PermissionRepository)
 }

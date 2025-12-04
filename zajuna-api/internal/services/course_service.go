@@ -8,11 +8,17 @@ import (
 )
 
 type CourseService struct {
-	repo repository.CourseRepositoryInterface
+	repo     repository.CourseRepositoryInterface
+	permRepo *repository.PermissionRepository
 }
 
 func NewCourseService(repo repository.CourseRepositoryInterface) *CourseService {
-	return &CourseService{repo: repo}
+	return &CourseService{repo: repo, permRepo: nil}
+}
+
+// SetPermissionRepository establece el repositorio de permisos (inyección de dependencia opcional)
+func (s *CourseService) SetPermissionRepository(permRepo *repository.PermissionRepository) {
+	s.permRepo = permRepo
 }
 
 func (s *CourseService) GetAllCourses() ([]models.Course, error) {
@@ -199,6 +205,59 @@ func (s *CourseService) GetCoursesWhereUserIsTeacher(userID int) ([]models.Cours
 
 // GetCourseContent obtiene el contenido completo del curso (secciones y módulos)
 // Compatible con core_course_get_contents de Moodle
-func (s *CourseService) GetCourseContent(courseID int) ([]repository.CourseSection, error) {
-	return s.repo.GetCourseContent(courseID)
+// Filtra el contenido según los permisos del usuario
+func (s *CourseService) GetCourseContent(courseID int, userID int) ([]repository.CourseSection, error) {
+	// Obtener todas las secciones (sin filtrar)
+	sections, err := s.repo.GetCourseContent(courseID)
+	if err != nil {
+		return nil, err
+	}
+
+	// Si no tenemos repositorio de permisos, devolver sin filtrar
+	if s.permRepo == nil {
+		return sections, nil
+	}
+
+	// Verificar si el usuario es site admin
+	isSiteAdmin, _ := s.permRepo.IsSiteAdmin(userID)
+
+	// Verificar si el usuario puede ver secciones ocultas
+	canViewHiddenSections := false
+	if !isSiteAdmin {
+		// Obtener el contexto del curso
+		courseContext, err := s.permRepo.GetContextByLevelAndInstance(50, courseID) // 50 = CONTEXT_COURSE
+		if err == nil {
+			permission, _ := s.permRepo.GetUserCapabilityInContext(userID, "moodle/course:viewhiddensections", courseContext.ID)
+			canViewHiddenSections = (permission == 1) // CAP_ALLOW
+		}
+	} else {
+		canViewHiddenSections = true
+	}
+
+	// Filtrar secciones basándose en permisos
+	filteredSections := []repository.CourseSection{}
+	for _, section := range sections {
+		// Si la sección está oculta y el usuario no puede ver secciones ocultas, saltarla
+		if section.Visible == 0 && !canViewHiddenSections {
+			continue
+		}
+
+		// Filtrar módulos ocultos si el usuario no puede verlos
+		if !canViewHiddenSections {
+			filteredModules := []repository.CourseModule{}
+			for _, module := range section.Modules {
+				if module.Visible == 1 {
+					filteredModules = append(filteredModules, module)
+				}
+			}
+			section.Modules = filteredModules
+		}
+
+		// Actualizar UserVisible
+		section.UserVisible = section.Visible == 1 || canViewHiddenSections
+
+		filteredSections = append(filteredSections, section)
+	}
+
+	return filteredSections, nil
 }
