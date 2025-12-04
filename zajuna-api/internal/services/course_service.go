@@ -190,3 +190,15 @@ func (s *CourseService) MoveCourses(courses []request.MoveCourseRequest) error {
 	}
 	return nil
 }
+
+// GetCoursesWhereUserIsTeacher obtiene los cursos donde el usuario es instructor
+// Busca cursos donde el usuario tiene rol de editingteacher o teacher
+func (s *CourseService) GetCoursesWhereUserIsTeacher(userID int) ([]models.Course, error) {
+	return s.repo.GetCoursesWhereUserIsTeacher(userID)
+}
+
+// GetCourseContent obtiene el contenido completo del curso (secciones y módulos)
+// Compatible con core_course_get_contents de Moodle
+func (s *CourseService) GetCourseContent(courseID int) ([]repository.CourseSection, error) {
+	return s.repo.GetCourseContent(courseID)
+}

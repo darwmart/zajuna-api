@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"fmt"
+	"time"
 	"zajunaApi/internal/dto/request"
 	"zajunaApi/internal/models"
 
@@ -537,4 +539,148 @@ func (r *CourseRepository) MoveCourse(id int, categoryID int, beforeID *int) err
 	}
 
 	return nil
+}
+
+// GetCoursesWhereUserIsTeacher obtiene TODOS los cursos donde el usuario está matriculado
+// Esto replica el comportamiento de Moodle: "Mis cursos" muestra todos los cursos donde el usuario
+// tiene una matrícula activa, independientemente del rol (estudiante, profesor, etc.)
+// Compatible con core_enrol_get_users_courses de Moodle
+func (r *CourseRepository) GetCoursesWhereUserIsTeacher(userID int) ([]models.Course, error) {
+	var courses []models.Course
+
+	// Query para obtener cursos donde el usuario está matriculado
+	// Replica el comportamiento de Moodle usando mdl_enrol y mdl_user_enrolments
+	// Busca en mdl_user_enrolments donde:
+	// 1. userid = userID
+	// 2. status = 0 (matrícula activa)
+	// 3. La matrícula no ha expirado (timestart y timeend)
+	// 4. El curso es visible
+	currentTime := time.Now().Unix()
+
+	err := r.db.Table("mdl_course AS c").
+		Select("DISTINCT c.*").
+		Joins("JOIN mdl_enrol AS e ON e.courseid = c.id").
+		Joins("JOIN mdl_user_enrolments AS ue ON ue.enrolid = e.id").
+		Where("ue.userid = ?", userID).
+		Where("ue.status = 0"). // 0 = matrícula activa
+		Where("(ue.timestart = 0 OR ue.timestart <= ?)", currentTime).
+		Where("(ue.timeend = 0 OR ue.timeend >= ?)", currentTime).
+		Where("c.visible = 1"). // Solo cursos visibles
+		Order("c.sortorder ASC").
+		Find(&courses).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	return courses, nil
+}
+
+// CourseModule representa un módulo/actividad dentro de una sección
+type CourseModule struct {
+	ID         int    `json:"id"`
+	Module     int    `json:"module"`     // ID del tipo de módulo en mdl_modules
+	Instance   int    `json:"instance"`   // ID de la instancia específica (en mdl_assign, mdl_quiz, etc.)
+	Name       string `json:"name"`
+	ModName    string `json:"modname"`    // Tipo de módulo: assign, quiz, resource, etc.
+	Indent     int    `json:"indent"`     // Nivel de indentación
+	Visible    int    `json:"visible"`    // 0 = oculto, 1 = visible
+	Completion int    `json:"completion"` // Estado de completitud
+	URL        string `json:"url"`        // URL del módulo (si aplica)
+}
+
+// CourseSection representa una sección del curso con sus módulos
+type CourseSection struct {
+	ID              int            `json:"id"`
+	Section         int            `json:"section"` // Número de sección (0 = general, 1, 2, 3...)
+	Name            string         `json:"name"`
+	Summary         string         `json:"summary"`
+	SummaryFormat   int            `json:"summaryformat"`
+	Visible         int            `json:"visible"`
+	Modules         []CourseModule `json:"modules" gorm:"-"`          // Ignorar en el query principal
+	UserVisible     bool           `json:"uservisible" gorm:"-"`      // Calculado manualmente
+}
+
+// GetCourseContent obtiene el contenido completo del curso (secciones y módulos)
+// Compatible con core_course_get_contents de Moodle
+func (r *CourseRepository) GetCourseContent(courseID int) ([]CourseSection, error) {
+	var sections []CourseSection
+
+	// Obtener todas las secciones del curso
+	err := r.db.Table("mdl_course_sections").
+		Select("id, section, name, summary, summaryformat, visible").
+		Where("course = ?", courseID).
+		Order("section ASC").
+		Scan(&sections).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	// Para cada sección, obtener sus módulos
+	for i := range sections {
+		var modules []CourseModule
+
+		// Query para obtener módulos de la sección
+		// Juntamos mdl_course_modules con mdl_modules para obtener el nombre del tipo de módulo
+		err := r.db.Table("mdl_course_modules AS cm").
+			Select("cm.id, cm.module, cm.instance, cm.indent, cm.visible, cm.completion, m.name as modname").
+			Joins("JOIN mdl_modules AS m ON m.id = cm.module").
+			Where("cm.course = ? AND cm.section = ? AND cm.deletioninprogress = 0", courseID, sections[i].ID).
+			Order("cm.sequence ASC").
+			Scan(&modules).Error
+
+		if err != nil {
+			continue // Si hay error en módulos, continuamos con la siguiente sección
+		}
+
+		// Para cada módulo, obtener el nombre del recurso/actividad específica
+		for j := range modules {
+			var moduleName string
+			var moduleTable string
+
+			// Cada tipo de módulo tiene su propia tabla en Moodle
+			// Por ejemplo: mdl_assign, mdl_quiz, mdl_resource, etc.
+			switch modules[j].ModName {
+			case "assign":
+				moduleTable = "mdl_assign"
+			case "quiz":
+				moduleTable = "mdl_quiz"
+			case "resource":
+				moduleTable = "mdl_resource"
+			case "forum":
+				moduleTable = "mdl_forum"
+			case "page":
+				moduleTable = "mdl_page"
+			case "url":
+				moduleTable = "mdl_url"
+			case "folder":
+				moduleTable = "mdl_folder"
+			case "book":
+				moduleTable = "mdl_book"
+			case "label":
+				moduleTable = "mdl_label"
+			default:
+				moduleTable = "mdl_" + modules[j].ModName
+			}
+
+			// Obtener el nombre del módulo desde su tabla específica
+			r.db.Table(moduleTable).
+				Select("name").
+				Where("id = ?", modules[j].Instance).
+				Scan(&moduleName)
+
+			if moduleName != "" {
+				modules[j].Name = moduleName
+			}
+
+			// Construir URL del módulo (simulada, en producción sería la URL de Moodle)
+			modules[j].URL = "/mod/" + modules[j].ModName + "/view.php?id=" + fmt.Sprint(modules[j].ID)
+		}
+
+		sections[i].Modules = modules
+		sections[i].UserVisible = sections[i].Visible == 1
+	}
+
+	return sections, nil
 }

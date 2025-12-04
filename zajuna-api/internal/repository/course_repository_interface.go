@@ -18,4 +18,6 @@ type CourseRepositoryInterface interface {
 	UpdateCourseCustomFields(courseID int, fields []request.CustomField) error
 	SearchCourses(criteriaName, criteriaValue string, page, perPage int) ([]models.Course, int64, error)
 	MoveCourse(id int, categoryID int, beforeID *int) error
+	GetCoursesWhereUserIsTeacher(userID int) ([]models.Course, error)
+	GetCourseContent(courseID int) ([]CourseSection, error)
 }

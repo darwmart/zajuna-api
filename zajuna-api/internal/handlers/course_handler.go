@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"net/http"
+	"strconv"
 	"zajunaApi/internal/dto/mapper"
 	"zajunaApi/internal/dto/request"
 	"zajunaApi/internal/dto/response"
@@ -310,4 +311,100 @@ func (h *CourseHandler) MoveCourses(c *gin.Context) {
 		Message: "Cursos movidos correctamente",
 		Moved:   len(req.Courses),
 	})
+}
+
+// GetMyCourses obtiene los cursos donde el usuario autenticado es instructor
+// @Summary      Listar mis cursos
+// @Description  Obtiene todos los cursos donde el usuario autenticado tiene rol de instructor (editingteacher o teacher)
+// @Tags         courses
+// @Accept       json
+// @Produce      json
+// @Success      200 {object} response.CourseListResponse
+// @Failure      401 {object} response.ErrorResponse
+// @Failure      500 {object} response.ErrorResponse
+// @Router       /courses/my-courses [get]
+func (h *CourseHandler) GetMyCourses(c *gin.Context) {
+	// 1. Obtener el userID del contexto (establecido por AuthMiddleware)
+	userID, exists := c.Get("userID")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, response.NewErrorResponse(
+			"UNAUTHORIZED",
+			"Usuario no autenticado",
+			nil,
+		))
+		return
+	}
+
+	// 2. Convertir userID a int
+	userIDInt, ok := userID.(int)
+	if !ok {
+		c.JSON(http.StatusInternalServerError, response.NewErrorResponse(
+			"INTERNAL_ERROR",
+			"Error al procesar ID de usuario",
+			nil,
+		))
+		return
+	}
+
+	// 3. Obtener cursos del servicio
+	courses, err := h.service.GetCoursesWhereUserIsTeacher(userIDInt)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, response.NewErrorResponse(
+			"FETCH_ERROR",
+			"Error al obtener los cursos",
+			err.Error(),
+		))
+		return
+	}
+
+	// 4. Convertir modelos a DTOs
+	coursesResponse := mapper.CoursesToResponse(courses)
+
+	// 5. Crear respuesta
+	listResponse := response.CourseListResponse{
+		Courses: coursesResponse,
+	}
+
+	// 6. Responder
+	c.JSON(http.StatusOK, listResponse)
+}
+
+// GetCourseContent godoc
+// @Summary      Obtener contenido del curso (secciones y módulos)
+// @Description  Obtiene todas las secciones y actividades de un curso. Compatible con core_course_get_contents de Moodle
+// @Tags         courses
+// @Security     BearerAuth
+// @Produce      json
+// @Param        id path int true "ID del curso"
+// @Success      200 {array} repository.CourseSection
+// @Failure      400 {object} response.ErrorResponse
+// @Failure      401 {object} response.ErrorResponse
+// @Failure      500 {object} response.ErrorResponse
+// @Router       /courses/{id}/content [get]
+func (h *CourseHandler) GetCourseContent(c *gin.Context) {
+	// 1. Obtener courseID del path parameter
+	courseIDStr := c.Param("id")
+	courseID, err := strconv.Atoi(courseIDStr)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, response.NewErrorResponse(
+			"INVALID_COURSE_ID",
+			"ID de curso inválido",
+			err.Error(),
+		))
+		return
+	}
+
+	// 2. Obtener contenido del curso desde el servicio
+	sections, err := h.service.GetCourseContent(courseID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, response.NewErrorResponse(
+			"FETCH_ERROR",
+			"Error al obtener el contenido del curso",
+			err.Error(),
+		))
+		return
+	}
+
+	// 3. Responder con las secciones
+	c.JSON(http.StatusOK, sections)
 }
