@@ -1,0 +1,4857 @@
+/* src/styles/moodle-theme.css
+   Tema visual tipo Moodle / Zajuna para la vista "Examinar lista de usuarios"
+   Última actualización: 2025-10-18
+*/
+
+/* GLOBAL */
+:root{
+  --moodle-green-strong: #39A900; /* header dark green - Zajuna green */
+  --moodle-green: #39A900; /* strong green for buttons/active - Zajuna green */
+  --moodle-green-light: #E6EFDC; /* table header */
+  /* sidebar width history: original 340px -> +5% -> 357px -> +5% -> 375px -> +10% -> ~413px
+    now reduced by 1% to slightly narrow the sidebar */
+  /* Sidebar width: tuned to match mock. Reduce from 409.41px -> 370px as requested */
+  --sidebar-width: 370px;
+  --moodle-grey-bg: #F5F7F6; /* page background */
+  --moodle-text: #333333;
+  --moodle-accent: #0D47A1; /* blue breadcrumb / links */
+  --moodle-header-blue: #053449; /* Zajuna/Moodle header dark blue */
+  --moodle-border: #D6D6D6;
+  --sidebar-bg: #e8e8e8;
+  --sidebar-item-hover: #d8d8d8;
+  /* Table spacing control */
+  --table-from-second-left-padding: 44px; /* total left padding from column 2 onwards */
+  /* Form layout variables: label width and gap between label and field */
+  --mform-label-width: 240px;
+  --mform-row-gap: 64px;
+}
+
+/* Ensure consistent visual width: reserve scrollbar gutter and hide native scrollbar visually
+   so the main content can display as 1850px without the native scrollbar reducing visible width. */
+html {
+  /* reserve the scrollbar gutter in modern browsers */
+  scrollbar-gutter: stable;
+  /* hide the Firefox native scrollbar visuals (still scrollable) */
+  scrollbar-width: none;
+}
+
+/* WebKit-based browsers: hide scrollbar track/thumb but keep scrolling functional */
+::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+}
+::-webkit-scrollbar-thumb {
+  background: transparent;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Force the main container to be 1850px so content renders at that width */
+.moodle-container {
+  /* Global container: fixed max width for all views */
+  max-width: 1432px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  /* Left-align the container content instead of centering */
+  margin-left: 0 !important;
+  margin-right: auto !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* ==========================
+   SIDEBAR NAVIGATION
+   ========================== */
+.zajuna-sidebar {
+  /* Match layout column width to avoid extra right gap next to the green divider */
+  width: var(--sidebar-width);
+  min-width: var(--sidebar-width);
+  background: #ffffff;
+  border-right: none;
+  /* padding horizontal reducido ligeramente para ajustar márgenes laterales */
+  padding: 12px 10px;
+  font-family: Arial, sans-serif;
+  overflow-y: visible;
+  height: auto;
+}
+
+/* Sidebar Section - base structure (visual styles are applied to match the calendar card
+   in a single place later in the file to avoid nested, conflicting containers) */
+.sidebar-section {
+  margin-bottom: 8px; /* further reduced gap between stacked sidebar sections (was 16px) */
+  padding: 3px; /* halved outer padding (was 6px) */
+}
+
+/* Ensure stacked sidebar sections (NAVEGACIÓN, ADMINISTRACIÓN, etc.) have a consistent
+   8px gap between them and no extra top margins from nested elements. This targets only
+   sections inside the main sidebar to avoid affecting other panel layouts. */
+.zajuna-sidebar .sidebar-section + .sidebar-section {
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
+/* Make the visible inner boxes (nav/admin bodies and calendar body) use the
+   same computed width so they render identically. We subtract 8px from 100%
+   to account for small internal borders/padding differences and produce a
+   consistent measured width (~342px with the current --sidebar-width). */
+.zajuna-sidebar .sidebar-section .sidebar-section-body,
+.zajuna-sidebar .sidebar-calendar-card .card-body {
+  box-sizing: border-box; /* ensure padding/border included in width */
+  width: calc(100% - 8px);
+}
+
+/* Enforce 15px font for sidebar section titles and calendar labels (NAVEGACIÓN / ADMIN / CALENDARIO) */
+.zajuna-sidebar .sidebar-section .sidebar-section-title,
+.zajuna-sidebar .sidebar-calendar-card .card-title,
+.zajuna-sidebar .sidebar-calendar-card .calendar-nav .calendar-month-label,
+.zajuna-sidebar .sidebar-calendar-card .calendarmonth thead th {
+  font-size: 15px !important;
+  line-height: 1;
+}
+
+/* Force all main sidebar inner containers to a fixed visual width of 337px
+   and center them inside the sidebar. This makes NAV/ADMIN/CALENDAR etc.
+   render with the same measured width regardless of internal padding/borders. */
+.zajuna-sidebar .sidebar-section .sidebar-section-body,
+.zajuna-sidebar .sidebar-calendar-card .card-body,
+.zajuna-sidebar .categories-list,
+.zajuna-sidebar .courses-list,
+.zajuna-sidebar .filters-panel {
+  box-sizing: border-box;
+  width: 337px;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.sidebar-section-header {
+  margin: 0;
+}
+
+.sidebar-section-title {
+  font-weight: 700;
+  color: var(--moodle-green);
+  display: inline-block;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.sidebar-section-content {
+  padding: 0;
+}
+
+/* Sidebar Nav Items */
+.sidebar-nav-item {
+  width: 100%;
+}
+
+.sidebar-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px 6px 8px;
+  color: #222222;
+  text-decoration: none;
+  font-size: 13px;
+  transition: background 0.15s;
+  cursor: pointer;
+}
+
+.sidebar-nav-item.level-1 .sidebar-nav-link {
+  padding-left: 20px;
+}
+
+.sidebar-nav-item.level-2 .sidebar-nav-link {
+  padding-left: 32px;
+}
+
+.sidebar-nav-item.level-3 .sidebar-nav-link {
+  padding-left: 44px;
+  font-size: 12.5px;
+}
+
+.sidebar-nav-link:hover {
+  background: var(--sidebar-item-hover);
+}
+
+.sidebar-nav-item.active .sidebar-nav-link {
+  background: var(--moodle-green-light);
+  font-weight: 600;
+}
+.sidebar-section-title {
+  font-weight: 700;
+  color: var(--moodle-green);
+  display: inline-block;
+}
+.nav-item-chevron {
+  display: inline-flex;
+  align-items: center;
+  color: #666;
+  flex-shrink: 0;
+  cursor: pointer;
+  padding: 2px;
+}
+
+.nav-item-chevron:hover {
+  color: #333;
+}
+
+.nav-item-icon {
+  display: inline-flex;
+  align-items: center;
+  color: #053449; /* Moodle dark blue color for icons */
+  flex-shrink: 0;
+}
+
+.nav-item-text,
+.nav-item-text a {
+  flex: 1;
+  color: #222222;
+  cursor: pointer;
+  text-decoration: none; /* ensure no underline on links */
+}
+
+.nav-item-text:hover {
+  /* Do not show underline; use a color change for hover affordance to match previous style */
+  color: var(--moodle-green);
+  text-decoration: none;
+}
+
+/* Sidebar Search */
+.sidebar-search {
+  padding: 8px 12px;
+}
+
+.sidebar-search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.sidebar-search-input {
+  width: 100%;
+  height: 32px;
+  padding: 6px 32px 6px 10px;
+  border: 1px solid #bdbdbd;
+  border-radius: 4px;
+  font-size: 13px;
+  font-family: Arial, sans-serif;
+  outline: none;
+  background: #fff;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+
+.sidebar-search-input:focus {
+  border-color: var(--moodle-green);
+  border-width: 2px;
+  padding: 5px 31px 5px 9px;
+}
+
+.sidebar-search-btn {
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  padding: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s;
+}
+
+.sidebar-search-btn:hover {
+  color: var(--moodle-green);
+}
+
+html,body,#root {
+  height: 100%;
+  margin: 0;
+  font-family: "Arial", "Helvetica", sans-serif;
+  color: var(--moodle-text);
+  background: #fff;
+  overflow-x: hidden;
+}
+
+/* Ensure main title starts flush to align with sidebar block top */
+.moodle-title {
+  margin: 0;
+  padding: 0;
+}
+
+.table-moodle {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  font-family: "Arial", "Helvetica", sans-serif;
+  background: #fff;
+}
+.table-moodle thead {
+  background: var(--moodle-green-light);
+}
+.table-moodle th, .table-moodle td {
+  /* Igualar altura visual entre encabezado y filas usando line-height */
+  padding: 6px 12px; /* vertical compacto */
+  text-align: left;
+  border-bottom: 1px solid #e6e6e6;
+  font-size: 13px;
+  line-height: 16px; /* controla la altura del contenido */
+  height: auto; /* evita forzar alturas distintas por navegador */
+  box-sizing: border-box;
+}
+.table-moodle thead {
+  background: #fff;
+}
+
+/* Column collapse toggle button under each table header */
+.table-moodle th .th-minimize { margin-top: 6px; }
+.table-moodle th .col-toggle {
+  background: transparent;
+  border: none;
+  color: var(--moodle-green);
+  font-weight: 700;
+  cursor: pointer;
+  width: 22px;
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+.table-moodle th .col-toggle:hover { background: rgba(91,184,76,0.08); }
+
+.table-moodle th {
+  color: var(--moodle-green);
+  font-weight: 700;
+  font-size: 13px;
+  background: #fff;
+  border-bottom: 2px solid #e6e6e6;
+}
+.table-moodle thead tr:first-child th {
+  border-top: 2px solid #e6e6e6 !important;
+}
+.table-moodle th.table-icons {
+  color: #222 !important;
+}
+  .table-moodle tbody tr:hover {
+    background: #e0e0e0 !important;
+  }
+/* Alternado de filas: solo una definición */
+.table-moodle tbody tr:nth-child(odd) {
+  background-color: #f5f7f6 !important;
+}
+.table-moodle tbody tr:nth-child(even) {
+  background-color: #fff !important;
+}
+.table-moodle td.user-name {
+  color: var(--moodle-green);
+  font-weight: 400; /* not bold, only header is bold */
+}
+  .table-icons {
+    text-align: center;
+    width: 90px;
+  }
+.moodle-paginator-top {
+  display:flex;
+    gap: 30px;
+  align-items:center;
+}
+
+/* PAGINATION (Moodle Zajuna exact style) */
+.moodle-pager {
+  display: flex;
+  gap: 0;
+  justify-content: center;
+  align-items: center;
+  margin: 10px 0;
+}
+.moodle-pager button {
+  min-width: 36px;
+  height: 32px;
+  border-radius: 0;
+  border: 1px solid #dcdcdc;
+  border-left: none;
+  background: #fff;
+  color: var(--moodle-green);
+  cursor: pointer;
+  padding: 0 8px;
+  font-size: 13px;
+  font-family: Arial, sans-serif;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  box-shadow: none;
+  font-weight: 400;
+}
+.moodle-pager button:first-child {
+  border-left: 1px solid #dcdcdc;
+  border-radius: 6px 0 0 6px;
+}
+.moodle-pager button:last-child {
+  border-radius: 0 6px 6px 0;
+}
+.moodle-pager button:hover:not(:disabled) {
+  background: #f7f7f7;
+  border-color: #cfcfcf;
+  color: var(--moodle-green);
+}
+.moodle-pager button.active {
+  background: var(--moodle-green);
+  color: #fff;
+  border-color: var(--moodle-green);
+  font-weight: 600;
+}
+.moodle-pager button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.atto-toolbar-row-secondary {
+  /* span the full toolbar width but align its left edge with the toolbar
+     inner padding so it starts where the 'Mostrar más' button starts */
+  grid-column: 1 / -1;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 10px !important;
+    padding: 8px 8px 0 0 !important; /* top right bottom left */
+    padding-top: 8px !important;
+    padding-bottom: 0 !important;
+  margin-left: 0 !important;
+  align-self: start !important;
+  background: #efefef !important; /* match the primary toolbar background */
+  border-bottom: none !important; /* avoid double separator */
+  box-sizing: border-box;
+}
+.atto-more-btn.expanded { transform: rotate(180deg); }
+
+/* Special highlight style for 'Mostrar más' button to differ from others */
+
+.atto-equation { background: #f3f6ff; padding: 2px 6px; border-radius: 3px; font-family: monospace; }
+.atto-table { border-collapse: collapse; }
+.atto-table td { border: 1px solid #ddd; padding: 6px; }
+
+/* FILTER AREA */
+.moodle-filter {
+  padding: 10px 14px; /* slightly reduced */
+  border-bottom:1px solid var(--moodle-border);
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.moodle-filter.closed .filter-body { display: none; }
+/* Flecha de despliegue con círculo gris al hover */
+.filter-header .moodle-chevron-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  background: none;
+  border: none;
+  color: #1d1d1d;
+  cursor: pointer;
+  padding: 0;
+  font-size: 16px;
+}
+.filter-header .moodle-chevron-toggle .moodle-chevron-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  transition: background 0.15s;
+  margin-right: 5px;
+}
+.filter-header .moodle-chevron-toggle:hover .moodle-chevron-circle {
+  background: #e9ecef !important;
+}
+.filter-header .moodle-chevron-toggle .filter-title {
+  color: #1d1d1d;
+  font-size: 16px;
+  font-weight: 400;
+}
+/* Ensure toggle SVG paths use a slightly thicker stroke for visibility */
+.filter-header .moodle-chevron-toggle .moodle-chevron-circle svg path,
+.mform-section-toggle .moodle-chevron-circle svg path,
+.mform-section-toggle .chevron svg path,
+.moodle-chevron-toggle .chevron svg path {
+  stroke-width: 1.5 !important;
+}
+.moodle-filter .filter-row {
+  display: flex;
+  gap: 8px !important; /* fixed gap to combine with label margin for total spacing */
+  align-items: center;
+  padding-left: 26px; /* indentación ajustada a 26px según petición */
+  margin-bottom: 12px; /* a bit more vertical space */
+}
+.moodle-filter label {
+  font-size: 14px;
+  color: #222;
+  width: 220px; /* ensure long label fits in one line */
+  min-width: 220px;
+  white-space: nowrap; /* keep label in a single line */
+  font-weight: 400;
+  margin-right: 100px !important; /* Final spacing: 100px + 8px gap */
+}
+.moodle-filter select {
+  height: 32px;
+  padding: 6px 12px 6px 10px; /* unified select padding for all filter selects */
+  border-radius: 6px;
+  border: 1px solid #8f959e;
+  font-size: 14px;
+  background: #fff;
+  font-family: Arial, sans-serif;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.moodle-filter input {
+  height: 32px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid #8f959e;
+  font-size: 14px;
+  background: #fff;
+  font-family: Arial, sans-serif;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+/* default widths for better spacing (can shrink on very small screens) */
+.moodle-filter .filter-row select { min-width: 150px; }
+.moodle-filter .filter-row input { min-width: 300px; }
+.moodle-search-input {
+  height: 34px !important; /* match select visual height */
+  padding: 6px 12px !important;
+  border-radius: 6px !important; /* rectangular like screenshot */
+  border: 1px solid #8f959e !important;
+  font-size: 14px;
+  font-family: Arial, sans-serif;
+  outline: none;
+  background: #fff;
+  box-sizing: border-box;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  /* Keep internal padding small; the input width is reduced so the button
+     sits at the very right end of the field. */
+  padding-right: 12px !important;
+}
+.moodle-search-input:focus {
+  border-color: var(--moodle-green) !important;
+  border-width: 2px !important;
+  box-shadow: 0 0 0 2px rgba(57, 169, 0, 0.18) !important;
+  /* Use border-box so border is included in the element width. Keep padding
+     consistent with the normal state so focus doesn't change layout. */
+  box-sizing: border-box !important;
+  padding: 5px 12px 5px 11px !important; /* preserve right padding for button */
+
+/* Make the ordering controls (selects and button) show the same disabled appearance
+   as the move controls so users see a consistent disabled state. */
+.categories-ordering .ordering-select:disabled,
+.categories-ordering .ordering-select[disabled] {
+  background: #efefef !important;
+  color: #8a8a8a !important;
+  border-color: #e6e6e6 !important;
+  cursor: not-allowed !important;
+  border-radius: 999px !important;
+  box-shadow: none !important;
+  padding-left: 12px !important;
+  padding-right: 12px !important;
+  opacity: 0.65 !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+}
+.categories-ordering .ordering-action-btn:disabled,
+.categories-ordering .ordering-action-btn[disabled] {
+  background: #efefef !important;
+  color: #8a8a8a !important;
+  border-color: #e6e6e6 !important;
+  cursor: not-allowed !important;
+  border-radius: 999px !important;
+  box-shadow: none !important;
+  opacity: 0.65 !important;
+}
+/* Extra: make the caret icon (if any) less visible when disabled */
+.categories-ordering .ordering-select:disabled::-ms-expand { display: none; }
+}
+
+/* Select with same visual style/effect as search input */
+.moodle-select {
+  height: 34px !important; /* control height */
+  padding: 6px 12px 6px 10px !important; /* unified padding for moodle selects */
+  border-radius: 10px !important; /* even less rounded */
+  border: 1px solid #8f959e !important;
+  font-size: 14px;
+  font-family: Arial, sans-serif;
+  outline: none;
+  background: #fff;
+  box-sizing: border-box;
+  min-width: 88px !important; /* restore previous compact baseline */
+  transition: border-color 0.2s, box-shadow 0.2s;
+  -webkit-appearance: menulist; /* keep native arrow style */
+  -moz-appearance: menulist;
+  appearance: menulist;
+}
+
+/* Stronger selector to ensure styles apply within filter block */
+.moodle-filter .moodle-select,
+.moodle-filter .moodle-search-input {
+  line-height: 1.2;
+}
+
+/* Tighter space between operator select and input to match screenshot */
+.moodle-filter .filter-row { gap: 4px !important; }
+
+/* Shorter input width to avoid overly long field */
+.moodle-filter .filter-row .moodle-search-input {
+  width: 200px !important; /* much shorter input width */
+  min-width: 200px !important;
+  max-width: 100%;
+}
+
+/* Search wrapper: position icon inside the input to the right */
+.search-wrapper {
+  position: relative;
+  display: inline-block;
+}
+.courses-manage-top .search-wrapper {
+  /* Ensure the wrapper matches the fixed width we give the top search input
+     so absolutely-positioned buttons are positioned relative to the visible field. */
+  /* Reduced width so the search bar is less long per design request (slightly increased to allow the magnifier inside) */
+  width: 240px !important;
+  /* Make the wrapper itself look like the input field: this lets the button sit
+     visually "inside" the field by removing the input's own border. */
+  background: #fff;
+  border: 1px solid #bdbdbd;
+  border-radius: 6px;
+  padding-right: 4px; /* small padding to keep button breathing room */
+  box-sizing: border-box;
+  position: relative; /* ensure absolutely-positioned buttons align */
+}
+
+/* When an element inside the wrapper has focus, highlight the wrapper */
+.courses-manage-top .search-wrapper:focus-within {
+  border-color: var(--moodle-green);
+  box-shadow: 0 0 0 3px rgba(57,169,0,0.08);
+}
+.courses-manage-top .search-wrapper .moodle-search-input {
+  /* Leave room for the search button so the input ends where the button sits.
+     The wrapper renders the visible border; remove the input border so the
+     button appears inside the same rounded box. */
+  width: calc(100% - 34px) !important;
+  max-width: calc(100% - 34px) !important;
+  border: none !important;
+  background: transparent !important;
+  padding-left: 10px !important;
+  padding-right: 6px !important;
+  height: 34px !important;
+  outline: none !important;
+}
+.moodle-search-btn {
+  position: absolute;
+  /* flush the button to the right edge of the wrapper so it appears at the
+     very end of the search bar */
+  right: 4px; /* small inset from the wrapper edge so the button looks inside */
+  top: 50%;
+  transform: translateY(-50%);
+  height: 30px;
+  width: 34px;
+  border-radius: 6px;
+  background: var(--moodle-green);
+  color: #fff;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  z-index: 12; /* ensure button is above the input to receive clicks */
+}
+.moodle-search-input {
+  padding-right: 12px !important; /* room for the search button + clear button inside the same area */
+}
+.moodle-search-btn svg { width: 14px; height: 14px; }
+
+/* Clear button shown inside the input area (right side). Keep it visually subtle and
+   inline with the search button. Positioned to the left of the green search button. */
+.moodle-search-clear {
+  position: absolute;
+  right: 44px; /* placed left of the green search button */
+  top: 50%;
+  transform: translateY(-50%);
+  height: 26px;
+  min-width: 26px;
+  padding: 0 6px;
+  border-radius: 6px;
+  background: rgba(0,0,0,0.04);
+  color: #333;
+  border: 1px solid rgba(0,0,0,0.06);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  z-index: 11;
+}
+.moodle-search-clear:hover { background: rgba(0,0,0,0.06); }
+
+/* Select styling: rounded green outline like the screenshot */
+.courses-top-select {
+  border-radius: 16px;
+  border: 2px solid var(--moodle-green);
+  padding: 6px 16px;
+  height: 36px;
+  background: #fff;
+  color: #333;
+}
+.courses-top-select:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(57, 169, 0, 0.12);
+}
+
+/* Make the operator select shorter in length */
+.moodle-filter .filter-row .moodle-select {
+  width: 116px !important; /* restore previous width */
+}
+.moodle-select:focus {
+  border-color: var(--moodle-green) !important;
+  border-width: 2px !important;
+  box-shadow: 0 0 0 2px rgba(57, 169, 0, 0.18) !important;
+}
+
+/* Custom lightweight wrapper to ensure a visible dropdown arrow while keeping native behavior
+   The pseudo-element draws a small triangle on the right; the select itself keeps appearance:none
+   so we can control padding and the visible placeholder color. */
+.select-wrapper {
+  position: relative;
+  display: inline-block;
+}
+.select-wrapper select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  padding-right: 34px; /* keep room for the arrow; visual padding for select is enforced in filter rules */
+}
+.select-wrapper::after {
+  content: '';
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid #111; /* dark arrow like screenshot (smaller) */
+  pointer-events: none;
+}
+
+/* Reduce arrow contrast in disabled/readonly states */
+.select-wrapper::after { z-index: 2; }
+.select-wrapper select { z-index: 1; }
+
+/* Force unified padding for filter selects (increase specificity to override
+   component-level rules and inline style tags). This targets common select
+   class combinations used in the filters including custom-select and country-select. */
+.moodle-filter.moodle-filter .filter-row select,
+.moodle-filter.moodle-filter .filter-row .moodle-select,
+.moodle-filter.moodle-filter .filter-row .select-wrapper.bulk-caret select,
+.moodle-filter.moodle-filter .filter-row .select-wrapper.bulk-caret .moodle-select,
+.moodle-filter.moodle-filter .filter-row select.custom-select,
+.moodle-filter.moodle-filter .filter-row .moodle-select.primer-acceso-day-select {
+  padding: 6px 12px 6px 10px !important;
+  box-sizing: border-box !important;
+  text-align: left !important;
+}
+
+/* Month select (enero-diciembre) in Primer acceso: fixed width requested */
+.moodle-filter.moodle-filter .filter-row .moodle-select.primer-acceso-select:not(.primer-acceso-day-select) {
+  width: 116.267px !important;
+  min-width: 116.267px !important;
+}
+
+/* Year select (e.g. 2025) in Primer acceso: fixed width requested */
+.moodle-filter.moodle-filter .filter-row .moodle-select.primer-acceso-year-select,
+.moodle-filter.moodle-filter .filter-row .select-wrapper.bulk-caret .moodle-select.primer-acceso-year-select {
+  width: 75.4166px !important;
+  min-width: 75.4166px !important;
+}
+.select-wrapper select:disabled + .select-wrapper::after {
+  border-top-color: #999;
+}
+
+/* Ensure the select keeps a white background and native border so the arrow sits visually inside */
+.select-wrapper select { background: #fff; }
+
+/* Align the actions (Add filter) with the select/input column */
+.moodle-filter .filter-actions {
+  display: flex;
+}
+.moodle-filter .actions-aligned {
+  margin-left: calc(36px + 220px + 100px + 8px); /* Final alignment with 100px label margin */
+  /* eliminado: volver a alineación original */
+}
+.btn-moodle {
+  background: var(--moodle-green);
+  color: #fff;
+  border: 1px solid var(--moodle-green);
+  padding: .5rem 1.1rem;
+  height: 37.6px;
+  border-radius: 12px;
+  font-size: .875em;
+  font-weight: 400;
+  cursor: pointer;
+}
+.btn-moodle:hover { background: #2f8a00; }
+
+
+
+/* TABLE */
+
+
+.table-moodle {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  font-family: "Arial", "Helvetica", sans-serif;
+  background: #fff;
+  box-shadow: none;
+  border-radius: 0;
+  border: none;
+  table-layout: auto;
+}
+.table-moodle thead {
+  background: #fff;
+}
+.table-moodle th, .table-moodle td {
+  padding: 6px 12px; /* vertical compacto */
+  text-align: left;
+  border-bottom: 1px solid #d6d6d6;
+  font-size: 13px;
+  line-height: 16px;
+  height: auto;
+  border-left: none;
+  border-right: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* Make body rows shorter without affecting the header */
+.table-moodle tbody td {
+  padding-top: 3px;
+  padding-bottom: 3px;
+  line-height: 14px;
+}
+.table-moodle th {
+  color: var(--moodle-green);
+  font-weight: 700;
+  font-size: 13px;
+  background: #fff;
+  border-bottom: 2px solid #e6e6e6;
+  letter-spacing: 0.02em;
+}
+.table-moodle thead tr:first-child th {
+  border-top: 2px solid #e6e6e6 !important;
+}
+.table-moodle th.table-icons {
+  color: #222 !important;
+}
+.table-moodle tbody tr {
+  transition: background 0.15s;
+}
+.table-moodle tbody tr:hover {
+  background: #e0e0e0 !important;
+}
+.table-icons {
+  text-align: center;
+  width: 110px;
+}
+
+/* icon column */
+.table-icons {
+  text-align: center;
+  width: 140px;
+  min-width: 140px;
+}
+
+/* Shift columns from 'Dirección de correo' to the end slightly to the right */
+/* Applies extra left padding to columns 2..n (keeps the first column unchanged) */
+.table-moodle thead th:nth-child(n+2),
+.table-moodle tbody td:nth-child(n+2) {
+  padding-left: var(--table-from-second-left-padding);
+}
+
+/* icon buttons */
+.icon-btn {
+  border: none;
+  background: transparent;
+  padding: 2px;
+  margin-left: 2px; /* reduced so icons sit closer together */
+  cursor: pointer;
+  color: var(--moodle-green);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+}
+.icon-btn svg { width: 12px; height: 12px; }
+.icon-btn.gray { color: #6b6b6b; }
+.icon-btn:hover { transform: translateY(-1px); }
+
+/* Specific styles for category row icons (eye, arrows, gear) to match the small UI shown */
+/* Category row icons: place icons into fixed slots so they align vertically across rows. */
+.category-row .row-right { display: flex; align-items: center; gap: 0.2px; }
+/* Icon slot for small action buttons (eye, arrows, etc.) */
+.category-row .row-right .icon-btn { width: 32px; height: 32px; padding: 4px; border-radius: 6px; background: transparent; color: var(--moodle-green); display: inline-flex; align-items: center; justify-content: center; }
+/* Slightly larger SVGs for better visibility */
+.category-row .row-right .icon-btn svg { width: 16px; height: 16px; }
+.category-row .icon-arrow { color: var(--moodle-green); opacity: 1; }
+.category-row .icon-grip { color: #9e9e9e; }
+.category-row .icon-badge { background: #fff; color: #333; border-radius: 10px; padding: 2px 6px; font-size: 12px; font-weight: 600; border: 1px solid #e6e6e6; }
+
+/* Hide move arrows on edges: first category row shouldn't show "Subir" (move up),
+   and last category row shouldn't show "Bajar" (move down). Use attribute selectors
+   to be explicit about the button meaning and :first-child/:last-child for position. */
+
+/* Keep the slot but hide the up-arrow in the first visible category row */
+.categories-list .courses-row:first-child .icon-arrow[title="Subir"],
+.categories-list .courses-row:first-child .icon-arrow[title='Subir'] {
+  visibility: hidden; /* preserves layout */
+  pointer-events: none;
+  opacity: 0.0;
+}
+
+/* Keep the slot but hide the down-arrow in the last visible category row */
+.categories-list .courses-row:last-child .icon-arrow[title="Bajar"],
+.categories-list .courses-row:last-child .icon-arrow[title='Bajar'] {
+  visibility: hidden;
+  pointer-events: none;
+  opacity: 0.0;
+}
+
+/* Hide move-up in the first course row and move-down in the last course row so
+   the buttons are not present (keeps layout stable by using visibility:hidden). */
+.courses-list .courses-row:first-child .icon-btn.icon-arrow[title="Subir"],
+.courses-list .courses-row:first-child .icon-btn.icon-arrow[title='Subir'] {
+  visibility: hidden;
+  pointer-events: none;
+  opacity: 0.0;
+}
+.courses-list .courses-row:last-child .icon-btn.icon-arrow[title="Bajar"],
+.courses-list .courses-row:last-child .icon-btn.icon-arrow[title='Bajar'] {
+  visibility: hidden;
+  pointer-events: none;
+  opacity: 0.0;
+}
+
+/* Also apply the same rule for search results list (when search results are shown) */
+.search-results-list .courses-row:first-child .icon-btn.icon-arrow[title="Subir"],
+.search-results-list .courses-row:first-child .icon-btn.icon-arrow[title='Subir'] {
+  visibility: hidden;
+  pointer-events: none;
+  opacity: 0.0;
+}
+.search-results-list .courses-row:last-child .icon-btn.icon-arrow[title="Bajar"],
+.search-results-list .courses-row:last-child .icon-btn.icon-arrow[title='Bajar'] {
+  visibility: hidden;
+  pointer-events: none;
+  opacity: 0.0;
+}
+
+/* Fallback: if a button is rendered with the disabled attribute, hide it too */
+.courses-list .icon-btn[disabled],
+.search-results-list .icon-btn[disabled] {
+  display: none !important;
+}
+
+
+/* Slightly lift icons on hover for affordance */
+.category-row .icon-btn:hover { transform: translateY(-2px); }
+
+/* Ensure drag handle in course rows also matches the same dimensions */
+.drag-handle { width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; color: var(--moodle-green); background: transparent; border: none; padding: 2px; border-radius: 6px; }
+.drag-handle svg { width: 12px; height: 12px; }
+/* Allow specific drag-handles to remain black (use class .custom-black) */
+.drag-handle.custom-black,
+.drag-handle.custom-black svg,
+.drag-handle.custom-black svg path,
+.drag-handle.custom-black svg circle,
+.drag-handle.custom-black svg rect {
+  color: #000 !important;
+  fill: #000 !important;
+  stroke: #000 !important;
+}
+
+/* Make the custom black drag-handle visibly larger so the shape is clear */
+.drag-handle.custom-black {
+  width: 28px !important;
+  height: 28px !important;
+}
+.drag-handle.custom-black svg {
+  width: 18px !important;
+  height: 18px !important;
+}
+
+/* Force icons inside the categories panel to be green and ensure svg uses currentColor */
+.categories-panel .icon-btn,
+.categories-panel .icon-btn svg,
+.categories-panel .icon-arrow,
+.categories-panel .icon-grip,
+.categories-panel .drag-handle {
+  color: var(--moodle-green) !important;
+}
+.categories-panel .icon-btn svg,
+.categories-panel .drag-handle svg {
+  width: 12px !important;
+  height: 12px !important;
+  fill: currentColor !important;
+  stroke: currentColor !important;
+}
+
+/* Ensure icons and drag-handles inside the courses panel use the Moodle Zajuna green
+   so action icons match the visual language of the app. Use !important to override
+   third-party icon defaults. */
+.courses-panel .icon-btn,
+.courses-panel .icon-btn svg,
+.courses-panel .icon-arrow,
+.courses-panel .drag-handle,
+.courses-list .icon-btn,
+.courses-list .icon-btn svg,
+.courses-list .icon-arrow,
+.courses-list .drag-handle,
+.right-panel .icon-btn,
+.right-panel .icon-btn svg,
+.right-panel .icon-arrow,
+.right-panel .drag-handle {
+  color: var(--moodle-green) !important;
+  fill: currentColor !important;
+  stroke: currentColor !important;
+}
+
+/* Extra-specific rules to override inline SVG/presentation attributes and
+   third-party icon styles that may set fills/paths directly. This targets
+   SVG elements and their children inside the courses/right panels so all
+   action icons (Editar, Copiar, Eliminar, Ocultar, Subir, Bajar) appear
+   in Zajuna green. */
+.courses-list .icon-btn,
+.courses-list .icon-btn svg,
+.courses-list .icon-btn svg *,
+.right-panel .icon-btn,
+.right-panel .icon-btn svg,
+.right-panel .icon-btn svg *,
+.courses-list .drag-handle,
+.courses-list .drag-handle svg,
+.courses-list .drag-handle svg *,
+.right-panel .drag-handle,
+.right-panel .drag-handle svg,
+.right-panel .drag-handle svg * {
+  color: var(--moodle-green) !important;
+  fill: var(--moodle-green) !important;
+  stroke: var(--moodle-green) !important;
+}
+
+/* Finally, target path/rect/circle elements just in case some icons use
+   those shapes with explicit attributes. */
+.courses-list svg path,
+.courses-list svg rect,
+.courses-list svg circle,
+.right-panel svg path,
+.right-panel svg rect,
+.right-panel svg circle {
+  fill: var(--moodle-green) !important;
+  stroke: var(--moodle-green) !important;
+}
+
+/* Additional safeguard: ensure any SVG elements inside category rows inherit the moodle green color.
+   This targets <svg>, <path>, <g> elements and applies fill/stroke/currentColor with !important to
+   override other styles coming from third-party icon libs or inline attributes. */
+.categories-panel svg,
+.categories-panel svg *,
+.categories-list svg,
+.categories-list svg * {
+  color: var(--moodle-green) !important;
+  fill: currentColor !important;
+  stroke: currentColor !important;
+  /* ensure SVG uses currentColor if an inline color is present */
+  vector-effect: non-scaling-stroke;
+}
+
+/* Also target the row-right group where icon buttons live to be extra specific */
+.category-row .row-right .icon-btn,
+.category-row .row-right .icon-grip,
+.category-row .row-right .icon-arrow,
+.category-row .row-right .drag-handle {
+  color: var(--moodle-green) !important;
+}
+
+/* Hide the "Subir" (move up) button for the first category row and
+   the "Bajar" (move down) button for the last category row. Use
+   visibility:hidden to keep the slot size so other icons stay aligned. */
+.categories-list .courses-row:first-child .icon-btn.icon-arrow[title="Subir"],
+.categories-list .courses-row:first-child .icon-btn.icon-arrow[title="Up"] {
+  visibility: hidden;
+  pointer-events: none;
+}
+.categories-list .courses-row:last-child .icon-btn.icon-arrow[title="Bajar"],
+.categories-list .courses-row:last-child .icon-btn.icon-arrow[title="Down"] {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Force edit buttons in category rows to have a fixed width so they align vertically */
+
+
+/* .icon-course styles removed (graduation cap icon removed from UI) */
+
+/* Ensure there is exactly 5px space from the Edit icon to the right edge of the white .categories-list container. */
+.categories-list { padding-right: 5px; }
+
+/* Unified fixed slots for action icons so columns line up across rows. */
+/* Use a fixed grid for action icons so each icon occupies its own column and rows
+   line up vertically like Moodle. Columns: eye / up / down / edit / cap */
+.categories-list .row-right {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: 32px 32px 32px 32px 48px; /* last column reserved for count */
+  column-gap: 6px;
+  align-items: center;
+  justify-content: end; /* keep actions to the right */
+}
+
+/* All action icons (eye, up, down, edit) use the same slot size so they align vertically. */
+.categories-list .row-right .icon-btn {
+  width: 28px;
+  height: 28px;
+  padding: 3px;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* .icon-course removed */
+
+/* Keep the first icon (Ver) at its slot, but pull the following icons closer to it.
+   This reduces space between Ver and Edit while keeping Ver visually fixed. */
+.categories-list .row-right .icon-btn:not(:first-child):not([title="Editar"]) {
+  margin-left: 0; /* removed negative shift to avoid overlapping the cap */
+}
+.categories-list .row-right .icon-btn:first-child { z-index: 4; }
+
+/* .icon-course removed */
+
+/* Slightly larger svg inside the 32px slot for readability */
+.categories-list .row-right .icon-btn svg { width: 16px; height: 16px; }
+
+/* Category count element (right-most column) */
+.categories-list .row-right .category-count {
+  text-align: right;
+  font-weight: 600;
+  color: #333;
+  font-size: 12px;
+  padding-right: 4px;
+}
+
+/* Hover/focus affordance: indicate these numbers represent courses */
+.categories-list .row-right .category-count:hover,
+.categories-list .row-right .category-count:focus {
+  cursor: pointer;
+  color: #0b5fff;
+  text-decoration: underline;
+  background: rgba(11,95,255,0.04);
+  border-radius: 3px;
+  outline: none;
+}
+
+/* .icon-course removed */
+
+/* Keep pagination also at bottom w/ spacing */
+
+
+.moodle-pager {
+  display: flex;
+  gap: 0;
+  justify-content: center;
+  align-items: center;
+  margin: 10px 0;
+}
+.moodle-pager button {
+  min-width: 36px;
+  height: 32px;
+  border-radius: 0;
+  border: 1px solid #dcdcdc;
+  border-left: none;
+  background: #fff;
+  color: var(--moodle-green);
+  cursor: pointer;
+  padding: 0 8px;
+  font-size: 13px;
+  font-family: Arial, sans-serif;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  box-shadow: none;
+  font-weight: 400;
+}
+.moodle-pager button:first-child {
+  border-left: 1px solid #dcdcdc;
+  border-radius: 6px 0 0 6px;
+}
+.moodle-pager button:last-child {
+  border-radius: 0 6px 6px 0;
+}
+.moodle-pager button:hover:not(:disabled) {
+  background: #f7f7f7;
+  border-color: #cfcfcf;
+  color: var(--moodle-green);
+}
+.moodle-pager button.active {
+  background: var(--moodle-green);
+  color: #fff;
+  border-color: var(--moodle-green);
+  font-weight: 600;
+}
+.moodle-pager button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.table-moodle td.user-name {
+  color: var(--moodle-green);
+  font-weight: 400;
+}
+
+/* User picture / initials styles */
+:root { --primary: var(--moodle-green); }
+.userpicture, .userinitials {
+  border: 2px solid var(--primary);
+  margin-right: 4px;
+}
+.userinitials {
+  background-color: #e9ecef;
+  vertical-align: middle;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: #343a40;
+  font-weight: 400;
+  margin-right: .25rem;
+}
+.userinitials.size-35 {
+  width: 35px;
+  height: 35px;
+  font-size: 13px;
+}
+
+/* helpers */
+* { scroll-behavior: smooth; }
+*, ::before, ::after { box-sizing: border-box; }
+
+
+
+/* Responsive */
+@media (max-width: 768px) {
+  .moodle-container {
+    width: 98%;
+  }
+  
+  .moodle-top-row {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  
+  .table-moodle {
+    font-size: 12px;
+  }
+  
+  .table-moodle thead {
+    background: #fff;
+  }
+  .table-moodle th {
+    color: var(--moodle-green);
+    font-weight: 700;
+    font-size: 13px;
+    background: #fff;
+    border-bottom: 2px solid var(--moodle-green);
+    letter-spacing: 0.02em;
+  }
+  .table-moodle tbody tr:nth-child(odd) {
+    background-color: #f5f7f6 !important;
+  }
+  .table-moodle tbody tr:nth-child(even) {
+    background-color: #fff !important;
+  }
+}
+
+/* ==========================
+   Moodle-like User Form
+   ========================== */
+.moodle-userform {
+  border: none !important;
+  border-radius: 0 !important;
+  overflow: visible;
+  background: #fff;
+  box-shadow: none !important;
+  outline: none !important;
+  /* Fixed gutter for field icons so controls align */
+  --field-icon-gutter: 44px;
+}
+.mform-user-title {
+  /* Bring edit-user title slightly higher to align with sidebar header */
+  padding: 8px 18px 8px 18px;
+  border-bottom: none;
+}
+.mform-user-title h2 {
+  margin: 0;
+  padding: 0;
+  font-size: 24px;
+  font-weight: 400;
+  color: #333;
+  line-height: 1.3;
+}
+.mform-topbar {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px 12px; /* reduced */
+  border-top: none;
+  border-bottom: none;
+}
+.mform-topbar-right { display: flex; justify-content: flex-end; }
+.mform-section-row { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+.mform-section-toggle {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  line-height: 1;
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 16px;
+  font-weight: 400;
+  color: #333;
+  font-family: inherit;
+}
+.mform-section-toggle .moodle-chevron-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  transition: background 0.15s;
+  margin-right: 5px;
+}
+.mform-section-toggle:hover .moodle-chevron-circle {
+  background: #f0f1f2;
+}
+.mform-section-toggle .chevron {
+  color: #222 !important;
+  width: 30px;
+  height: 30px;
+  display: block;
+  transition: none;
+}
+.mform-section-toggle:hover .chevron {
+  color: #222 !important; /* keep chevron color unchanged on hover; only circle background changes */
+}
+.mform-section-toggle .section-title {
+  display: inline-block;
+  line-height: 1;
+  vertical-align: middle;
+  font-size: 16px;
+  font-weight: 400;
+  color: #333;
+}
+.mform-topbar .link-btn { background: none; border: none; color: var(--moodle-green); cursor: pointer; font-size: 13px; }
+.mform-body { padding: 16px 18px; }
+.mform-row { display: flex; align-items: center; gap: var(--mform-row-gap); padding: 8px 0; }
+.mform-label { width: var(--mform-label-width); min-width: var(--mform-label-width); color: #222; display: inline-flex; align-items: center; gap: 8px; font-size: 14px; align-self: flex-start; padding-top: 6px; }
+.mform-field { flex: 1; position: relative; }
+.mform-input, .mform-select {
+  width: 420px;
+  max-width: 100%;
+  height: 34px;
+  padding: 6px 10px;
+  border: 1px solid #bdbdbd;
+  border-radius: 4px;
+  font-size: 14px;
+  box-sizing: border-box;
+  background-color: #fff;
+  transition: border-width 0.15s, padding 0.15s;
+}
+.mform-input:focus, .mform-select:focus {
+  background-color: #fff;
+  border: 3px solid var(--moodle-green) !important;
+  outline: none;
+  box-shadow: none;
+  padding: 4px 8px;
+}
+.field-with-icons input:focus,
+.field-with-icons select:focus {
+  background-color: #fff;
+  border: 3px solid var(--moodle-green) !important;
+  outline: none;
+  box-shadow: none;
+  padding: 4px 8px;
+}
+.mform-input.invalid {
+  border: 1px solid #bdbdbd;
+  box-shadow: none;
+}
+.mform-input:disabled, .mform-select:disabled {
+  background-color: #f5f5f5;
+  color: #666;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+/* Icons outside the input with minimal consistent margin */
+.field-with-icons { display: inline-flex; align-items: center; gap: 14px; }
+.field-with-icons .field-icons { display: inline-flex; align-items: center; gap: 6px; min-width: 28px; }
+/* Uniform icon size for field icons */
+.field-with-icons .field-icons svg { width: 14px; height: 14px; }
+/* Keep selects visually consistent */
+.field-with-icons .mform-select { appearance: none; -webkit-appearance: none; -moz-appearance: none; background-color: #fff; }
+.password-field { position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 0; align-self: flex-start; }
+.password-field .icon-btn.eye { border: none; background: #fff; color: #333; width: 36px; height: 34px; border: 1px solid #bdbdbd; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: border-color 0.15s; }
+.password-field .icon-btn.eye:hover:not(:disabled) { border-color: var(--moodle-green); }
+.password-field .icon-btn.eye:disabled { opacity: 0.5; cursor: not-allowed; }
+.password-input-row { display: flex; align-items: flex-start; gap: 8px; }
+.mform-check { margin-top: 12px !important; }
+.mform-field .mform-check { margin-top: 12px !important; }
+.checkbox { display: inline-flex; align-items: center; gap: 8px; color: #333; font-size: 14px; width: 100%; }
+/* Checkbox active/ focus styles */
+.mform-field input[type="checkbox"] { accent-color: #d32f2f; }
+.table-moodle input[type="checkbox"] {
+  /* Table checkboxes should use red when checked per design request */
+  accent-color: #d32f2f; /* material red 700 */
+}
+
+/* Ensure filter checkboxes (Primer acceso, etc.) also use the red accent color
+   so their checked state matches the active-filter visual language. */
+.moodle-filter input[type="checkbox"],
+.moodle-filter .filter-row input[type="checkbox"] {
+  accent-color: #d32f2f;
+}
+
+/* Focus ring for filter checkboxes should also match the red accent */
+.moodle-filter input[type="checkbox"]:focus-visible,
+.moodle-filter .filter-row input[type="checkbox"]:focus-visible {
+  outline: 2px solid rgba(211,47,47,0.18);
+  outline-offset: 1px;
+}
+
+/* Badge styles for status labels */
+.badge {
+  display: inline-block;
+  height: 16px;
+  line-height: 16px; /* vertically center single-line text */
+  padding: 0 8px; /* horizontal padding only to keep badge compact */
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 12px;
+}
+.badge-success {
+  color: #fff;
+  background-color: #357a32; /* custom active green as requested */
+}
+.badge-warning {
+  color: #1d2125;
+  background-color: #f0ad4e;
+}
+
+/* Status icons next to badges (info, cog, trash) */
+.status-icons { display: inline-flex; align-items: center; gap: 6px; }
+.status-icons .icon { width: 16px; height: 16px; font-size: 16px; line-height: 16px; display: inline-flex; align-items: center; justify-content: center; color: var(--moodle-green) !important; }
+.status-icons .icon.fa-trash { color: var(--moodle-green) !important; }
+.mform-field input[type="checkbox"]:focus-visible { outline: 2px solid #000; outline-offset: 1px; }
+/* Empty-state title for users list */
+.users-empty-state {
+  font-size: 1.875rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.75rem;
+  font-weight: 300;
+}
+.help-icon { margin-left: 6px; display: inline-flex; align-items: center; }
+.req-icon { margin-left: 6px; display: inline-flex; align-items: center; }
+.mform-hint { margin-top: 12px; color: #333; font-size: 12px; display: block; }
+.mform-hint.field-with-icons { display: inline-flex; align-items: flex-start; gap: 14px; }
+.mform-hint.field-with-icons .field-icons { min-width: 28px; }
+.mform-hint.field-with-icons span:last-child { flex: 1; line-height: 1.5; }
+.mform-row-sub { display: flex; align-items: center; gap: 14px; margin-top: 10px; }
+.mform-sub-label { width: 240px; min-width: 240px; color: #222; font-size: 14px; }
+.mform-sub-field { flex: 1; }
+.mform-actions {
+  /* Default actions layout: align start of buttons with the form fields column. */
+  display: flex;
+  justify-content: flex-start; /* keep buttons aligned to the left */
+  align-items: center;
+  gap: 10px; /* equal spacing between buttons */
+  padding-top: 10px;
+  border-top: none;
+  margin-top: 8px;
+  /* Align start of buttons with form inputs: shift the whole actions block right by the label width + gap */
+  margin-left: calc(var(--mform-label-width) + var(--mform-row-gap));
+  padding-left: 0;
+  width: auto;
+  align-self: flex-start; /* ensure actions don't get centered by parent flex containers */
+}
+
+/* If actions are placed inside the .mform-field (inline with the field), they should not be additionally offset. */
+.mform-field > .mform-actions {
+  margin-left: 0 !important;
+  align-self: flex-start !important;
+}
+
+/* For the user add/edit form, inputs include left-side helper icons; ensure
+   the actions inside the field align with the visual start of the input by
+   adding the same left gutter used by field icons. Scoped to the .user-form
+   class so other pages aren't affected. */
+.moodle-userform.user-form .mform-field > .mform-actions {
+  padding-left: var(--field-icon-gutter);
+}
+
+/* When a form of actions is rendered as a direct child of the overall form container
+   (for example in UserForm where actions are in a separate <form> at the end), make
+   that form a 2-col grid so .mform-actions can be placed in the second column. */
+
+
+/* Stronger page-scoped rule to ensure left alignment inside the Category page */
+.users-category-page .mform-actions {
+  justify-content: flex-start;
+  margin-left: calc(240px + 64px);
+}
+
+/* Stronger override: some component styles (MUI) may center actions; use higher
+   specificity and !important to ensure left alignment and correct offset. */
+.users-category-page .moodle-userform .mform-actions,
+.users-category-page .mform-body .mform-actions {
+  justify-content: flex-start !important;
+  margin-left: calc(240px + 64px) !important;
+  padding-left: 0 !important;
+}
+
+/* Strongest override: render actions as a block and align text left so inline
+   buttons are positioned at the left edge of the actions block regardless of
+   parent flex centering. */
+.users-category-page .mform-actions {
+  /* Use flex so buttons keep consistent gap while remaining left-aligned */
+  display: flex !important;
+  justify-content: flex-start !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding-left: 0 !important;
+  width: auto !important;
+}
+
+/* Ensure when actions live inside the .mform-field on the category page they are
+   not shifted by the page-wide margin rule above (this fixes buttons aligning
+   to icons instead of inputs). */
+.users-category-page .mform-field > .mform-actions {
+  margin-left: 0 !important;
+  padding-left: 0 !important;
+}
+
+/* Adjust vertical spacing on the category page so the gap between rows is
+   approximately 16px (8px top + 8px bottom). Keep actions in normal flow
+   (no negative margins) so spacing is consistent with other pages. */
+.users-category-page .mform-row + .mform-row .mform-actions {
+  margin-top: 0 !important;
+}
+.users-category-page .mform-row {
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
+}
+.users-category-page .mform-actions {
+  padding-top: 0 !important;
+}
+
+/* (removed per-row grid override to restore original label/layout behavior) */
+.btn-primary { background: var(--moodle-green); color: #fff; border: none; padding: 10px 16px; border-radius: 8px; cursor: pointer; font-weight: 600; }
+.btn-primary:hover { background: #2f8a00; }
+.btn-secondary { background: #6c757d; color: #fff; border: none; padding: 10px 16px; border-radius: 8px; cursor: pointer; font-weight: 600; }
+
+/* Page-scoped fine tuning: ensure icons in the CategoryCreatePage sit immediately
+   to the right of the label text (≈2px) and are vertically aligned with the input.
+   Scope to .users-category-page so other forms across the app aren't affected. */
+.users-category-page .mform-label {
+  gap: 2px !important; /* small gap so icon sits 2px from label text */
+  align-items: center !important; /* vertically center label contents */
+}
+.users-category-page .mform-label { position: relative !important; }
+.users-category-page .mform-row {
+  gap: 32px !important; /* bring inputs closer to labels for this page */
+}
+
+/* Make the primary action button on the Create Category page an exact size. */
+.users-category-page .mform-actions .btn-primary {
+  min-width: 128.45px !important;
+  min-height: 37.6833px !important;
+  box-sizing: border-box !important; /* include padding/border in the dimensions */
+  padding: .5rem 1.1rem !important; /* ensure consistent padding */
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  white-space: nowrap !important; /* prevent text wrapping onto multiple lines */
+  justify-content: center !important;
+}
+
+.users-category-page .mform-actions .btn-primary {
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+  font-size: .875em;
+  font-weight: 400;
+  border-radius: 12px !important;
+  padding: .5rem 1.1rem !important;
+}
+.users-category-page .req-icon,
+.users-category-page .help-icon {
+  margin-left: 2px !important; /* explicit 2px spacing requested */
+  display: inline-flex !important;
+  align-items: center !important;
+  vertical-align: middle !important;
+  /* move to the right edge of the label column so the icon appears next to the input */
+  position: absolute !important;
+  right: -8px !important; /* negative offset into the gap - tweak if you want it closer/farther */
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+}
+.users-category-page .req-icon svg,
+.users-category-page .help-icon svg {
+  width: 18px !important;
+  height: 18px !important;
+  display: block;
+}
+
+/* Labels and hints on the Create Category page should be 15px */
+.users-category-page .mform-label span,
+.users-category-page .mform-hint {
+  font-size: 15px !important;
+}
+
+/* Make the secondary action (Cancelar) match requested dimensions and visual rules */
+.users-category-page .mform-actions .btn-secondary {
+  min-width: 89.75px !important;
+  min-height: 37.6833px !important;
+  padding: .5rem 1.1rem !important;
+  box-sizing: border-box !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  white-space: nowrap !important;
+
+  /* colors and borders as requested */
+  color: #1d2125 !important;
+  background-color: #ced4da !important;
+  border-color: #ced4da !important;
+
+  /* typography and shape */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;
+  font-size: .875em !important;
+  font-weight: 400 !important;
+  border-radius: 12px !important;
+  cursor: pointer !important;
+}
+.users-category-page .mform-actions .btn-secondary:hover {
+  color: #1d2125 !important;
+  background-color: #b8c1ca !important;
+  border-color: #b1bbc4 !important;
+}
+
+/* If a field uses .field-with-icons stacked column (category select), ensure
+   the icon remains visually aligned with the label and the control. */
+.users-category-page .field-with-icons { align-items: flex-start !important; }
+
+/* Sidebar calendar card (visible on Enrolled Users view) */
+.sidebar-calendar-card { padding: 4px; /* halved from 8px to match NAV/ADMIN spacing */
+  --alternate-background: var(--moodle-header-blue);
+  margin-top: 0; /* ensure no extra gap above the calendar */
+  margin-bottom: 8px; /* match section gap */
+}
+.sidebar-calendar-card .card-body { background-color: #d6d6d6; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,.1),0 1px 3px rgba(0,0,0,.08); padding: 8px; border: 1px solid #bdbdbd; }
+.sidebar-calendar-card .card-title { color: var(--moodle-green); border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.08); background: #fff; padding: 3px 5px; font-weight:700; }
+.sidebar-calendar-card .maincalendar { margin-top: 4px; }
+.sidebar-calendar-card .calendarwrapper { background: transparent; }
+.sidebar-calendar-card .calendarmonth { width: 100%; border-collapse: collapse; }
+.sidebar-calendar-card .calendarmonth thead th { font-weight: 700; color: #333; padding: 3px 2px; font-size: 15px; }
+.sidebar-calendar-card .calendarmonth td { padding: 3px 2px; text-align: center; font-size: 13px; }
+.sidebar-calendar-card .calendarmonth td .day-number-circle { display: inline-block; width: 28px; height: 28px; border-radius: 50%; line-height: 28px; }
+.sidebar-calendar-card .calendarmonth td.today .day-number-circle { background: var(--moodle-green); color: #fff; }
+.sidebar-calendar-card .footer .bottom { margin-top: 4px; }
+.sidebar-calendar-card a { color: #1d5a1d; text-decoration: none; }
+.sidebar-calendar-card a:hover { text-decoration: underline; }
+
+/* Separator for the calendar footer */
+.sidebar-calendar-card .footer {
+  margin-top: 4px; /* space between white box and the divider (halved) */
+  padding-top: 4px; /* same space after the divider before the links (halved) */
+  border-top: 1px solid #bbbbbb; /* thin divider between white box and links (slightly stronger) */
+}
+/* Default footer links: use Moodle header blue; hover color will follow global a:hover rules */
+.sidebar-calendar-card .footer a {
+  color: var(--moodle-header-blue);
+  text-decoration: none;
+}
+
+/* Calendar nav inside white box */
+.sidebar-calendar-card .calendar-nav { border-bottom: none; padding-bottom: 4px; }
+.sidebar-calendar-card .calendar-nav .calendar-month-label { text-transform: lowercase; font-size: 14px; color: #111; }
+.sidebar-calendar-card .calendar-nav-btn { color: #111; display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; }
+.sidebar-calendar-card .calendar-nav-btn:hover { color: #053449; }
+.sidebar-calendar-card .calendar-nav svg { display: block; }
+.sidebar-calendar-card .calendarmonth thead th { color: #111; }
+
+/* Upcoming events small box reused under calendar */
+.upcoming-events-box {
+  background: transparent; /* outer container keeps section body grey */
+}
+.upcoming-events-box .upcoming-events-empty {
+  background: #fff;
+  border-radius: 8px;
+  /* Fixed pill size requested: 303x34 */
+  width: 303px !important;
+  height: 34px !important;
+  min-width: 303px !important;
+  min-height: 34px !important;
+  padding: 0 10px !important; /* horizontal breathing room inside fixed height */
+  color: #333;
+  margin-bottom: 8px;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.02), 0 2px 4px rgba(0,0,0,0.06);
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  box-sizing: border-box;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 15px; /* requested: No hay eventos próximos at 15px */
+  line-height: 1.1;
+}
+.upcoming-events-box .upcoming-events-footer a {
+  color: var(--moodle-header-blue);
+  text-decoration: none;
+  font-size: 13px; /* requested: Ir al calendario... at 13px */
+}
+.upcoming-events-box .upcoming-events-footer a:hover { text-decoration: underline; }
+
+/* Make the upcoming-section header pill match the small white box used for the "No hay eventos próximos" state
+   (same padding, border-radius, background and subtle inset border). We scope it under .zajuna-sidebar
+   and the .upcoming-section class added to the SidebarSection root so other section pills remain unchanged. */
+.zajuna-sidebar .sidebar-section.upcoming-section .sidebar-section-header {
+  background: #fff;
+  border-radius: 8px; /* match .upcoming-events-empty */
+  padding: 8px 10px; /* same internal padding */
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.02), 0 2px 4px rgba(0,0,0,0.06);
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0 0 14.4px 0 !important; /* reduced by 40% from 24px -> 14.4px */
+  font-size: 14px; /* match pill text sizing */
+}
+.zajuna-sidebar .sidebar-section.upcoming-section .sidebar-section-title {
+  font-size: 14px;
+  color: var(--moodle-green);
+}
+
+/* NAV / ADMIN pills should reuse the calendar pill visual language but without altering
+   the calendar component itself. We implement this only for sidebar sections. */
+.sidebar-section .sidebar-section-header {
+  color: var(--moodle-green);
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.08);
+  background: #fff;
+  /* Make the pill fill the available inner width of its body container so it
+     adapts automatically when the sidebar width changes. Use box-sizing so
+     padding is included in the computed width. */
+  width: 100%;
+  height: 35.19px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 10px; /* keep horizontal padding while fixed height centers text */
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1;
+  margin: 0 0 6px 0;
+  box-sizing: border-box;
+}
+
+/* Make the section body reuse the calendar card body styles (only for sidebar sections) */
+.sidebar-section .sidebar-section-body {
+  background-color: #d6d6d6;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0,0,0,.1), 0 1px 3px rgba(0,0,0,.08);
+  padding: 16px; /* make body padding consistent with design and JS inline values */
+  box-sizing: border-box;
+  /* subtle outer contour line to match Moodle visual language (slightly darker) */
+  border: 1px solid #bdbdbd;
+}
+
+/* restore glyph arrow appearance used previously */
+.sidebar-calendar-card .calendar-nav-arrow {
+  font-size: 14px;
+  line-height: 1;
+  color: inherit; /* inherits from .calendar-nav-btn so hover works */
+  display: inline-block;
+  width: 18px;
+  text-align: center;
+}
+.users-category-page .field-with-icons > .field-icons { margin-top: 0 !important; }
+
+/* Prevent the page-level title/icon cluster from inheriting the small label rules */
+.users-category-page .mform-user-title .req-icon,
+.users-category-page .mform-user-title .help-icon {
+  margin-left: 8px !important; /* keep title-level icons spaced normally */
+}
+
+/* Ensure the small legend/hint at the bottom ("Requerido") shows the icon
+   at the start of the text. This overrides the absolute positioning used for
+   label icons on this page but only for .mform-hint so other labels keep their
+   positioned icons next to inputs. */
+.users-category-page .mform-hint .req-icon {
+  position: static !important;
+  right: auto !important;
+  top: auto !important;
+  transform: none !important;
+  margin-left: 0 !important;
+  margin-right: 6px !important; /* small breathing room between icon and text */
+  display: inline-flex !important;
+  align-items: center !important;
+}
+
+/* Apply calendar container styles to general sidebar sections (NAVEGACIÓN, ADMINISTRACIÓN)
+   so they visually match the calendar card: gray body, white title pill, rounded corners, shadow. */
+.sidebar-section {
+  padding: 3px; /* halved outer padding to tighten vertical spacing between sections (was 6px) */
+}
+.sidebar-section .sidebar-section-header {
+  /* title pill that matches .card-title */
+  display: inline-flex;
+  background: #fff;
+  padding: 3px 5px; /* halved from 6px 10px */
+  border-radius: 12px;
+  font-weight: 700;
+  color: var(--moodle-green);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.08);
+  width: 100%;
+  box-sizing: border-box;
+  justify-content: flex-start;
+}
+.sidebar-section .sidebar-section-title {
+  font-size: 16px; /* increased per request for NAV/ADMIN */
+  line-height: 1;
+}
+.sidebar-section .sidebar-section-body {
+  background-color: #d6d6d6; /* same gray as calendar body */
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0,0,0,.1), 0 1px 3px rgba(0,0,0,.08);
+  padding: 8px; /* halved from 16px */
+  box-sizing: border-box;
+  /* subtle outer contour line to match Moodle visual language (slightly darker) */
+  border: 1px solid #bdbdbd;
+}
+.sidebar-section .sidebar-section-header {
+  display: inline-flex;
+  background: #fff;
+  padding: 3px 5px; /* halved from 6px 10px */
+  border-radius: 12px;
+  font-weight: 700;
+  color: var(--moodle-green);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.08);
+  width: 100%;
+  box-sizing: border-box;
+  justify-content: flex-start;
+  margin: 0 0 3px 0; /* halved from 6px */
+}
+.sidebar-section .sidebar-section-title {
+  font-size: 16px; /* increased per request for NAV/ADMIN */
+  line-height: 1;
+}
+.sidebar-section .sidebar-section-content {
+  background: transparent;
+  padding: 0;
+}
+.courses-manage-top {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 28px; /* slightly reduced space between title and filters */
+}
+
+.courses-page-root {
+  padding-top: 0;
+  /* make the courses page a vertical flex container so we can stretch the two-column
+     area to fill the viewport. We use a conservative header offset so panels don't
+     sit underneath global headers — adjust --courses-top-offset if your header
+     size differs. */
+  display: flex;
+  flex-direction: column;
+  /* Viewport minus top chrome (header, top bars). Tune the default 120px as needed. */
+  --courses-top-offset: 120px;
+  min-height: calc(100vh - var(--courses-top-offset));
+  /* Small extra bottom margin so the view doesn't sit flush to the browser edge */
+  margin-bottom: 20px;
+}
+
+.courses-page-left {
+  padding-left: 12px; /* left gutter for courses page only */
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+
+.panel {
+  border-radius: 8px; /* rounded outer container */
+  overflow: hidden; /* ensure title and body are visually one block */
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+  border: 1px solid #d0d0d0; /* neutral border */
+  background-clip: padding-box;
+  background: #f3f4f4; /* light gray background for the whole panel */
+  transition: box-shadow 0.18s, transform 0.12s;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.panel:hover {
+  box-shadow: 0 12px 34px rgba(0,0,0,0.12);
+  transform: translateY(-1px);
+}
+
+.panel-title {
+  font-size: 14px;
+  color: #333;
+  font-weight: 600;
+  padding: 10px 12px;
+  background: #f3f4f4; /* match panel background so title blends in */
+  margin: 0;
+  border-bottom: 1px solid rgba(0,0,0,0.06); /* subtle separator under title */
+}
+
+.panel-body {
+  background: #d9d9d9; /* light gray panel background seen in screenshot */
+  border-radius: 0; /* panel already has rounded corners */
+  padding: 0; /* inner panels provide spacing */
+  box-shadow: none;
+  flex: 1 1 auto;
+  overflow: auto;
+}
+
+/* Specific padding for the left categories panel inner body.
+   Centralized here to keep styling consistent and avoid inline styles in JSX. */
+.panel-body.categories-panel {
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-bottom: 18px;
+  box-sizing: border-box;
+  /* Anchor absolutely-positioned controls (create button) to this panel body */
+  position: relative;
+}
+
+/* Ensure text inside the panel (content rows, controls) is 12px and not bold */
+.panel-body,
+.panel-body * {
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  color: #333333;
+}
+
+/* Specifically ensure the courses panel (right column) uses 12px text as requested */
+.right-panel .panel-body,
+.right-panel .panel-body * {
+  font-size: 12px !important;
+  font-weight: 400 !important;
+}
+
+/* Ensure panel title in the right panel is also not bold */
+.right-panel .panel-title {
+  font-weight: 400 !important;
+}
+
+/* Stronger safeguard: ensure all text inside the right-panel is normal weight */
+.right-panel, .right-panel * {
+  font-weight: 400 !important;
+}
+
+/* Make left panel titles normal weight (e.g. the 'Categorías' heading)
+   Keep high specificity and use !important to override the global .panel-title
+   which intentionally uses a heavier weight in some contexts. */
+.left-panel .panel-title {
+  font-weight: 400 !important;
+}
+
+/* But keep the panel title styling separate (it may be larger/bolder) */
+.panel-title {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* Expanded course details - centered action buttons like the screenshot */
+.expanded-panel-inner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 18px 12px;
+}
+.expanded-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: nowrap; /* keep actions on a single first line */
+  justify-content: center;
+  align-items: center;
+  overflow-x: auto; /* allow horizontal scroll on very small widths */
+}
+.action-pill {
+  /* Match the appearance of the 'Crear nueva categoría' button */
+  background: #e3e3e3;
+  color: #333 !important;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-size: 13px !important;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: none;
+  white-space: nowrap;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.06s ease;
+}
+.action-pill:hover {
+  background: #bdbdbd; /* same hover tone as create-category-btn */
+  color: #333 !important;
+  transform: translateY(-1px);
+}
+.action-pill:active { transform: translateY(0.5px); }
+
+/* Expanded details list - left aligned vertical titles under the action buttons */
+.expanded-details {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 28px; /* two lines below the action row - increased spacing */
+  padding-left: 18px; /* small left padding so text aligns visually with panel content */
+  padding-bottom: 30px; /* ensure extra space below the expanded details area */
+  box-sizing: border-box;
+}
+
+/* Filters panel visual adjustments to match Moodle reference */
+.filters-panel {
+  background: #f6f8f9  !important; /* panel general: gris claro */
+  border: 1px solid #e6e6e6 !important;
+  border-radius: 8px !important;
+  padding: 10px !important;
+}
+.filters-panel .filter-controls {
+  background: #fff;
+  border-radius: 8px;
+  padding: 6px;
+  border: 1px solid #e9e9e9;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.filters-panel .select-wrapper { display: inline-block; }
+.filters-panel .moodle-select {
+  border-radius: 6px !important; /* ligeramente redondeado (antes pill) */
+  padding: 6px 12px !important;
+  /* Force a constant width by default so option content doesn't expand the control */
+  width: 120px !important;
+  max-width: 120px !important;
+  height: 34px !important;
+}
+.filters-panel .filter-close { position: relative; }
+.filters-panel .filter-close span { box-shadow: none !important; }
+.filters-panel [data-filterregion="actions"] {
+  background: transparent;
+  padding: 8px 6px 0 6px;
+}
+.filters-panel .btn-link.text-reset {
+  color: #333;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: transparent;
+}
+
+/* Make the 'Añadir condición' control look like a plain link and
+   only show underline on hover/focus. Target by data-filteraction to be
+   explicit and avoid affecting other .btn-link usages. */
+.filters-panel [data-filteraction="add"] {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  color: #333;
+  text-decoration: none; /* no underline by default on the container */
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+/* Underline only the textual label on hover/focus; keep the '+' un-underlined */
+.filters-panel [data-filteraction="add"]:hover .add-text,
+.filters-panel [data-filteraction="add"]:focus .add-text {
+  text-decoration: underline;
+}
+.filters-panel [data-filteraction="add"] .add-plus {
+  text-decoration: none; /* ensure plus never underlines */
+}
+.filters-panel [data-filteraction="add"]:disabled .add-text,
+.filters-panel [data-filteraction="add"][disabled] .add-text {
+  text-decoration: none;
+  color: #8a8a8a; /* subdued when disabled */
+}
+.filters-panel .btn-secondary {
+  background: #dcdcdc;
+  color: #333;
+  border: 1px solid #d6d6d6;
+  /* vertical padding 8px and horizontal padding to match 'Matricular usuarios' button */
+  padding: 8px 14px;
+  border-radius: 12px; /* rounded as requested */
+  display: inline-block;
+  width: auto; /* adapt to content */
+  box-sizing: border-box;
+}
+.filters-panel .btn-primary {
+  background: var(--moodle-green);
+  color: #fff;
+  border: 1px solid var(--moodle-green);
+  padding: 8px 14px;
+  border-radius: 12px; /* rounded as requested */
+  display: inline-block;
+  width: auto; /* adapt to content */
+  box-sizing: border-box;
+}
+/* Make filters-panel buttons use normal weight and match surrounding font-size
+   (so they visually match the "Matricular usuarios" button which uses inherited size). */
+.filters-panel .btn-secondary,
+.filters-panel .btn-primary {
+  font-weight: 400 !important;
+  /* Explicit size to match 'Matricular usuarios' visually (pixel-stable) */
+  font-size: 14px !important;
+}
+
+/* Force visual height to match the 'Matricular usuarios' button exactly.
+   Use a fixed height and center content so the buttons align pixel-perfect. */
+.filters-panel .btn-secondary,
+.filters-panel .btn-primary {
+  height: 40px !important;
+  min-height: 40px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+  padding-top: 0 !important; /* padding included via height */
+  padding-bottom: 0 !important;
+}
+
+/* Ensure consistent line-height so visual height matches other primary action buttons */
+.filters-panel .btn-secondary,
+.filters-panel .btn-primary {
+  line-height: 1 !important;
+  height: auto !important;
+}
+
+/* Enhanced filter-row styles to match the Moodle selector in the reference image */
+.filters-panel .filter-row {
+  display: flex;
+  align-items: center; /* keep controls vertically centered */
+  gap: 12px;
+  /* increase vertical padding so the row appears taller while keeping control heights fixed */
+  padding: 18px 12px;
+  border-radius: 6px;
+  background: #fff;
+  /* subtle separating line so the white row reads distinct from the grey panel */
+  border: 1px solid rgba(0,0,0,0.04) !important; /* very subtle, keeps the row looking white */
+  box-shadow: none !important; /* no inner shadow, keep the row visually flat */
+  background-clip: padding-box !important; /* avoid antialiasing artifacts at rounded corners */
+  isolation: isolate !important; /* prevent blending with ancestors */
+  min-height: 64px; /* taller rows while inputs/selects remain 36px */
+}
+.filters-panel .filter-label {
+  font-size: 16px; /* aumentado para dar más énfasis a la etiqueta 'Coincidir' */
+  color: #000; /* letra negra */
+  min-width: 80px;
+  margin-right: 6px;
+  font-weight: 400; /* normal, no negrita */
+}
+.filters-panel .filter-control { display: inline-flex; align-items: center; }
+
+/* Make the value column flexible and ensure inputs/selects used for the
+   filter value occupy the same width as the 'Escriba...' input. This will
+   keep visual parity between the free-text input and the selects that show
+   the placeholder 'Escriba o seleccione...'. */
+.filters-panel .filter-control.input {
+  flex: 1 1 auto; /* allow this column to take remaining horizontal space */
+  min-width: 0;   /* allow children to shrink if necessary */
+  /* Prevent controls from growing too wide on large screens */
+  max-width: 210px; /* reduced to half per UX request */
+}
+.filters-panel .filter-control.input .moodle-input,
+.filters-panel .filter-control.input .moodle-search-input,
+.filters-panel .filter-control.input .moodle-select {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box;
+}
+/* Ensure the small/large helpers don't force a different width inside the value column */
+.filters-panel .filter-control.input .moodle-select.small,
+.filters-panel .filter-control.input .moodle-select.large {
+  width: 100% !important;
+}
+
+/* Responsive: on small viewports allow the value column to stretch to fit
+   the container so controls remain usable (stacking behaviour handled by
+   existing responsive rules). */
+@media (max-width: 768px) {
+  .filters-panel .filter-control.input {
+    max-width: none;
+    flex: 1 1 100%;
+  }
+}
+
+.filters-panel .moodle-select.small { width: 120px !important; max-width: 120px !important; height: 36px !important; border-radius: 8px; padding: 6px 44px 6px 12px; box-sizing: border-box; }
+.filters-panel .moodle-select.large { width: 420px !important; max-width: 420px !important; height: 36px !important; border-radius: 8px; padding: 6px 44px 6px 12px; box-sizing: border-box; }
+.filters-panel .moodle-select { 
+  /* base appearance: keep existing size but with a subtle rounded corner */
+  border: 1px solid var(--moodle-border,#cfd8dc) !important; /* neutral thin border */
+  background: #fff !important;
+  box-shadow: none !important;
+  font-size: 14px;
+  background-clip: padding-box !important;
+  border-radius: 8px !important; /* forma ligeramente redondeada */
+}
+
+/* Make the shape of filters-panel selects match the categories select visual style
+   without changing their size: rounded pill corners and a green focus/active state. */
+.filters-panel .moodle-select {
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.filters-panel .moodle-select:focus,
+.filters-panel .moodle-select:active {
+  outline: none !important;
+  /* Visual match: keep the control size stable but show a green border & halo similar to categories */
+  border-color: var(--moodle-green) !important;
+  /* outer halo to match the screenshot (subtle, non-shifting) */
+  box-shadow: none !important;
+}
+
+/* For keyboard/hover affordance keep a visible green ring on focus-within of the select wrapper */
+.filters-panel .select-wrapper:focus-within {
+  box-shadow: none !important;
+  border-radius: 16px;
+}
+
+/* select wrap arrow (safe cross-browser) */
+.filters-panel .select-wrap { position: relative; display: inline-block; }
+.filters-panel .select-wrap::after {
+  /* Use the same double-caret glyph as the enrolled-users bulk-action select
+     so the filter selectors visually match. Rendered via an inline SVG for
+     precise sizing and consistent color across browsers. */
+  content: '';
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 18px;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 16'%3e%3cpath fill='%23343a40' d='M7 3L3 7h8L7 3z'/%3e%3cpath fill='%23343a40' d='M7 13l4-4H3l4 4z'/%3e%3c/svg%3e");
+  /* Ensure any previous border-based triangle is removed so only the SVG is visible */
+  border: none !important;
+  border-left: none !important;
+  border-right: none !important;
+  border-top: none !important;
+  background-size: 16px 18px;
+  background-repeat: no-repeat;
+  z-index: 2;
+}
+
+.filters-panel .moodle-input { height: 36px !important; border: 1px solid var(--moodle-border,#cfd8dc); padding: 8px 12px; border-radius: 6px; font-size: 14px; box-sizing: border-box; }
+
+/* Inputs inside the filters panel: text and caret should be green on focus
+   so typed text matches the green intensity requested by the design. */
+.filters-panel input:focus,
+.filters-panel textarea:focus,
+.filters-panel .moodle-input:focus,
+.filters-panel .moodle-search-input:focus,
+.filters-panel .moodle-select:focus {
+  /* Match the active/green outline used in the "Crear nueva categoría" view.
+     Keep the typed text/caret dark and only change the outer border/halo. */
+  color: #333333 !important;
+  caret-color: #333333 !important;
+  -webkit-text-fill-color: #333333 !important;
+  outline: none !important;
+  /* Slightly stronger border + outer halo to visually match the category inputs */
+  border: 2px solid var(--moodle-green) !important;
+  box-shadow: none !important;
+}
+
+/* Keep the placeholder color neutral when the input is focused (so "Escriba..."
+   remains gray while typed text becomes green). Browsers show the placeholder
+   even on focus when the field is empty, so we must explicitly override it. */
+.filters-panel input:focus::placeholder,
+.filters-panel textarea:focus::placeholder,
+.filters-panel .moodle-input:focus::placeholder,
+.filters-panel .moodle-search-input:focus::placeholder {
+  color: rgba(0,0,0,0.45) !important; /* subtle gray placeholder on focus */
+  opacity: 1 !important; /* ensure visibility in all browsers */
+}
+
+/* Vendor fallbacks for older browsers */
+.filters-panel input:focus::-webkit-input-placeholder,
+.filters-panel textarea:focus::-webkit-input-placeholder,
+.filters-panel .moodle-input:focus::-webkit-input-placeholder,
+.filters-panel .moodle-search-input:focus::-webkit-input-placeholder {
+  color: rgba(0,0,0,0.45) !important;
+}
+.filters-panel input:focus::-moz-placeholder,
+.filters-panel textarea:focus::-moz-placeholder,
+.filters-panel .moodle-input:focus::-moz-placeholder,
+.filters-panel .moodle-search-input:focus::-moz-placeholder {
+  color: rgba(0,0,0,0.45) !important;
+}
+.filters-panel input:focus:-ms-input-placeholder,
+.filters-panel textarea:focus:-ms-input-placeholder,
+.filters-panel .moodle-input:focus:-ms-input-placeholder,
+.filters-panel .moodle-search-input:focus:-ms-input-placeholder {
+  color: rgba(0,0,0,0.45) !important;
+}
+
+.filters-panel .chips { display:flex; gap:8px; align-items:center; margin-left: 8px; }
+.filters-panel .chip { display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:8px; background: #fff; border:2px solid #5bb84a; color: #0c3b0b; font-size:13px; }
+.filters-panel .chip-close { background: transparent; border: none; color: #0c3b0b; font-weight:700; cursor:pointer; padding: 0 4px; }
+
+.filters-panel .filters-remove { margin-left: auto; width: 28px; height: 28px; border-radius: 50%; background: #111; color: #fff; border: none; display:inline-flex; align-items:center; justify-content:center; cursor: pointer; }
+
+/* action buttons spacing */
+.filters-panel [data-filterregion="actions"] { margin-top: 12px; }
+
+/* Combobox styles for filters-panel: input + dropdown suggestions */
+.filters-panel .combobox { width: 100%; }
+.filters-panel .combobox-input { width: 100%; height: 36px; padding: 8px 12px; border: 1px solid var(--moodle-border,#cfd8dc); border-radius: 6px; font-size: 14px; box-sizing: border-box; background: #fff; }
+.filters-panel .combobox-input:focus { border: 2px solid var(--moodle-green) !important; box-shadow: none !important; outline: none; }
+.filters-panel .combobox-list { position: absolute; left: 0; right: 0; background: #fff; border: 1px solid #e6e6e6; border-radius: 6px; margin-top: 6px; max-height: 220px; overflow: auto; z-index: 240; box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
+.filters-panel .combobox-item { padding: 8px 12px; cursor: pointer; }
+.filters-panel .combobox-item:hover, .filters-panel .combobox-item.highlight { background: #f5f7f6; }
+.filters-panel .combobox-noresults { padding: 8px 12px; color: #666; }
+
+/* Show a small dropdown arrow on combobox inputs to indicate there are options */
+.filters-panel .combobox { position: relative; }
+.filters-panel .combobox::after {
+  /* Use the enrolled-users double-caret glyph so comboboxes match selects.
+     Render via inline SVG for consistent sizing and color. */
+  content: '';
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 18px;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 16'%3e%3cpath fill='%23343a40' d='M7 3L3 7h8L7 3z'/%3e%3cpath fill='%23343a40' d='M7 13l4-4H3l4 4z'/%3e%3c/svg%3e");
+  /* Remove any border-based triangle left from global rules and keep only the SVG */
+  border: none !important;
+  border-left: none !important;
+  border-right: none !important;
+  border-top: none !important;
+  background-size: 16px 18px;
+  background-repeat: no-repeat;
+  opacity: 0.95;
+  z-index: 2;
+}
+
+/* For the specific value combobox inside a filter row (the "Escriba o seleccione..."
+   input) we want the single down-triangle like before. This selector is more
+   specific and will override the double-caret used elsewhere in the filters
+   panel. */
+.filters-panel .filter-control.input .combobox::after {
+  /* remove SVG background and render a single border-based triangle */
+  background-image: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  border-left: 6px solid transparent !important;
+  border-right: 6px solid transparent !important;
+  border-top: 6px solid #333 !important;
+  right: 12px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  pointer-events: none;
+  opacity: 0.95;
+  z-index: 2;
+}
+/* Ensure the input has extra right padding so text doesn't overlap the double-caret */
+.filters-panel .combobox-input { padding-right: 44px; }
+
+/* Tag-input variant: do not show the combobox arrow. Remove the large right padding
+  that was used for absolutely positioned chips — chips are now rendered outside
+  the input, so keep a normal padding so placeholder and typed text are visible. */
+.filters-panel .combobox.tag-input::after { display: none; }
+.filters-panel .combobox.tag-input .combobox-input { padding-right: 12px; }
+
+/* Tag list for tag-input: position to the right of the value input and do not
+   affect the input width. On small screens fall back to a stacked layout. */
+.filters-panel .combobox.tag-input .tag-list {
+  position: absolute;
+  left: calc(100% + 8px);
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: nowrap; /* keep tags in a single line */
+  overflow-x: auto; /* allow horizontal scroll when there are many tags */
+  -webkit-overflow-scrolling: touch;
+  z-index: 10;
+}
+
+/* Initial-letter filters (Nombre / Apellido(s)) styles to match Moodle Zajuna */
+.initial-letter {
+  padding: 6px 8px 12px 8px;
+}
+
+/* Reset table preferences link/button above the initials control */
+.initial-letter .reset-table-prefs {
+  background: none;
+  border: none;
+  color: var(--moodle-green);
+  font-weight: 400; /* not bold */
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  font-size: 15px; /* slightly larger */
+  display: inline-block;
+  text-align: right;
+}
+.initial-letter .reset-table-prefs:hover {
+  text-decoration: underline;
+}
+
+/* Wrapper to align the reset control to the right of the initials container */
+.initial-letter .reset-table-prefs-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin: 0 0 24px 0 !important; /* increased gap (triple) between header and upcoming-events box) */
+}
+.sidebar-section {
+  padding: 6px; /* reduced outer padding to tighten vertical spacing between sections */
+}
+.initial-label {
+  min-width: 80px;
+  /* Make the labels slightly larger and use normal weight as requested */
+  font-weight: 400 !important;
+  color: #222;
+  font-size: 15px !important;
+}
+.initial-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0; /* collapse gap so boxes touch */
+  flex-wrap: nowrap; /* keep on single line */
+}
+
+/* Ensure the label and the segmented control sit on the same line */
+.initial-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+.initial-btn {
+  height: 28px;
+  min-width: 28px;
+  padding: 6px 8px;
+  border-radius: 4px;
+  border: 1px solid #e6efdc;
+  background: #fff;
+  color: var(--moodle-green);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  line-height: 1;
+}
+.initial-btn.todos {
+  background: #fff; /* default: white so "Todos" appears unselected when a letter is chosen */
+  color: var(--moodle-green);
+  border-color: #e6efdc;
+  padding: 6px 12px;
+  border-radius: 5px 0 0 5px; /* rounded on the left edge only */
+  font-weight: 600;
+}
+.initial-btn.todos.active {
+  background: var(--moodle-green);
+  color: #fff;
+  border-color: var(--moodle-green);
+}
+.initial-btn.active {
+  background: var(--moodle-green);
+  color: #fff;
+  border-color: var(--moodle-green);
+}
+.initial-btn.letter {
+  background: #fff;
+}
+
+/* Make buttons look flush: remove extra default margins from buttons globally in this block */
+.initial-buttons button { margin: 0; }
+
+
+@media (max-width: 768px) {
+  .filters-panel .combobox.tag-input .tag-list {
+    position: static;
+    left: auto;
+    top: auto;
+    transform: none;
+    margin-top: 8px;
+  }
+}
+
+/* Same tag-list behavior for multi combobox so chips in other rows share
+   the same placement and look. */
+.filters-panel .combobox.multi .tag-list {
+  position: absolute;
+  left: calc(100% + 8px);
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: nowrap; /* keep tags in a single line */
+  overflow-x: auto; /* allow horizontal scroll when there are many tags */
+  -webkit-overflow-scrolling: touch;
+  z-index: 10;
+}
+
+@media (max-width: 768px) {
+  .filters-panel .combobox.multi .tag-list {
+    position: static;
+    left: auto;
+    top: auto;
+    transform: none;
+    margin-top: 8px;
+  }
+}
+
+/* Tag-specific chip styles: slightly darker grey background so tags stand out
+   from the white input row while keeping the green outline and black text. */
+.filters-panel .tag-chip {
+  background: #e0e0e0;
+  border: 2px solid var(--moodle-green);
+  color: #000;
+  font-weight: 600;
+}
+
+/* Connector between filter rows (logical operator) */
+.filters-panel .filters-connector {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+}
+.filters-panel .filters-connector .connector-letter {
+  font-weight: 600;
+  color: #333;
+  font-size: 14px;
+}
+
+/* If the combobox is multi and wraps chips, keep the arrow visually aligned to the right
+   by applying the same pseudo-element on the wrapper; already targeted by .combobox::after */
+
+
+
+/* Each row contains the title and the corresponding value on the same line */
+.detail-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.detail-row .detail-title {
+  min-width: 220px; /* fixed column width for titles */
+  font-weight: 700 !important;
+  font-size: 13px !important;
+  color: #333;
+}
+.detail-row .detail-value {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* keep values and inline controls left-aligned instead of stretched/centered */
+  gap: 6px;
+  font-weight: 400;
+  font-size: 13px;
+  color: #333;
+}
+
+/* Category link inside the expanded course details should appear as simple green text
+   (no button chrome). Override the panel-wide color rule which uses !important. */
+.detail-category-link {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  color: var(--moodle-green) !important;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-block; /* prevent the button from stretching to full width inside flex column */
+  align-self: flex-start; /* explicitly place the link at the start of the value column */
+}
+.detail-category-link:hover,
+.detail-category-link:focus {
+  text-decoration: underline;
+  outline: none;
+}
+
+.initial-btn {
+  height: 28px;
+  min-width: 28px;
+  padding: 6px 8px;
+  border-radius: 0; /* square so buttons sit flush */
+  border: 1px solid #e6efdc;
+  background: #fff;
+  color: var(--moodle-green);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  line-height: 1;
+  box-shadow: none;
+}
+.initial-btn.todos {
+  background: #fff;
+  color: var(--moodle-green);
+  border-color: #e6efdc;
+  padding: 6px 12px;
+  border-radius: 5px 0 0 5px; /* left corners rounded only */
+  font-weight: 600;
+}
+.initial-btn.todos.active {
+  background: var(--moodle-green);
+  color: #fff;
+  border-color: var(--moodle-green);
+}
+.initial-btn.active {
+  background: var(--moodle-green);
+  color: #fff;
+  border-color: var(--moodle-green);
+}
+.initial-btn.letter {
+  background: #fff;
+}
+.initial-buttons button { margin: 0; }
+
+/* Collapse borders so adjacent buttons appear as a single segmented control */
+.initial-btn + .initial-btn {
+  margin-left: -1px; /* overlap 1px to avoid double borders */
+}
+
+/* Round the rightmost button to match pill look */
+.initial-buttons .initial-btn:last-child {
+  border-radius: 0 5px 5px 0; /* rounded on the right edge only */
+}
+/* outer panel rounding/positioning handled by their specific selectors */
+
+/* Ensure active state always wins over the default `.letter` background
+   by using a more specific selector and placing it after the basic rules. */
+.initial-buttons .initial-btn.active,
+.initial-buttons .initial-btn.letter.active,
+.initial-buttons .initial-btn.todos.active {
+  background: var(--moodle-green);
+  color: #fff;
+  border-color: var(--moodle-green);
+}
+
+.categories-list {
+  background: #fff; /* white inner container */
+  border-radius: 6px;
+  /* keep top/left/bottom padding but ensure exactly 5px space on the right so edit icons line up */
+  padding: 12px 10px 12px 12px;
+  max-width: 100%; /* allow the white box to occupy full available width */
+  margin: 0; /* align left so the box spans available space */
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.02) inset;
+}
+
+/* Make courses panel and list mirror categories styles */
+.courses-panel {
+  /* Mirror categories panel appearance but use a single authoritative rule
+     so we don't get conflicting duplicate rules elsewhere in the file. */
+  padding: 56px 12px 18px 12px; /* top padding set to align with .categories-panel */
+  background: #d9d9d9;
+  border-radius: 0;
+  position: relative;
+}
+
+/* Controls that sit above the white .courses-list box without shifting layout */
+.courses-panel .create-controls {
+  position: absolute;
+  top: 12px;
+  left: 0; /* align to panel edges and center via flex */
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* center only within the panel width */
+  gap: 6px; /* tighter gap so controls are contiguous */
+  flex-wrap: nowrap; /* keep controls on a single line */
+  white-space: nowrap; /* prevent inline wrapping */
+  z-index: 60;
+  pointer-events: auto;
+}
+.courses-panel .create-controls > * {
+  /* Prevent children from growing or using auto margins that push siblings apart */
+  flex: 0 0 auto !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+.courses-panel .create-controls .create-course-btn,
+.courses-panel .create-controls .create-category-btn {
+  display: inline-block;
+  background: #e3e3e3;
+  color: #333;
+  border-radius: 8px;
+  padding: 8px 18px;
+  border: none;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.06s ease;
+}
+.courses-panel .create-controls .create-course-btn:hover,
+.courses-panel .create-controls .create-category-btn:hover {
+  background: #bdbdbd;
+  transform: translateY(-1px);
+}
+
+/* Make the order toggles plain green text (not pills) and inline next to the create button */
+.courses-panel .orders-toggle {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0 4px;
+  color: var(--moodle-green);
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+}
+.courses-panel .orders-toggle:hover { text-decoration: underline; }
+.courses-panel .orders-toggle .caret { margin-left: 6px; color: var(--moodle-green); font-size: 12px; }
+
+/* Green text toggles with dropdown menus */
+.courses-panel .courses-order { position: relative; display: inline-flex; align-items: center; flex: 0 0 auto; }
+.courses-panel .create-controls .courses-order:first-of-type { margin-left: 6px; }
+.courses-panel .orders-toggle {
+  background: none;
+  border: none;
+  color: var(--moodle-green);
+  font-weight: 600;
+  cursor: pointer;
+  padding: 6px 8px;
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+}
+.courses-panel .orders-toggle .caret-icon {
+  display: inline-block;
+  width: 8px; /* smaller width */
+  height: 6px; /* smaller height */
+  margin-left: 4px; /* slightly tighter spacing */
+  vertical-align: -0.06em; /* fine-tune vertical centering */
+  color: var(--moodle-green); /* SVG uses currentColor for stroke */
+}
+.courses-panel .orders-toggle .caret-icon path {
+  stroke: currentColor; /* ensure stroke uses the moodle green variable */
+  fill: none !important; /* override global svg fill rules so the shape is not painted */
+  stroke-width: 1.1; /* thinner stroke for smaller caret */
+  vector-effect: non-scaling-stroke;
+}
+.courses-panel .courses-order-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 6px;
+  background: #fff;
+  border: 1px solid #e6e6e6;
+  border-radius: 6px;
+  padding: 6px 0;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  min-width: 160px;
+  max-height: 360px; /* keep long lists usable */
+  overflow-y: auto;
+  z-index: 120;
+}
+.courses-panel .courses-order.open .courses-order-menu { display: block; }
+.courses-panel .order-item {
+  background: none;
+  border: none;
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+.courses-panel .order-item:hover { background: #f5f5f5; }
+
+/* Give the courses-list a top margin so it doesn't overlap the absolute controls */
+.courses-list { margin-top: 36px; }
+
+.courses-list {
+  background: #fff;
+  border-radius: 6px;
+  padding: 12px 12px; /* slightly larger padding so content breathes when full-width */
+  max-width: 100%; /* allow courses list to use full column width */
+  margin: 0; /* no centering, span the available space */
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.02) inset;
+}
+
+/* Inline pager centered between the create-controls and the white courses-list */
+.courses-panel .inline-pager {
+  display: flex;
+  justify-content: center;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+.courses-panel .inline-pager .moodle-pager { margin: 0; }
+
+/* Move controls below the courses list: left title, centered select and move button */
+.courses-move-area {
+  display: block;
+  margin-top: 12px;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden; /* prevent internal grid from causing panel horizontal scroll */
+}
+.move-top {
+  display: grid;
+  /* use symmetric layout so center column auto will be centered in the panel
+     left and right take remaining space; this keeps controls centered visually */
+  grid-template-columns: 1fr auto 1fr;
+  grid-template-rows: auto; /* single row layout by default */
+  align-items: center;
+  width: 100%;
+  gap: 28px; /* increase space between title and controls */
+}
+.move-first {
+  grid-column: 1;
+  grid-row: 1;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  color: #000 !important; /* user asked the title be black and bold */
+  line-height: 1.05 !important;
+  justify-self: start;
+  white-space: normal; /* allow wrapping so it fits panel width without causing scroll */
+  word-break: break-word;
+  margin-right: 8px; /* small extra breathing room before the filter */
+}
+.move-spacer {
+  /* keep an optional spacer if markup includes it */
+  justify-self: end;
+}
+.move-rest {
+  grid-column: 1; /* keep the stacked words inside the left column */
+  grid-row: 2; /* place them on the second row under the first line */
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 6px;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  color: #000 !important; /* ensure black color */
+  align-items: flex-start; /* ensure the stacked words start at the left edge */
+  width: 100%;
+}
+
+.move-rest > div {
+  width: 100%;
+  text-align: left; /* each line aligned left under the left column */
+}
+.courses-move-area .move-controls {
+  grid-column: 2; /* center column */
+  grid-row: 1;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  box-sizing: border-box;
+  justify-self: center; /* center the whole controls group inside the grid cell */
+  width: auto; /* let content determine width while respecting max-width */
+  max-width: 520px; /* reduce max width so controls don't overflow small panels */
+}
+.courses-move-area .move-controls .move-select {
+  margin: 0 auto; /* ensure the select is centered inside the center column */
+}
+.courses-move-area .move-btn {
+  grid-column: 3; /* keep the button in the small right column */
+  grid-row: 1;
+}
+
+/* Make the select shrink and be responsive inside the center column */
+.move-select {
+  width: 280px !important; /* slightly narrower so it fits better in small panels */
+  max-width: 100% !important;
+  min-width: 120px;
+  display: block;
+  margin: 0 auto; /* ensure it's centered inside move-controls */
+}
+
+/* Responsive: on narrow screens stack title and controls vertically to avoid scroll */
+@media (max-width: 760px) {
+  .move-top {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .move-first { text-align: left; }
+  .courses-move-area .move-controls { justify-content: center; max-width: 100%; }
+  .courses-move-area .move-btn { justify-self: end; }
+  .courses-move-area .move-controls { margin-top: 8px; }
+}
+
+/* Stronger specificity to override the global .panel-body * rules that force normal weight/size */
+.right-panel .panel-body .courses-move-area .move-first,
+.panel-body .courses-move-area .move-first {
+  color: #000 !important;
+  font-weight: 700 !important;
+  font-size: 14px !important;
+}
+.right-panel .panel-body .courses-move-area .move-rest,
+.panel-body .courses-move-area .move-rest {
+  color: #000 !important;
+  font-weight: 700 !important;
+  font-size: 16px !important;
+}
+.right-panel .panel-body .courses-move-area .move-rest > div,
+.panel-body .courses-move-area .move-rest > div {
+  color: #000 !important;
+  font-weight: 700 !important;
+}
+
+/* On narrow screens, stack title and controls vertically to avoid overlap */
+@media (max-width: 760px) {
+  .courses-move-area { display: block; }
+  .move-top { display: flex; flex-direction: row; gap: 8px; align-items: center; }
+  .move-first { flex: 0 0 auto; }
+  .courses-move-area .move-controls { position: static; transform: none; max-width: 100%; justify-content: center; }
+  .move-rest { margin-top: 8px; }
+}
+.move-select {
+  width: 280px !important;
+  max-width: 60%;
+  height: 34px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #bdbdbd;
+  background: #fff;
+  font-size: 13px;
+}
+.move-btn {
+  margin-left: 6px;
+  background: #e3e3e3;
+  color: #333;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+}
+.move-btn:hover { background: #d0d0d0; }
+
+/* Disabled appearance for the move controls: light-gray rounded "pill" background
+   shown when no courses are selected. Use high contrast subdued text and
+   a pill-shaped radius to match the requested 'dondo gris claro' look. */
+.move-select:disabled,
+.move-btn:disabled {
+  background: #efefef !important; /* light gray */
+  color: #8a8a8a !important; /* subdued text */
+  border-color: #e6e6e6 !important;
+  cursor: not-allowed !important;
+  border-radius: 999px !important; /* pill / round effect */
+  box-shadow: none !important;
+}
+
+.move-select:disabled {
+  /* keep height/padding consistent but make the disabled select visually pill-shaped */
+  padding-left: 12px !important;
+  padding-right: 12px !important;
+}
+
+/* Make the white inner container of the right (courses) panel slightly narrower
+   so it doesn't touch the panel edges and appears visually smaller than the
+   full panel width. This only affects the courses panel to keep categories unchanged. */
+.right-panel .courses-list {
+  max-width: calc(100% - 48px);
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+}
+
+/* Keep the left panel's white box width consistent with the right panel so both columns
+   visually align. This narrows the categories white box to match the courses box. */
+/* left-panel .categories-list kept at full width (no forced max-width) to match prior behavior */
+
+/* Align categories-list and courses-list top edges by setting consistent top padding on panel-body */
+.categories-panel {
+  padding-top: 56px; /* keep categories top padding */
+}
+
+.courses-list .courses-row {
+  border-bottom: 1px solid #e6e6e6;
+  margin-bottom: 0;
+}
+
+.courses-list .courses-row:last-child {
+  border-bottom: none;
+}
+
+.courses-list .courses-row:hover {
+  background: #fafafa;
+}
+
+
+.courses-row {
+  display: flex;
+  justify-content: space-between;
+  /* align items to the top so we can align the right-side icons to the subtitle line */
+  align-items: flex-start;
+  background: transparent;
+  border-radius: 2px;
+  padding: 8px 12px; /* further reduced vertical/horizontal padding for even shorter rows */
+  margin-bottom: 6px;
+  border-left: 4px solid transparent;
+  line-height: 1.2; /* tighter line height for compact rows */
+  min-height: 40px; /* reduced minimum height so rows appear shorter */
+}
+
+/* Make search result rows span the full content width (not centered narrow boxes) */
+.search-results-plain .search-result-row {
+  background: #fff;
+  border-top: 1px solid #e6e6e6; /* use top border to separate rows */
+  padding: 8px 12px; /* further reduced padding for compact appearance */
+  margin: 0; /* no gaps between rows */
+  width: 100%;
+  box-sizing: border-box;
+  line-height: 1.2;
+  min-height: 40px;
+}
+
+/* First row gets the top-most border visible and rounded top corners */
+.search-results-plain .search-result-row:first-child {
+  border-top: 1px solid #e6e6e6;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
+
+/* Last row gets rounded bottom corners */
+.search-results-plain .search-result-row:last-child {
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+.search-results-plain .search-result-row .row-left { display: flex; align-items: center; gap: 12px; }
+.search-results-plain .search-result-row .row-right { display: flex; gap: 8px; align-items: center; }
+
+/* Filters panel specific adjustments for EnrolledUsersView */
+.filters-panel {
+  border-radius: 6px;
+  background: #fff;
+  border: 1px solid #e6e6e6;
+  padding: 12px;
+  box-sizing: border-box;
+}
+.filters-panel .filter-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 8px;
+  border-radius: 6px;
+  background: #fff; /* make the row pure white to match page background */
+  border: 1px solid rgba(0,0,0,0.04); /* subtle border to delimit the row */
+  box-shadow: none;
+  background-clip: padding-box;
+}
+.filters-panel .action-pill {
+  background: none;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  color: #333;
+}
+.filters-panel .moodle-select {
+  min-width: 160px;
+  /* show select text in a muted gray (like the input before activation) */
+  color: rgba(0,0,0,0.6) !important;
+}
+.filters-panel .moodle-input,
+.filters-panel input,
+.filters-panel textarea {
+  color: #000 !important; /* typed input text remains black */
+}
+.filters-panel .moodle-search-input {
+  min-width: 220px;
+}
+
+/* Disabled appearance for selects inside the filters panel to look "blocked" */
+.filters-panel .moodle-select:disabled,
+.filters-panel .moodle-select[disabled] {
+  background: #efefef !important;
+  color: rgba(0,0,0,0.5) !important;
+  border-color: #e6e6e6 !important;
+  cursor: not-allowed !important;
+  opacity: 0.95 !important;
+}
+
+/* Search results boxed list to mimic the courses-list white box */
+.search-results-list {
+  background: #fff;
+  border-radius: 6px;
+  padding: 8px; /* inner padding so rows don't touch the edges */
+  /* increase width to occupy more of the viewport; cap at 100% */
+  width: 100%; /* span the full available width of the panel */
+  max-width: 100%;
+  margin: 24px 0 12px 0; /* more top margin so there's noticeably more space under the "Cursos" heading */
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.02) inset;
+  border: 1px solid #e6e6e6; /* visible border so the box is clear */
+}
+.search-results-list .courses-row { border-bottom: 1px solid #e6e6e6; margin-bottom: 0; padding: 8px 12px; background: transparent; line-height: 1.2; min-height: 40px; }
+.search-results-list .courses-row:last-child { border-bottom: none; }
+
+/* Align the action icons to the subtitle line by nudging the right column down slightly.
+   This keeps the icons vertically aligned with the smaller, grey subtitle (course shortname)
+   while the left side remains a two-line stack (title + subtitle). Tweak the margin-top
+   value if you need finer alignment for your font/zoom settings. */
+.courses-list .courses-row .row-right,
+.search-results-list .courses-row .row-right {
+  display: flex;
+  align-items: center;
+  margin-top: 6px;
+}
+
+/* Ensure the left side items (drag handle, checkbox, title block) are centered so
+   the course title (first line) sits on the same horizontal line as the checkbox. */
+.courses-list .courses-row .row-left {
+  /* Use a fixed three-column grid for regular course rows: drag handle | checkbox | title block
+     This guarantees the checkbox sits at the same x position across standard rows. */
+  display: grid;
+  grid-template-columns: 36px 28px 1fr; /* drag-handle, checkbox, content */
+  align-items: center;
+  column-gap: 12px;
+}
+
+/* Search results use a different compact layout: keep them as a simple flex row so
+   the checkbox and title stay inside the white results casilla and don't overflow.
+   This prevents the title/category from shifting left over the checkbox. */
+.search-results-list .courses-row .row-left,
+.search-results-plain .search-result-row .row-left {
+  display: flex !important;
+  align-items: center;
+  gap: 12px;
+  grid-template-columns: none !important;
+}
+
+/* Make the course-main a vertical stack for normal course lists so the title
+   aligns with the checkbox and subtitle appears below the title. */
+.courses-list .courses-row .course-main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* centers the two-line block relative to checkbox */
+}
+
+/* Ensure checkboxes are positioned consistently inside the fixed grid slot */
+.courses-list .courses-row .row-left input[type="checkbox"],
+.search-results-list .courses-row .row-left input[type="checkbox"] {
+  margin: 0;
+  width: 16px;
+  height: 16px;
+  box-sizing: border-box;
+}
+
+/* Small safeguard: if a drag-handle is absent (some rows), keep checkbox in the same slot by
+   forcing an empty placeholder width via a pseudo-element on the row-left */
+.courses-list .courses-row .row-left:empty::before { content: ''; display: inline-block; width: 36px; }
+
+/* For search results, make the course-main inline (row) so title and category
+   sit on the same line. We use a specific class (.search-inline) on the
+   markup to target only the search-results variant. */
+.search-results-list .courses-row .course-main {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+.search-results-list .course-meta {
+  color: #777;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+/* Small tweak for subtitle spacing so it looks visually separated from the title */
+.courses-list .courses-row .course-subtitle,
+.search-results-list .courses-row .course-subtitle {
+  margin-top: 2px;
+  color: #777;
+  font-size: 12px;
+}
+
+/* Reduce the visual weight of text inside each search-result casilla. Make
+   the course name and metadata slightly smaller and tighten line-height so
+   the content appears less dominant compared to surrounding UI. */
+.search-results-list,
+.search-results-list .courses-row,
+.search-results-plain .search-result-row {
+  font-size: 12px; /* slightly smaller than default */
+  line-height: 1.25; /* tighter lines for compact appearance */
+}
+
+/* Make the course link a touch larger than the rest of the row but still
+   smaller than previous sizing. This preserves emphasis while reducing
+   overall visual dominance. */
+.search-results-list .courses-row .course-link,
+.search-results-plain .search-result-row .course-link {
+  font-size: 13px;
+  line-height: 1.2;
+}
+
+/* Meta line shown under the search results box */
+.search-results-meta {
+  text-align: center;
+  margin-top: 6px;
+  margin-bottom: 12px;
+  color: #666;
+  font-size: 13px; /* slightly larger per request */
+  font-weight: 500;
+}
+
+/* Reduce the heading sizes for the search results area so they don't dominate the layout */
+.search-results-plain h1 {
+  font-size: 27px; /* increased by 4px + 3px additional request */
+  margin-top: 8px;
+  margin-bottom: 6px;
+  font-weight: 400; /* normal weight (not bold) */
+}
+.search-results-plain h3 {
+  font-size: 16px; /* increased by 1px per request */
+  margin-top: 0;
+  margin-bottom: 12px; /* slightly larger gap below subtitle */
+  font-weight: 400; /* normal weight */
+}
+.categories-list .courses-row {
+  border-bottom: 1px solid #e6e6e6; /* separator line between rows */
+  margin-bottom: 0; /* remove extra gap, separators handle spacing */
+}
+.categories-list .courses-row:last-child {
+  border-bottom: none;
+}
+
+.categories-list .courses-row:hover {
+  background: #fafafa;
+}
+
+.categories-ordering {
+  /* Use the same 3-column grid used by the move controls so the center column
+     (where the select filters and Ordenar button live) lines up perfectly
+     with the .courses-move-area .move-controls center column. This keeps the
+     selects exactly where they are visually while aligning titles and actions. */
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: start;
+  gap: 18px;
+  /* Use panel-consistent left padding so titles inside different sibling blocks
+    align to the same left edge. Panel inner padding is 12px, so use that here. */
+  padding: 8px 16px 12px 12px;
+  box-sizing: border-box;
+  border-top: none;
+  margin-top: 0;
+}
+.categories-ordering .ordering-title {
+  grid-column: 1;
+  justify-self: start;
+  /* keep previous visual weight and sizing */
+  /* Match the move-block title styles: size, weight, color and line-height
+     so both titles are visually identical (user requirement). */
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  color: #000 !important;
+  line-height: 1.05 !important;
+  padding-top: 6px;
+  margin: 0; /* keep small left nudge separately if needed */
+  margin-left: -8px;
+  min-width: 0;
+}
+.categories-ordering .ordering-controls {
+  grid-column: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* keep the selects left-aligned inside the center column */
+  justify-self: center; /* center the whole controls group in the middle column */
+  margin-left: 0; /* remove negative margin - grid centers the column */
+}
+.categories-ordering .ordering-select {
+  min-width: 320px;
+  max-width: 420px;
+  margin-top: 8px;
+}
+.ordering-action-btn {
+  background: #e3e3e3;
+  color: #333;
+  border-radius: 8px;
+  padding: 8px 18px;
+  border: none;
+  transition: background 0.15s ease, transform 0.06s ease;
+}
+.ordering-action-btn:hover { background: #bdbdbd; transform: translateY(-1px); }
+
+/* When create-category-btn is used inside the ordering block, cancel its absolute positioning
+   (the normal .create-category-btn is positioned absolutely in .categories-panel). */
+.categories-ordering .create-category-btn {
+  position: static !important;
+  left: auto !important;
+  top: auto !important;
+  transform: none !important;
+  margin: 0 !important;
+}
+
+/* Increase spacing between the checkbox and the category title to match visual spec */
+.categories-list .courses-row .row-left {
+  display: flex;
+  align-items: center;
+  gap: 14px; /* space between checkbox and title */
+}
+
+/* Ensure category checkboxes match the courses panel checkbox size for visual parity */
+.categories-list .courses-row .row-left input[type="checkbox"],
+.categories-list .courses-row input[type="checkbox"] {
+  margin: 0;
+  width: 16px;
+  height: 16px;
+  box-sizing: border-box;
+  vertical-align: middle;
+}
+
+.courses-row.selected { border-left-color: var(--moodle-green); }
+
+.course-link { color: var(--moodle-green); text-decoration: none; }
+.course-link:hover { text-decoration: underline; }
+
+.create-category-btn {
+  display: inline-block;
+  margin: 8px auto 16px auto;
+  background: #e3e3e3;
+  color: #333;
+  border-radius: 8px;
+  padding: 8px 18px;
+  border: none;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.06s ease;
+}
+
+/* Keep the create button visually available but remove it from the normal flow
+   so the inner white boxes of categories and courses align at the same vertical level */
+.categories-panel .create-category-btn {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  z-index: 20; /* ensure button stays above inner white boxes */
+}
+
+/* Hover state: cambia de color al pasar el mouse */
+.create-category-btn:hover {
+  background: #bdbdbd; /* un poco más claro */
+  color: #333 !important; /* mantener el color de la letra sin cambios */
+  transform: translateX(-50%) translateY(-1px);
+}
+
+/* Small extra gap so the white boxes don't sit flush under the top padding */
+.categories-list, .courses-list {
+  margin-top: 8px; /* small gap so boxes don't sit flush under the top padding */
+}
+
+/* Force the Edit icon to have a 5px gap to the right edge of the white container so all
+   edit icons visually align across rows regardless of hidden arrow slots. */
+.categories-list .row-right .icon-btn[title="Editar"],
+.categories-list .row-right .icon-btn[title='Editar'] {
+  margin-right: 5px !important;
+}
+.manage-two-col { display: flex; gap: 32px; align-items: stretch; width: 100%; box-sizing: border-box; flex: 1 1 auto; }
+/* Make both panels occupy exactly half of the available width (accounting for gap)
+   so they fill the view horizontally while respecting the gap/margins. */
+.left-panel, .right-panel {
+  flex: 0 0 calc((100% - 32px) / 2);
+  max-width: calc((100% - 32px) / 2);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  box-sizing: border-box;
+}
+
+/* Ensure the direct .panel children inside the two-column layout grow equally and fill column height
+   This makes the categories and courses panels the same height and allows .panel-body to scroll if content overflows. */
+.manage-two-col > .left-panel > .panel,
+.manage-two-col > .right-panel > .panel {
+  flex: 1 1 auto;
+  display: flex; /* reinforce panel is flex column */
+  flex-direction: column;
+}
+
+/* Keep a configurable minimum if needed; default is 0. */
+.manage-two-col > .left-panel > .panel,
+.manage-two-col > .right-panel > .panel {
+  min-height: var(--courses-panel-min-height, 0);
+}
+
+/* When only categories are shown (manage-two-col.single), make the left panel occupy the full width
+   and hide the right panel. Also make inner white boxes span the available width. */
+
+/* Ensure that when the two-column container is in `single` mode the single panel
+   (either left or right) occupies the full available width rather than being
+   constrained to half. This overrides the equal-split rules above. */
+.manage-two-col.single > .left-panel,
+.manage-two-col.single > .right-panel {
+  flex: 0 0 100% !important;
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
+/* When single, ensure the inner white boxes use full width as well */
+.manage-two-col.single .categories-list,
+.manage-two-col.single .courses-list {
+  max-width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+
+
+/* Header above the left panel: larger, not bold */
+.courses-page-left .manage-header {
+  font-size: 27px;
+  font-weight: 400;
+  color: #333;
+  margin: 0 0 12px 0; /* space below the header */
+}
+
+.category-main-title {
+  font-size: 28px;
+  color: #333;
+  font-weight: 400;
+  margin: 0 0 20px 0;
+  padding: 0;
+}
+
+.category-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.category-section {
+  border-bottom: 1px solid #ddd;
+  padding: 15px 0;
+}
+
+.category-section:last-child {
+  border-bottom: none;
+}
+
+.category-section-title {
+  font-size: 16px;
+  color: var(--moodle-green);
+  font-weight: 400;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+.category-section-title:hover {
+  text-decoration: underline;
+}
+.btn-secondary:hover { background: #5c636a; }
+.mform-alert { padding: 12px; border-radius: 6px; margin: 8px 0; border: 1px solid; }
+.mform-alert.error { background: #f8d7da; border-color: #f5c6cb; color: #721c24; }
+.mform-alert.success { background: #d4edda; border-color: #c3e6cb; color: #155724; }
+
+/* Message shown when a selected category has no courses - small and without the white panel background */
+.panel-body .empty-category-message {
+  font-size: 12px;
+  color: var(--moodle-text-muted, #666);
+  margin: 12px auto;
+  padding: 6px 12px;
+  background: transparent;
+  text-align: center;
+  max-width: 88%;
+}
+
+.courses-empty {
+  padding: 8px 6px;
+  text-align: center;
+  color: var(--moodle-text-muted, #666);
+  font-size: 12px;
+}
+
+/* Ensure the two-column manage layout stacks on narrower screens and remains balanced */
+@media (max-width: 900px) {
+  .manage-two-col {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  /* Reset shift on small screens so layout doesn't overflow */
+  .categories-ordering .ordering-controls {
+    margin-left: 0;
+  }
+
+  .left-panel, .right-panel {
+    flex: 1 1 100% !important;
+    min-width: 0;
+  }
+}
+
+/* Atto editor toolbar styles (page-scoped where needed) */
+/* Atto toolbar: tuned for pixel-closer match to Moodle Zajuna screenshot */
+.atto-toolbar {
+  /* Make the editor container show a thin outer border like Moodle and remove
+    any surrounding panel shadow so the editor reads as a distinct box. */
+  /* Darken the outer border so the editor has a more noticeable contour */
+  border: 1px solid #8f8f8f;
+  border-radius: 6px;
+  background: #ffffff; /* white background for the whole editor box */
+  overflow: visible;
+  padding: 0; /* toolbar row will provide its own padding and background */
+  box-sizing: border-box; /* make width include borders/padding */
+  width: 1066.5px;
+  box-shadow: none !important; /* remove any inherited shadow from parent panels */
+}
+.atto-toolbar-row {
+  display: grid;
+  grid-template-columns: auto 1fr; /* more-button | main controls */
+  column-gap: 10px; /* space between more-button and controls */
+  align-items: center;
+  padding: 8px 8px; /* toolbar strip padding (top/right/bottom/left) */
+  background: #efefef; /* slightly darker grey for the toolbar strip */
+  /* separator line between toolbar and editor area — match outer border color */
+  border-bottom: 1px solid #8f8f8f; /* separates toolbar from editor area */
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
+
+/* The main area (all controls except the more-button) handles wrapping internally */
+.atto-toolbar-main {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px; /* row-gap smaller (4px) and column-gap 10px */
+  align-items: center;
+  /* remove the extra internal left padding so the grid column-gap (10px)
+     becomes the visible gap between the 'Mostrar más' button and the
+     first control (Formato). This ensures an exact 10px horizontal gap. */
+  padding-left: 0; /* was 8px, changed to 0 to make gap = 10px */
+  box-sizing: border-box;
+}
+
+/* Keep the 'Mostrar más' button anchored to the top-left of the toolbar so
+   when the main controls wrap to a second row the button stays visually in
+   the first row (not vertically centered between rows). */
+.atto-toolbar-row > .atto-more-btn {
+  grid-row: 1;
+  align-self: start; /* align to top of the grid row */
+}
+
+/* Ensure the main controls align to the top so wrapped rows start at the same Y */
+.atto-toolbar-main { align-items: flex-start; }
+.atto-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px; /* increased size for clearer, larger icons */
+  height: 38px;
+  padding: 0;
+  border-radius: 6px;
+  background: #ffffff;
+  border: 1px solid #ccc;
+  color: #333;
+  cursor: pointer;
+  font-size: 14px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.6); /* subtle bevel */
+}
+.atto-btn .atto-icon { display: inline-block; width: 16px !important; height: 16px !important; }
+.atto-btn svg { display: block; width: 16px !important; height: 16px !important; fill: currentColor; }
+
+/* Use letter-based icons for Bold/Italic to match Moodle Atto appearance */
+.atto-btn .atto-letter {
+  display: inline-block;
+  width: 16px !important;
+  height: 16px !important;
+  line-height: 16px !important;
+  text-align: center;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 16px; /* match toolbar icon sizing */
+  color: inherit;
+}
+.atto-btn .atto-letter.atto-bold {
+  font-weight: 700;
+}
+.atto-btn .atto-letter.atto-italic {
+  font-style: italic;
+  font-weight: 500;
+}
+.atto-btn:hover {
+  background: #f4f4f4;
+  border-color: #dddddd;
+  transform: translateY(-1px);
+}
+.atto-btn:active {
+  background: #ececec;
+}
+/* (reverted custom Atto replication rules) */
+/* active state: Moodle uses a green accent for active formatting; keep contrast high */
+.atto-btn.atto-active {
+  /* Keep a distinct formatting-active look for some controls, but
+     override for the 'Mostrar más' and format-group buttons below */
+  background: linear-gradient(#1b6f00,#2f8a00);
+  color: #fff !important;
+  border-color: rgba(0,0,0,0.08);
+}
+
+/* Make the 'Mostrar más' button show the same visual state as the
+   grouped format buttons when active (white background, subtle bevel and
+   stronger border). This matches the visual reference where the more-button
+   and the active format buttons share the same elevated white appearance. */
+.atto-toolbar-row > .atto-more-btn.atto-active,
+.atto-format-group .atto-btn.atto-active {
+  /* Use the hover radial-gradient visual also for the active state. Keep !important
+     to override other rules and ensure the ellipse is visible when active. */
+  background-image: radial-gradient(ellipse at center,#fff 60%,#dfdfdf 100%) !important;
+  background-color: #ebebeb !important;
+  color: #111 !important;
+  border-color: #d6d6d6 !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.7), 0 1px 2px rgba(0,0,0,0.06) !important;
+  font-weight: 700 !important;
+}
+
+/* Ensure the letter icon for bold looks bold when active */
+.atto-format-group .atto-btn.atto-active .atto-letter.atto-bold {
+  font-weight: 800 !important;
+  color: inherit !important;
+}
+.atto-sep {
+  width: 1px;
+  height: 22px;
+  background: #e6e6e6;
+  /* remove lateral margin so spacing is controlled by .atto-toolbar-row gap */
+  margin: 0;
+}
+.atto-textarea {
+  width: 100%;
+  /* increased min-height to give a taller editing area by default */
+  min-height: 320px;
+  resize: vertical;
+  padding: 12px;
+    /* remove the textarea top border to avoid doubling the separator line
+      (the toolbar bottom border provides the single 1px divider that
+      matches the outer contour). */
+    border: none;
+  outline: none;
+  background: #ffffff; /* ensure editor area is white */
+  box-sizing: border-box;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+.atto-textarea * { /* ensure internal nodes don't inherit unexpected transforms */
+  transform: none !important;
+  -webkit-transform: none !important;
+  -moz-transform: none !important;
+  -ms-transform: none !important;
+}
+/* DEBUG: temporary diagnostic override to help find 'reversed text when typing'.
+   This forces the Atto toolbar/editor and all descendants to use normal
+   left-to-right rendering and removes any transforms that may mirror content.
+   Remove this block after diagnosing/fixing the root cause. */
+.atto-toolbar, .atto-toolbar * , .atto-textarea, .atto-textarea * {
+  transform: none !important;
+  -webkit-transform: none !important;
+  -moz-transform: none !important;
+  -ms-transform: none !important;
+  transform-origin: 0 0 !important;
+  direction: ltr !important;
+  writing-mode: horizontal-tb !important;
+  unicode-bidi: normal !important;
+}
+.atto-h5p .h5p-badge {
+  display: inline-block;
+  padding: 4px 6px;
+  font-size: 11px;
+  font-weight: 600;
+  background: #3a6ea5;
+  color: #fff;
+  border-radius: 4px;
+}
+
+/* H5P badge used in toolbar: white pill with black 'H5P' text to match reference */
+.atto-h5p-icon {
+  /* Minimal text-only H5P badge: no border, transparent background */
+  display: inline-block;
+  padding: 0 4px;
+  font-size: 13px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 800;
+  line-height: 1;
+  color: #111;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  letter-spacing: 0.2px;
+  vertical-align: middle;
+}
+
+/* H5P button: center the icon/text inside the button and normalize size
+   Using a dedicated class avoids needing !important overrides elsewhere. */
+.atto-h5p-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px; /* match other toolbar buttons */
+  height: 38px;
+  padding: 0;
+  box-sizing: border-box;
+}
+.atto-h5p-button .icon,
+.atto-h5p-button .atto-icon,
+.atto-h5p-button .atto-h5p-icon {
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+  line-height: 16px;
+  margin: 0; /* remove extra right-margin from generic rules */
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* small helper: compact format button (A ▾) */
+.atto-format-btn { display: inline-flex; align-items: center; gap: 8px; padding: 0 10px; min-width: 60px; border-radius: 6px; height: 38px; background:#fff; border:1px solid #ccc; }
+.atto-format-btn .atto-icon { font-weight: 700; font-size: 14px; line-height:1; }
+.atto-format-btn .caret { width: 12px; height: 10px; display: inline-block; color: #666; }
+
+/* Group format/bold/italic so they appear visually connected like Moodle */
+.atto-format-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 0; /* no gap so borders join */
+  vertical-align: middle;
+  border-radius: 6px;
+  overflow: hidden; /* ensure shared rounded corners */
+}
+.atto-format-group .atto-btn {
+  border-radius: 0; /* remove individual rounding when grouped */
+  height: 38px;
+}
+.atto-format-group .atto-btn:not(:last-child) {
+  border-right: none; /* avoid double border between buttons */
+}
+/* Rounded ends for the first/last buttons so the group looks like a single pill */
+.atto-format-group .atto-btn:first-child {
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+}
+.atto-format-group .atto-btn:last-child {
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+/* Group list/bulleted/numbered/indent buttons similarly */
+.atto-list-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  vertical-align: middle;
+  border-radius: 6px;
+  overflow: hidden;
+}
+/* Make list-group buttons visually joined like other grouped controls */
+.atto-list-group .atto-btn {
+  border-radius: 0; /* remove individual rounding when grouped */
+  height: 38px;
+}
+.atto-list-group .atto-btn:not(:last-child) {
+  border-right: none; /* avoid double border between buttons */
+}
+.atto-list-group .atto-btn:first-child {
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+}
+.atto-list-group .atto-btn:last-child {
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+.atto-script-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 0; /* buttons glued together */
+  vertical-align: middle;
+  border-radius: 6px;
+  overflow: hidden; /* join rounded corners */
+}
+.atto-script-group .atto-btn {
+  border-radius: 0; /* remove per-button rounding when grouped */
+  height: 38px; /* match toolbar button height */
+}
+.atto-script-group .atto-btn:not(:last-child) {
+  border-right: none; /* avoid double borders between grouped buttons */
+}
+.atto-script-group .atto-btn:first-child {
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+}
+.atto-script-group .atto-btn:last-child {
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+.atto-justify-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 0; /* buttons glued */
+  vertical-align: middle;
+  border-radius: 6px;
+  overflow: hidden;
+}
+.atto-justify-group .atto-btn {
+  border-radius: 0; /* remove per-button rounding */
+  height: 38px;
+}
+.atto-justify-group .atto-btn:not(:last-child) {
+  border-right: none; /* avoid double border between buttons */
+}
+.atto-justify-group .atto-btn:first-child {
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+}
+.atto-justify-group .atto-btn:last-child {
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+.atto-insert-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 0; /* glue buttons */
+  vertical-align: middle;
+  border-radius: 6px;
+  overflow: hidden;
+}
+.atto-insert-group .atto-btn {
+  border-radius: 0;
+  height: 38px;
+}
+.atto-insert-group .atto-btn:not(:last-child) {
+  border-right: none;
+}
+.atto-insert-group .atto-btn:first-child {
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+}
+.atto-insert-group .atto-btn:last-child {
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+.atto-undo-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 0; /* glue the two buttons */
+  vertical-align: middle;
+  border-radius: 6px;
+  overflow: hidden;
+}
+.atto-undo-group .atto-btn {
+  border-radius: 0;
+  height: 38px;
+}
+.atto-undo-group .atto-btn:not(:last-child) {
+  border-right: none;
+}
+.atto-undo-group .atto-btn:first-child {
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+}
+.atto-undo-group .atto-btn:last-child {
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+.atto-list-group .icon.fa {
+  /* ensure Font Awesome glyphs in the list group match the requested 16px size */
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
+  display: inline-block;
+  text-align: center;
+  color: rgba(0,0,0,0.65); /* softer gray for subtler look */
+  font-weight: 400; /* normal weight */
+  opacity: 0.86; /* slightly stronger but still soft */
+  -webkit-font-smoothing: antialiased; /* improve rendering */
+  -moz-osx-font-smoothing: grayscale;
+  text-shadow: none; /* keep shapes crisp */
+  transform: translateZ(0) scale(0.995); /* tiny scale tweak */
+  transition: color 120ms ease, opacity 120ms ease, transform 120ms ease;
+}
+
+/* Prevent chip text from wrapping so labels like "1 día" stay on one line */
+.tag-chip,
+.filters-panel .combobox .tag-list .tag-chip {
+  white-space: nowrap;
+}
+
+/* Ensure chip internals are laid out horizontally even if child elements are block-level */
+.filters-panel .combobox .tag-list .tag-chip {
+  display: inline-flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 6px;
+}
+
+.filters-panel .combobox .tag-list .tag-chip > * {
+  display: inline-block !important;
+  white-space: nowrap !important;
+}
+
+/* Ensure both Font Awesome glyphs and inline SVG icons inside the list-group
+   use the same softened color so bullets and ordered lists match visually. */
+.atto-list-group .atto-btn .icon.fa,
+.atto-list-group .atto-btn .atto-icon-svg {
+  color: rgba(0,0,0,0.65);
+}
+
+/* Keep hover subtle: slightly stronger but not full black */
+.atto-list-group .atto-btn:hover .icon.fa,
+.atto-list-group .atto-btn:hover .atto-icon-svg {
+  color: rgba(0,0,0,0.8);
+}
+
+/* Stronger overrides to ensure SVG strokes and FA glyphs inside the list group
+   are rendered in the softened gray across browsers and not overridden by other rules. */
+.atto-toolbar .atto-list-group .atto-icon-svg svg,
+.atto-list-group .atto-icon-svg svg {
+  color: rgba(0,0,0,0.65);
+}
+.atto-toolbar .atto-list-group .atto-icon-svg svg path,
+.atto-toolbar .atto-list-group .atto-icon-svg svg line,
+.atto-toolbar .atto-list-group .atto-icon-svg svg circle,
+.atto-list-group .atto-icon-svg svg path,
+.atto-list-group .atto-icon-svg svg line,
+.atto-list-group .atto-icon-svg svg circle {
+  stroke: rgba(0,0,0,0.65);
+  fill: rgba(0,0,0,0.65);
+  stroke-width: 0.85;
+}
+.atto-list-group .icon.fa {
+  color: rgba(0,0,0,0.65) !important;
+  opacity: 0.9 !important;
+}
+
+/* Styling for the custom 1/2 ordered-list marker used instead of the Font Awesome glyph */
+.atto-list-group .atto-icon-svg {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  vertical-align: middle;
+}
+.atto-list-group .atto-icon-svg svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.atto-list-group .atto-icon-svg { color: rgba(0,0,0,0.65); }
+.atto-list-group .atto-icon-svg svg path,
+.atto-list-group .atto-icon-svg svg line,
+.atto-list-group .atto-icon-svg svg circle {
+  stroke: currentColor;
+  stroke-width: 0.9; /* thinner stroke for a lighter appearance */
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Make link/media/access groups match the visual joining of other groups */
+.atto-link-group,
+.atto-media-group,
+.atto-access-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  vertical-align: middle;
+  border-radius: 6px;
+  overflow: hidden;
+}
+.atto-link-group .atto-btn,
+.atto-media-group .atto-btn,
+.atto-access-group .atto-btn {
+  border-radius: 0;
+  height: 38px;
+}
+.atto-link-group .atto-btn:not(:last-child),
+.atto-media-group .atto-btn:not(:last-child),
+.atto-access-group .atto-btn:not(:last-child) {
+  border-right: none;
+}
+.atto-link-group .atto-btn:first-child,
+.atto-media-group .atto-btn:first-child,
+.atto-access-group .atto-btn:first-child {
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+}
+.atto-link-group .atto-btn:last-child,
+.atto-media-group .atto-btn:last-child,
+.atto-access-group .atto-btn:last-child {
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+.atto-list-group .atto-icon-svg svg circle { fill: currentColor; opacity: 0.75; }
+
+/* Increase the size of the inline SVG/ReactComponent icons inside the list group */
+.atto-list-group .atto-btn .atto-icon,
+.atto-list-group .atto-btn svg {
+  width: 16px !important;
+  height: 16px !important;
+}
+
+/* Unified rule: force all toolbar icons (first + second row) to 16×16 and center them. */
+.atto-toolbar .atto-btn .icon.fa,
+.atto-toolbar .atto-btn .atto-icon,
+.atto-toolbar .atto-btn .atto-icon-svg,
+.atto-toolbar .atto-btn svg,
+.atto-toolbar .atto-btn img {
+  width: 16px !important;
+  height: 16px !important;
+  font-size: 16px !important;
+  line-height: 16px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  vertical-align: middle !important;
+}
+
+/* Ensure font-based icons don't get clipped and sit visually centered */
+.atto-toolbar .atto-btn .icon.fa {
+  width: 16px !important;
+  height: 16px !important;
+  font-size: 16px !important;
+  line-height: 16px !important;
+}
+
+/* Scoped fixes for EnrolledUsersView to avoid horizontal scrollbar and
+   to keep the checkbox/gutter behaviour consistent. These rules are
+   intentionally specific and applied only inside the users-enrolled panel. */
+.users-enrolled-panel { box-sizing: border-box; }
+.users-enrolled-panel .enrolled-table-container {
+  padding-left: 8px;
+  box-sizing: border-box;
+  /* Allow horizontal scroll when necessary but prevent an internal vertical
+     scrollbar by letting the table expand vertically (page scroll will be used).
+     Keeping overflow-x:auto preserves horizontal scrolling on small screens. */
+  overflow-x: auto;
+  overflow-y: visible;
+  max-height: none;
+}
+
+/* Scoped: Ensure the panel that wraps the EnrolledUsersView does not show
+   an internal vertical scrollbar. Let the page handle vertical scrolling
+   instead. Keep this scoped to avoid affecting other panels. */
+.users-enrolled-panel .panel-body {
+  overflow-y: visible !important;
+  /* Allow the panel to grow and let the page scroll; remove min-height traps */
+  min-height: 0 !important;
+}
+.users-enrolled-panel {
+  /* Ensure flex children can shrink properly inside parent flex containers */
+  min-height: 0 !important;
+}
+
+/* Desktop: preserve the original table structure and prevent layout
+   deformation. Keep nowrap so columns align as intended on wide screens. */
+@media (min-width: 1024px) {
+  .users-enrolled-panel .table-moodle {
+    table-layout: auto; /* let browser size columns to preserve design */
+    width: 100%;
+  }
+  .users-enrolled-panel .table-moodle th,
+  .users-enrolled-panel .table-moodle td {
+    white-space: nowrap; /* preserve single-line cells on desktop */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
+  .users-enrolled-panel .table-moodle thead th:nth-child(2),
+  .users-enrolled-panel .table-moodle tbody td:nth-child(2) {
+    padding-left: 0 !important; /* name column sits next to checkbox */
+  }
+}
+
+/* Mobile / narrow: make the table content adapt by allowing wrapping and
+   using a fixed table algorithm for predictable small-screen layout. */
+@media (max-width: 1023px) {
+  .users-enrolled-panel .table-moodle {
+    table-layout: fixed;
+    width: 100%;
+  }
+  .users-enrolled-panel .table-moodle th,
+  .users-enrolled-panel .table-moodle td {
+    white-space: normal !important;
+    word-break: break-word !important;
+    overflow-wrap: anywhere !important;
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
+  .users-enrolled-panel .table-moodle thead th:first-child,
+  .users-enrolled-panel .table-moodle tbody td:first-child {
+    padding-left: 8px !important;
+    padding-right: 6px !important;
+  }
+  .users-enrolled-panel .table-icons {
+    min-width: 80px !important;
+    width: 80px !important;
+  }
+}
+
+
+/* Group accessibility buttons (accessibility checks + screen reader helper) */
+.atto-access-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  vertical-align: middle;
+  border-radius: 6px;
+  overflow: hidden;
+}
+.atto-access-group .atto-btn {
+  border-radius: 0;
+  height: 38px;
+}
+.atto-access-group .atto-btn:not(:last-child) {
+  border-right: none;
+}
+.atto-access-group .atto-btn:first-child {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.atto-access-group .atto-btn:last-child {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+/* Media group: emoticons, image, media, record, attach, H5P */
+.atto-media-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  vertical-align: middle;
+  border-radius: 6px;
+  overflow: hidden;
+}
+.atto-media-group .atto-btn {
+  border-radius: 0;
+  height: 38px;
+}
+.atto-media-group .atto-btn:not(:last-child) {
+  border-right: none;
+}
+.atto-media-group .atto-btn:first-child {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.atto-media-group .atto-btn:last-child {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.atto-media-group .atto-btn .icon.fa {
+  font-size: 16px;
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  line-height: 20px;
+  text-align: center;
+}
+
+/* Group link/unlink with clearer stroke icons like Moodle */
+.atto-link-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  vertical-align: middle;
+  border-radius: 6px;
+  overflow: hidden;
+}
+.atto-link-group .atto-btn {
+  border-radius: 0;
+  height: 38px;
+  color: #333; /* ensure dark icon by default */
+}
+.atto-link-group .atto-btn:not(:last-child) {
+  border-right: none;
+}
+.atto-link-group .atto-btn:first-child {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.atto-link-group .atto-btn:last-child {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+/* Make link/unlink SVGs crisper: use stroke, larger size, and prevent fills from hiding strokes */
+.atto-link-group .atto-btn .atto-icon,
+.atto-link-group .atto-btn svg {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+.atto-link-group .atto-btn svg path,
+.atto-link-group .atto-btn svg g,
+.atto-link-group .atto-btn svg {
+  stroke: currentColor !important;
+  fill: none !important;
+  stroke-width: 1.6 !important;
+  vector-effect: non-scaling-stroke;
+}
+.atto-link-group .atto-btn.atto-active {
+  background: linear-gradient(#1b6f00,#2f8a00);
+  color: #fff !important;
+}
+.atto-link-group .atto-btn:hover { color: var(--moodle-green); }
+
+/* Font Awesome glyph sizing for toolbar icons to match surrounding SVGs */
+.icon.fa {
+  /* match Moodle's .icon font appearance used with Font Awesome */
+  font-size: 16px; /* tuned to match surrounding SVG icons */
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  line-height: 20px;
+  text-align: center;
+}
+
+/* Ensure any <img class="icon"> inside toolbar buttons matches the
+   same visual size as other toolbar icons (16x16). Use object-fit to
+   preserve aspect ratio and vertical-align for centering. */
+.atto-toolbar .atto-btn img.icon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  vertical-align: middle;
+  display: inline-block;
+}
+/* Ensure the H5P image aligns with font-based icons by matching font-size/line-height */
+.atto-toolbar .atto-btn img.icon {
+  font-size: 16px;
+  line-height: 16px;
+}
+
+/* Force H5P toolbar image to match other toolbar icons and override
+   any `.atto_h5p_button .icon` rules from other stylesheets. This
+   targets the exact H5P button (aria-label="h5p") for maximum specificity. */
+.atto-toolbar button[aria-label="h5p"] img.icon,
+.atto-toolbar .atto-btn[aria-label="h5p"] img.icon {
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+  line-height: 16px;
+  margin: 0; /* remove the .5rem right margin coming from generic .icon */
+  padding: 0;
+  box-sizing: content-box;
+  object-fit: contain;
+  vertical-align: middle;
+  display: inline-block;
+}
+.atto-link-group .atto-btn { color: #333; }
+
+/* Scoped style for bulk-action select under EnrolledUsersView to match the reference image */
+.users-enrolled-panel .userlist.buttons .custom-select {
+  display: inline-block;
+  width: 360px;
+  max-width: 100%;
+  height: 36.5px;
+  padding: .375rem 1.75rem .375rem .9rem; /* right padding will be increased below for the pseudo-element */
+  font-size: 14px;
+  color: #333;
+  background-color: #fff;
+  border: 1px solid #8f959e;
+  border-radius: 12px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: none; /* remove background-based caret to use pseudo-element */
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
+  /* Reserve space for the custom caret */
+  padding-right: 44px;
+}
+
+/* Positioning wrapper so we can render the caret as a pseudo-element */
+.users-enrolled-panel .userlist.buttons .form-inline {
+  position: relative;
+  display: inline-block;
+}
+
+/* draw the double caret using ::after so we control size/position precisely */
+.users-enrolled-panel .userlist.buttons .form-inline::after{
+  content: "";
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  /* larger glyph area and shorter gap between arrows */
+  width: 16px;
+  height: 18px;
+  pointer-events: none;
+  /* SVG: two triangles (up and down) sized to fill the glyph area */
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 16'%3e%3cpath fill='%23343a40' d='M7 3L3 7h8L7 3z'/%3e%3cpath fill='%23343a40' d='M7 13l4-4H3l4 4z'/%3e%3c/svg%3e");
+  background-size: 16px 18px;
+  background-repeat: no-repeat;
+}
+
+/* Reuse bulk-action select visuals for the País select inside the filters panel */
+.moodle-filter .filter-row .select.custom-select.country-select {
+  display: inline-block;
+  width: 343.133px;
+  max-width: 100%;
+  height: 36.5px;
+  padding: .375rem 1.75rem .375rem .9rem;
+  font-size: 14px;
+  color: #495057 !important;
+  background-color: #fff;
+  border: 1px solid #8f959e;
+  border-radius: 12px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: none;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
+  /* Reserve space for the custom caret */
+  padding-right: 44px;
+}
+
+/* When the País select is disabled (operator 'cualquier valor'), match
+   the grey blocked style used by the bulk-action select in EnrolledUsersView */
+.moodle-filter .filter-row .select.custom-select.country-select:disabled,
+.moodle-filter .filter-row .select.custom-select.country-select[disabled] {
+  /* Keep the disabled visual (grey background) but preserve the original
+     outer contour color so the border remains visible */
+  color: #6a737b !important;
+  background-color: #e9ecef !important;
+  border: 1px solid #8f959e !important; /* preserve the original contour color */
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.6) !important;
+  cursor: not-allowed !important;
+  opacity: 1 !important; /* ensure border contrast is not reduced */
+  -webkit-appearance: none !important;
+  appearance: none !important;
+}
+
+/* When hovering the disabled País select, do not show the "not-allowed" cursor
+   (or any lock-like symbol). Keep the element visually disabled but use the
+   default cursor to avoid the blocked glyph on hover. */
+.moodle-filter .filter-row .select.custom-select.country-select:disabled:hover,
+.moodle-filter .filter-row .select.custom-select.country-select[disabled]:hover {
+  cursor: default !important;
+}
+
+/* Also ensure the wrapper area around the select doesn't show a blocked cursor
+   when the select inside is disabled (covers the pseudo-element / padding area). */
+.moodle-filter .filter-row .select-wrapper.bulk-caret:hover {
+  cursor: default !important;
+}
+
+/* Calendar icon styles: enabled = green (moodle green), disabled = muted */
+.moodle-filter .filter-row .calendar-icon { color: #6a737b; cursor: default; }
+.moodle-filter .filter-row .calendar-icon.enabled { color: var(--moodle-green); cursor: pointer; }
+.moodle-filter .filter-row .calendar-icon.disabled { color: #6a737b; cursor: default; }
+
+/* Calendar popup styles to resemble the provided image */
+#zajuna-calendar-popup.zajuna-cal, .zajuna-cal {
+  background: #fff !important;
+  border: 1px solid #bfbfbf !important;
+  border-radius: 6px !important;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.16) !important;
+  padding: 8px !important;
+  width: 260px !important;
+  height: 260px !important;
+  font-family: Arial, sans-serif;
+}
+.zajuna-cal__header {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding: 4px 8px;
+  margin-bottom: 6px;
+}
+.zajuna-cal__title {
+  font-weight: 700;
+  font-size: 16px;
+  text-align: center;
+  flex: 1 1 auto;
+}
+.zajuna-cal__nav {
+  background: none;
+  border: none;
+  font-size: 16px;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  color: #222;
+}
+.zajuna-cal__weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  text-align: center;
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+.zajuna-cal__weekday { font-weight: 700; }
+.zajuna-cal__grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0; /* cells are joined without gap */
+}
+.zajuna-cal__cell {
+  height: 33.5px !important;
+  line-height: 33.5px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: #fff;
+  color: #111;
+  border: 1px solid #e6e6e6;
+  box-sizing: border-box !important;
+  border-radius: 0 !important; /* joined squares */
+  cursor: pointer;
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.zajuna-cal__cell:hover { background: #f2f4f6; }
+.zajuna-cal__cell--muted {
+  color: #c2c2c2;
+  background: #f8f9fa;
+  cursor: default;
+}
+.zajuna-cal__cell--selected {
+  background: var(--moodle-green) !important; /* use Moodle green for selected day */
+  color: #fff !important;
+  border-color: var(--moodle-green) !important;
+}
+
+/* Show Primer acceso selects as blocked only when they are disabled (match País disabled style) */
+.moodle-filter .filter-row .moodle-select.primer-acceso-select:disabled,
+.moodle-filter .filter-row .moodle-select.primer-acceso-select[disabled],
+.moodle-filter .filter-row .select-wrapper.bulk-caret .moodle-select.primer-acceso-select:disabled,
+.moodle-filter .filter-row .select-wrapper.bulk-caret .moodle-select.primer-acceso-select[disabled] {
+  color: #6a737b !important;
+  background-color: #e9ecef !important;
+  border: 1px solid #8f959e !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.6) !important;
+  cursor: default !important;
+  opacity: 1 !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+}
+
+/* Ensure the wrapper doesn't show blocked cursor when hovering around caret area */
+.moodle-filter .filter-row .select-wrapper.bulk-caret:hover {
+  cursor: default !important;
+}
+
+/* Make option text appear muted when the select is disabled */
+.moodle-filter .filter-row .moodle-select.primer-acceso-select:disabled option,
+.moodle-filter .filter-row .moodle-select.primer-acceso-select[disabled] option,
+.moodle-filter .filter-row .select-wrapper.bulk-caret .moodle-select.primer-acceso-select:disabled option,
+.moodle-filter .filter-row .select-wrapper.bulk-caret .moodle-select.primer-acceso-select[disabled] option {
+  color: #6a737b !important;
+}
+
+/* Stronger override: ensure no 'not-allowed' cursor appears even on very quick
+   mouse movements by forcing default cursor on the disabled select and its
+   wrapper and descendants. This overrides other global disabled rules. */
+.moodle-filter .filter-row .select.custom-select.country-select:disabled,
+.moodle-filter .filter-row .select.custom-select.country-select[disabled],
+.moodle-filter .filter-row .select.custom-select.country-select:disabled *,
+.moodle-filter .filter-row .select.custom-select.country-select[disabled] *,
+.moodle-filter .filter-row .select-wrapper.bulk-caret,
+.moodle-filter .filter-row .select-wrapper.bulk-caret * {
+  cursor: default !important;
+}
+
+.moodle-filter .filter-row .form-inline {
+  position: relative;
+  display: inline-block;
+}
+
+.moodle-filter .filter-row .form-inline::after {
+  content: "";
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 18px;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 16'%3e%3cpath fill='%23343a40' d='M7 3L3 7h8L7 3z'/%3e%3cpath fill='%23343a40' d='M7 13l4-4H3l4 4z'/%3e%3c/svg%3e");
+  background-size: 16px 18px;
+  background-repeat: no-repeat;
+}
+
+.users-enrolled-panel .userlist.buttons .custom-select:disabled {
+  color: #6a737b !important;
+  background-color: #e9ecef !important;
+  /* Preserve the original outer contour color even when disabled */
+  border: 1px solid #8f959e !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.6) !important;
+}
+
+.users-enrolled-panel .userlist.buttons .custom-select:focus {
+  /* Make the focus border thicker and match the filters-panel focus style */
+  border: 2px solid var(--moodle-green) !important;
+  box-shadow: 0 0 0 6px rgba(57,169,0,0.06);
+  outline: none;
+}
+
+/* hide IE native arrow */
+.users-enrolled-panel .userlist.buttons .custom-select::-ms-expand { display: none; }
+
+/* Small-screen tweak: make select full-width under 420px */
+@media (max-width: 420px) {
+  .users-enrolled-panel .userlist.buttons .custom-select {
+    width: 100%;
+  }
+}
+
+/* Utility heading size class used for totals */
+.h2 {
+  font-size: 1.875rem; /* 30px approx */
+  line-height: 1.15;
+}
+
+/* Normalize H5P icon size to toolbar standard (override earlier large rule).
+   Keep high specificity and use !important only here to neutralize prior
+   conflicting rules from third-party stylesheets. */
+.atto-toolbar .atto-h5p-button .atto-h5p-icon,
+.atto-h5p-icon {
+  width: 16px !important;
+  height: 16px !important;
+  padding: 0 !important;
+  font-size: 12px !important;
+  line-height: 16px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  margin: 0 !important;
+}
+
+/* ===== Unified toolbar icon sizing and color =====
+   This rule enforces a consistent 16x16 icon size, centering and color
+   across all Atto toolbar buttons (both primary and secondary rows).
+   Use of !important here is intentional to neutralize group-specific
+   overrides spread across the stylesheet; we can remove !important later
+   once cleanup is completed. */
+.atto-toolbar .atto-btn .icon.fa,
+.atto-toolbar .atto-btn .atto-icon,
+.atto-toolbar .atto-btn svg,
+.atto-toolbar .atto-btn img.icon,
+.atto-toolbar .atto-btn .atto-letter {
+  width: 16px !important;
+  height: 16px !important;
+  font-size: 16px !important;
+  line-height: 16px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  vertical-align: middle !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  color: inherit !important;
+}
+
+/* Ensure letter-based icons (B, I, A) match the same visual height */
+.atto-toolbar .atto-btn .atto-letter {
+  font-size: 16px !important;
+  line-height: 16px !important;
+  width: 16px !important;
+  height: 16px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* CategoryCreatePage: apply same outer contour as Atto editor to specific inputs/selects
+   Scope under .users-category-page so other forms keep their original styling. This
+   gives the select for 'Categoría padre' and the inputs 'Nombre de la categoría' and
+   'Número ID de la categoría' the same 1px solid outer contour and 6px radius as
+   the Atto editor container for a consistent visual language. */
+.users-category-page .mform-field .mform-input:not(.atto-textarea),
+.users-category-page .mform-field .mform-select:not(.atto-textarea),
+.users-category-page .select-wrapper .mform-select:not(.atto-textarea) {
+  border: 1px solid #8f8f8f !important;
+  border-radius: 6px !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+
+/* Focus state: slightly thicker outline matching editor feel (exclude the Atto editor) */
+.users-category-page .mform-field .mform-input:not(.atto-textarea):focus,
+.users-category-page .mform-field .mform-select:not(.atto-textarea):focus,
+.users-category-page .select-wrapper .mform-select:not(.atto-textarea):focus {
+  outline: none;
+  /* Match the global .mform-input:focus behaviour: thick green border and stable padding */
+  border: 3px solid var(--moodle-green) !important;
+  padding: 4px 8px !important;
+  box-shadow: none !important;
+}
+
+/* tooltip baseline for buttons */
+.atto-btn[data-title] { position: relative; }
+.atto-btn[data-title]:hover::after {
+  content: attr(data-title);
+  position: absolute;
+  bottom: -34px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: #fff;
+  padding: 6px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 2000;
+}
+
+/* Back-compat: some buttons still use the native `title` attribute.
+   Provide the same pseudo-tooltip for those too so tooltips don't disappear. */
+.atto-btn[title] { position: relative; }
+.atto-btn[title]:hover::after {
+  content: attr(title);
+  position: absolute;
+  bottom: -34px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: #fff;
+  padding: 6px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 2000;
+}
+
+/* Allow pseudo-tooltips to overflow grouped button containers so the
+   tooltip is not clipped by `overflow: hidden` used to join rounded corners. */
+.atto-format-group,
+.atto-list-group,
+.atto-script-group,
+.atto-justify-group,
+.atto-insert-group,
+.atto-undo-group,
+.atto-link-group,
+.atto-media-group,
+.atto-access-group {
+  overflow: visible !important;
+}
+
+/* small-screen adjustments */
+@media (max-width: 640px) {
+  .atto-toolbar-row { gap: 3px; padding: 3px; }
+  .atto-btn { width: 30px; height: 30px; }
+  .atto-btn .atto-icon, .atto-btn svg { width: 16px; height: 16px; }
+  .atto-format-btn { min-width: 48px; height: 34px; }
+}
+
+/* ===== Override: force white title pills to exact size 303x34 =====
+   Use a high-specificity selector under .zajuna-sidebar and !important for
+   width/height to ensure these fixed dimensions take precedence over earlier
+   fluid rules. This keeps the visual pills consistent across NAV/ADMIN/CALENDAR
+   and the upcoming section. If you later want them to expand responsively,
+   remove the fixed width/height declarations. */
+.zajuna-sidebar .sidebar-section .sidebar-section-header,
+.zajuna-sidebar .sidebar-section.upcoming-section .sidebar-section-header,
+.zajuna-sidebar .sidebar-calendar-card .card-title {
+  width: 303px !important;
+  height: 34px !important;
+  min-width: 303px !important;
+  min-height: 34px !important;
+  padding: 0 10px !important; /* keep horizontal padding inside fixed height */
+  box-sizing: border-box !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+/* More specific adjustment to try to avoid fractional rendering and ensure
+   the glyph occupies the full 16x16 visual box. This helps on high-DPI displays.
+   Note: due to devicePixelRatio and font hinting some sub-pixel differences
+   may still occur; converting the glyph to an SVG path is the only way
+   to guarantee identical rasterization across platforms. */
+.atto-toolbar .atto-btn {
+  box-sizing: content-box !important;
+  padding: 6px 8px !important; /* keep click target while not affecting icon box */
+}
+.atto-toolbar .atto-btn .icon.fa::before {
+  display: inline-block !important;
+  width: 16px !important;
+  height: 16px !important;
+  line-height: 16px !important;
+  font-size: 16px !important;
+}
+.atto-toolbar .atto-btn .icon.fa {
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  transform: translateZ(0) !important;
+}
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  text-overflow: ellipsis !important;
+  border-radius: 8px !important;
+  background: #fff !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.06) !important;
+}
+
+/* Increase the gap between the section pill and the first item specifically
+   for NAVEGACIÓN and ADMINISTRACIÓN so the pill has breathing room. */
+.zajuna-sidebar .sidebar-section.nav-section .sidebar-section-header,
+.zajuna-sidebar .sidebar-section.admin-section .sidebar-section-header {
+  margin-bottom: 18px !important;
+}
+
+/* ensure title text uses a stable font-size and truncates inside the fixed pill */
+.zajuna-sidebar .sidebar-section .sidebar-section-title,
+.zajuna-sidebar .sidebar-calendar-card .card-title {
+  font-size: 14px !important;
+  line-height: 1 !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  text-overflow: ellipsis !important;
+}
+
+/* Note: Fixed-width pills may leave extra horizontal space inside the sidebar
+   if the sidebar inner container is wider than 303px. This is intentional per
+   the requested pixel dimensions. If you want the pill centered inside the
+   section body, add 'margin-left: auto; margin-right: auto;' to the selectors. */
+
+/* Define tertiary color for hover background (user-provided) and ensure
+   navigation/admin hover shows this background while keeping text color stable. */
+:root { --tertiary: #f2ffe5; }
+
+/* Sidebar navigation/admin hover behaviour: use tertiary background and
+   prevent the text from turning green on hover. Scoped under .zajuna-sidebar
+   and .sidebar-section so it only applies to the NAV/ADMIN sections. */
+.zajuna-sidebar .sidebar-section .sidebar-nav-link:hover {
+  background: var(--tertiary) !important;
+}
+
+.zajuna-sidebar .sidebar-section .sidebar-nav-link:hover .nav-item-text,
+.zajuna-sidebar .sidebar-section .sidebar-nav-link:hover .nav-item-text a,
+.zajuna-sidebar .sidebar-section .nav-item-text:hover,
+.zajuna-sidebar .sidebar-section .nav-item-text a:hover {
+  color: #222222 !important; /* keep dark text on hover */
+  text-decoration: none !important;
+}
+
+/* Also ensure chevrons and icons remain the same color on hover */
+.zajuna-sidebar .sidebar-section .sidebar-nav-link:hover .nav-item-icon,
+.zajuna-sidebar .sidebar-section .sidebar-nav-link:hover .nav-item-chevron {
+  color: inherit !important;
+}
+
+/* Make NAV/ADMIN links render as fully rounded pills like the reference image.
+   Keep left padding from level rules so nested items remain indented. Only
+   override top/bottom/right padding, height, gap and shape here. */
+.zajuna-sidebar .sidebar-section .sidebar-nav-link {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  height: auto !important;         /* allow the pill to size to its content */
+  min-height: 28px !important;     /* keep a sensible minimum */
+  line-height: 1.2 !important;     /* avoid extra vertical space but preserve descenders */
+  padding: 4px 12px !important;    /* vertical padding controls effective height */
+  border-radius: 999px !important; /* fully rounded pill */
+  box-sizing: border-box !important;
+  transition: background 0.12s ease, transform 0.06s ease !important;
+  /* make pill stretch to container while leaving left offset for indentation */
+  width: 100% !important;
+}
+
+.zajuna-sidebar .sidebar-section .sidebar-nav-link .nav-item-icon {
+  width: 1em !important;           /* scale with font-size */
+  height: 1em !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin-left: 4px !important;
+  flex: 0 0 1em !important;
+}
+
+/* Make the pill start at the item (respecting indentation) and extend to the end
+   of the sidebar container. We implement by giving the link full width and applying
+   a left margin equal to the previous indentation. Also reduce internal left padding
+   so content sits inside the pill. */
+.sidebar-nav-item.level-1 .sidebar-nav-link {
+  margin-left: 20px !important; /* previous indent */
+  width: calc(100% - 20px) !important;
+  padding-left: 12px !important; /* internal left padding inside pill */
+}
+.sidebar-nav-item.level-2 .sidebar-nav-link {
+  margin-left: 32px !important;
+  width: calc(100% - 32px) !important;
+  padding-left: 12px !important;
+}
+.sidebar-nav-item.level-3 .sidebar-nav-link {
+  margin-left: 44px !important;
+  width: calc(100% - 44px) !important;
+  padding-left: 12px !important;
+}
+
+.zajuna-sidebar .sidebar-section .sidebar-nav-link .nav-item-text,
+.zajuna-sidebar .sidebar-section .sidebar-nav-link .nav-item-text a {
+  color: #222222 !important; /* keep dark text */
+  font-size: 14px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* Ensure hover visual (white-centered ellipse with gray edges) and make
+   active (pressed/toggled) buttons keep the same visual spec after click. */
+.atto-toolbar .atto-btn:hover,
+.atto-toolbar .atto-btn.atto-active {
+  background-image: radial-gradient(ellipse at center,#fff 60%,#dfdfdf 100%);
+  background-color: #ebebeb;
+  border-color: #dddddd !important;
+  transform: translateY(-1px);
+  color: inherit !important;
+}
+
+/* More specific: ensure grouped format button (A ▾) also shows active state visually */
+.atto-format-btn.atto-active,
+.atto-format-group .atto-btn.atto-active {
+  background-image: radial-gradient(ellipse at center,#fff 60%,#dfdfdf 100%);
+  background-color: #ebebeb;
+  border-color: #dddddd !important;
+  transform: translateY(-1px);
+  color: inherit !important;
+}
+
+
+/* Ensure inputs/textarea use the same outer contour line as País select (Colombia)
+   This applies the 1px solid #8f959e border to regular text-like inputs and textareas.
+   If you prefer a narrower scope (e.g. only filter inputs), tell me and I will restrain it. */
+input, textarea {
+  border: 1px solid #8f959e;
+}
+

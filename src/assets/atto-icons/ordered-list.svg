@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+  <!-- Left: numbers 1 and 2 (uses system sans-serif) -->
+  <!-- Place numbers centered in the gaps between the horizontal lines -->
+  <!-- Centers computed as midpoints between the rect centers: 1 at ~8.7, 2 at ~15.5 -->
+  <text x="3" y="8.7" font-family="Arial, Helvetica, sans-serif" font-size="6.5" font-weight="600" dominant-baseline="middle">1</text>
+  <text x="3" y="15.5" font-family="Arial, Helvetica, sans-serif" font-size="6.5" font-weight="600" dominant-baseline="middle">2</text>
+
+  <!-- Right: three horizontal list lines -->
+  <rect x="8" y="4.5" width="13" height="1.6" rx="0.8" fill="currentColor" />
+  <rect x="8" y="11.3" width="13" height="1.6" rx="0.8" fill="currentColor" />
+  <rect x="8" y="18.1" width="13" height="1.6" rx="0.8" fill="currentColor" />
+</svg>
