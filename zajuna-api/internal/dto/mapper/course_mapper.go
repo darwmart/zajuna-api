@@ -15,6 +15,7 @@ func CourseToResponse(course *models.Course) *response.CourseResponse {
 	return &response.CourseResponse{
 		ID:                course.ID,
 		Category:          course.Category,
+		CategoryName:      course.CategoryName,
 		FullName:          course.FullName,
 		ShortName:         course.ShortName,
 		IDNumber:          course.IDNumber,

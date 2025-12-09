@@ -3,6 +3,7 @@ package models
 type Course struct {
 	ID                int    `gorm:"column:id" json:"id"`
 	Category          int    `gorm:"column:category" json:"category"`
+	CategoryName      string `gorm:"-" json:"categoryname,omitempty"` // Campo calculado, no de la tabla
 	FullName          string `gorm:"column:fullname" json:"fullName"`
 	ShortName         string `gorm:"column:shortname" json:"shortName"`
 	IDNumber          string `gorm:"column:idnumber" json:"idNumber"`

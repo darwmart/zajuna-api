@@ -4,6 +4,7 @@ package response
 type CourseResponse struct {
 	ID                int    `json:"id"`
 	Category          int    `json:"category"`
+	CategoryName      string `json:"categoryname,omitempty"`
 	FullName          string `json:"fullname"`
 	ShortName         string `json:"shortname"`
 	IDNumber          string `json:"idnumber"`
