@@ -405,7 +405,7 @@ func (h *CourseHandler) GetCourseContent(c *gin.Context) {
 	}
 
 	// 2. Obtener courseID del path parameter
-	courseIDStr := c.Param("id")
+	courseIDStr := c.Param("idnumber")
 	courseID, err := strconv.Atoi(courseIDStr)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, response.NewErrorResponse(

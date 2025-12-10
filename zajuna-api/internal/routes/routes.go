@@ -79,11 +79,11 @@ func RegisterRoutes(router *gin.Engine, db *gorm.DB) {
 		courseHandler.GetMyCourses) // Solo requiere autenticación (AuthMiddleware ya aplicado)
 
 	// Obtener detalles de un curso por idnumber
-	api.GET("/courses/details/:idnumber",
+	api.GET("/courses/:idnumber/details",
 		courseHandler.GetCourseDetails) // Sin middleware por ahora, agregarlo si es necesario
 
 	// Obtener contenido del curso (secciones y módulos)
-	api.GET("/courses/:id/content",
+	api.GET("/courses/:idnumber/content",
 		courseHandler.GetCourseContent) // Requiere autenticación
 
 	// Eliminar cursos (requiere capacidad de eliminar cursos)

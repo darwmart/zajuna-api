@@ -16,7 +16,7 @@ yarn-error.log*
 /tmp/*.log
 
 # Scripts de desarrollo
-start-dev.sh
+node_modules/
 
 # Archivos de documentación temporal
 INTEGRACION.md
