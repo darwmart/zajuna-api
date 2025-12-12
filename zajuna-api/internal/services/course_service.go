@@ -206,8 +206,9 @@ func (s *CourseService) GetCoursesWhereUserIsTeacher(userID int) ([]models.Cours
 // GetCourseContent obtiene el contenido completo del curso (secciones y módulos)
 // Compatible con core_course_get_contents de Moodle
 // Filtra el contenido según los permisos del usuario
+// Devuelve secciones PLANAS con campo parent (el cliente construye la jerarquía)
 func (s *CourseService) GetCourseContent(courseID int, userID int) ([]repository.CourseSection, error) {
-	// Obtener todas las secciones (sin filtrar)
+	// Obtener todas las secciones (planas)
 	sections, err := s.repo.GetCourseContent(courseID)
 	if err != nil {
 		return nil, err

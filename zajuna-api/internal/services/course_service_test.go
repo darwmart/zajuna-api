@@ -15,7 +15,6 @@ import (
 func TestGetAllCourses_Success(t *testing.T) {
 	// Arrange
 	mockRepo := new(mocks.MockCourseRepository)
-	service := NewCourseService(mockRepo)
 
 	expectedCourses := []models.Course{
 		{ID: 1, FullName: "Course 1", ShortName: "C1"},

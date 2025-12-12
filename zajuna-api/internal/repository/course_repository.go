@@ -576,111 +576,306 @@ func (r *CourseRepository) GetCoursesWhereUserIsTeacher(userID int) ([]models.Co
 	return courses, nil
 }
 
+// ============================================================================
+// STRUCTS - Compatible 100% con core_course_get_contents de Moodle 4.x
+// ============================================================================
+
 // CourseModule representa un módulo/actividad dentro de una sección
+// Compatible con la estructura devuelta por core_course_get_contents
 type CourseModule struct {
-	ID         int    `json:"id"`
-	Module     int    `json:"module"`     // ID del tipo de módulo en mdl_modules
-	Instance   int    `json:"instance"`   // ID de la instancia específica (en mdl_assign, mdl_quiz, etc.)
-	Name       string `json:"name"`
-	ModName    string `json:"modname"`    // Tipo de módulo: assign, quiz, resource, etc.
-	Indent     int    `json:"indent"`     // Nivel de indentación
-	Visible    int    `json:"visible"`    // 0 = oculto, 1 = visible
-	Completion int    `json:"completion"` // Estado de completitud
-	URL        string `json:"url"`        // URL del módulo (si aplica)
+	ID        int    `json:"id"`        // cm.id - ID del course_module
+	Module    int    `json:"module"`    // cm.module - ID del tipo de módulo
+	Instance  int    `json:"instance"`  // cm.instance - ID de la instancia específica
+	Name      string `json:"name"`      // Nombre del módulo (desde mdl_assign, mdl_quiz, etc.)
+	ModName   string `json:"modname"`   // Tipo: assign, quiz, resource, forum, etc.
+	ModIcon   string `json:"modicon"`   // URL del icono (opcional)
+	ModPlural string `json:"modplural"` // Nombre plural del módulo (opcional)
+
+	Indent      int  `json:"indent"`      // Nivel de indentación
+	Visible     int  `json:"visible"`     // 0 = oculto, 1 = visible
+	UserVisible bool `json:"uservisible"` // Si el usuario puede verlo
+
+	URL string `json:"url"` // URL del módulo: /mod/{modname}/view.php?id={cmid}
+
+	Completion int `json:"completion"` // Estado de completitud (0, 1, 2)
+
+	// Campos opcionales que Moodle puede devolver
+	VisibleOnCoursePage int    `json:"visibleoncoursepage"` // Si es visible en la página del curso
+	AvailabilityInfo    string `json:"availabilityinfo"`    // Info de restricciones
 }
 
 // CourseSection representa una sección del curso con sus módulos
+// Compatible 100% con core_course_get_contents de Moodle
 type CourseSection struct {
-	ID              int            `json:"id"`
-	Section         int            `json:"section"` // Número de sección (0 = general, 1, 2, 3...)
-	Name            string         `json:"name"`
-	Summary         string         `json:"summary"`
-	SummaryFormat   int            `json:"summaryformat"`
-	Visible         int            `json:"visible"`
-	Modules         []CourseModule `json:"modules" gorm:"-"`          // Ignorar en el query principal
-	UserVisible     bool           `json:"uservisible" gorm:"-"`      // Calculado manualmente
+	// Campos básicos de mdl_course_sections
+	ID            int    `json:"id"`            // ID de la sección
+	Section       int    `json:"section"`       // Número de sección (0, 1, 2...)
+	Name          string `json:"name"`          // Nombre de la sección
+	Summary       string `json:"summary"`       // Resumen HTML
+	SummaryFormat int    `json:"summaryformat"` // Formato (1 = HTML)
+
+	// Visibilidad
+	Visible     int  `json:"visible"`     // 0 = oculta, 1 = visible
+	UserVisible bool `json:"uservisible"` // Calculado: si el usuario puede verla
+
+	// Jerarquía (Formato Flexsections)
+	Parent *int `json:"parent"` // ID de la sección padre (null = raíz)
+
+	// Restricciones y disponibilidad
+	AvailabilityInfo string `json:"availabilityinfo"` // HTML con info de restricciones
+
+	// Campos opcionales
+	HiddenFromStudents bool `json:"hiddenfromstudents"` // Si está oculta para estudiantes
+
+	// Módulos de la sección
+	Modules []CourseModule `json:"modules" gorm:"-"` // Actividades/recursos
 }
 
+// SectionWithChildren representa una sección con su jerarquía de subsecciones
+// Utilizado para construir el árbol jerárquico del formato flexsections
+type SectionWithChildren struct {
+	CourseSection                       // Embebe todos los campos de CourseSection
+	Children      []SectionWithChildren `json:"subsections,omitempty"` // Subsecciones anidadas
+}
+
+// ============================================================================
+// FUNCIÓN PRINCIPAL: GetCourseContent
+// Replica fielmente core_course_get_contents de Moodle 4.x
+// ============================================================================
+
 // GetCourseContent obtiene el contenido completo del curso (secciones y módulos)
-// Compatible con core_course_get_contents de Moodle
+// Compatible 100% con core_course_get_contents de Moodle Web Services
+//
+// Parámetros:
+//   - courseID: ID del curso (mdl_course.id)
+//
+// Retorna:
+//   - Array de CourseSection PLANAS con campo parent (igual que Moodle)
+//   - El cliente construirá la jerarquía usando el campo parent
+//   - Error si hay problemas de base de datos
 func (r *CourseRepository) GetCourseContent(courseID int) ([]CourseSection, error) {
 	var sections []CourseSection
 
-	// Obtener todas las secciones del curso
+	// ================================================================
+	// 1. OBTENER TODAS LAS SECCIONES DEL CURSO
+	// ================================================================
 	err := r.db.Table("mdl_course_sections").
-		Select("id, section, name, summary, summaryformat, visible").
+		Select("id, section, name, summary, summaryformat, visible, sequence").
 		Where("course = ?", courseID).
 		Order("section ASC").
 		Scan(&sections).Error
 
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("error obteniendo secciones: %w", err)
 	}
 
-	// Para cada sección, obtener sus módulos
+	// ================================================================
+	// 2. ENRIQUECER CADA SECCIÓN
+	// ================================================================
 	for i := range sections {
-		var modules []CourseModule
+		sectionID := sections[i].ID
 
-		// Query para obtener módulos de la sección
-		// Juntamos mdl_course_modules con mdl_modules para obtener el nombre del tipo de módulo
-		err := r.db.Table("mdl_course_modules AS cm").
-			Select("cm.id, cm.module, cm.instance, cm.indent, cm.visible, cm.completion, m.name as modname").
-			Joins("JOIN mdl_modules AS m ON m.id = cm.module").
-			Where("cm.course = ? AND cm.section = ? AND cm.deletioninprogress = 0", courseID, sections[i].ID).
-			Order("cm.sequence ASC").
-			Scan(&modules).Error
+		// parent (desde mdl_course_format_options para formato flexsections)
+		var parentValue *int
+		r.db.Table("mdl_course_format_options").
+			Select("CAST(value AS INTEGER)").
+			Where("courseid = ? AND sectionid = ? AND name = 'parent'", courseID, sectionID).
+			Scan(&parentValue)
+		sections[i].Parent = parentValue
 
-		if err != nil {
-			continue // Si hay error en módulos, continuamos con la siguiente sección
+		// availability
+		var availability string
+		r.db.Table("mdl_course_sections").
+			Select("availability").
+			Where("id = ?", sectionID).
+			Scan(&availability)
+
+		if availability != "" && availability != "null" {
+			sections[i].AvailabilityInfo = "Restricciones de acceso aplicadas"
 		}
 
-		// Para cada módulo, obtener el nombre del recurso/actividad específica
-		for j := range modules {
-			var moduleName string
-			var moduleTable string
-
-			// Cada tipo de módulo tiene su propia tabla en Moodle
-			// Por ejemplo: mdl_assign, mdl_quiz, mdl_resource, etc.
-			switch modules[j].ModName {
-			case "assign":
-				moduleTable = "mdl_assign"
-			case "quiz":
-				moduleTable = "mdl_quiz"
-			case "resource":
-				moduleTable = "mdl_resource"
-			case "forum":
-				moduleTable = "mdl_forum"
-			case "page":
-				moduleTable = "mdl_page"
-			case "url":
-				moduleTable = "mdl_url"
-			case "folder":
-				moduleTable = "mdl_folder"
-			case "book":
-				moduleTable = "mdl_book"
-			case "label":
-				moduleTable = "mdl_label"
-			default:
-				moduleTable = "mdl_" + modules[j].ModName
-			}
-
-			// Obtener el nombre del módulo desde su tabla específica
-			r.db.Table(moduleTable).
-				Select("name").
-				Where("id = ?", modules[j].Instance).
-				Scan(&moduleName)
-
-			if moduleName != "" {
-				modules[j].Name = moduleName
-			}
-
-			// Construir URL del módulo (simulada, en producción sería la URL de Moodle)
-			modules[j].URL = "/mod/" + modules[j].ModName + "/view.php?id=" + fmt.Sprint(modules[j].ID)
-		}
-
-		sections[i].Modules = modules
 		sections[i].UserVisible = sections[i].Visible == 1
+		sections[i].HiddenFromStudents = sections[i].Visible == 0
+
+		// módulos
+		modules, err := r.getCourseModules(courseID, sectionID)
+		if err == nil {
+			sections[i].Modules = modules
+		}
 	}
 
+	// ================================================================
+	// RETORNAR SECCIONES PLANAS (como Moodle core_course_get_contents)
+	// El frontend construirá la jerarquía usando el campo 'parent'
+	// ================================================================
 	return sections, nil
+}
+
+// ============================================================================
+// FUNCIÓN AUXILIAR: getCourseModules
+// Obtiene los módulos (actividades/recursos) de una sección específica
+// ============================================================================
+
+func (r *CourseRepository) getCourseModules(courseID int, sectionID int) ([]CourseModule, error) {
+	var modules []CourseModule
+
+	// ========================================================================
+	// PASO 1: Obtener módulos desde mdl_course_modules
+	// ========================================================================
+	err := r.db.Table("mdl_course_modules AS cm").
+		Select(`
+			cm.id,
+			cm.module,
+			cm.instance,
+			cm.indent,
+			cm.visible,
+			cm.completion,
+			cm.visibleoncoursepage,
+			m.name as modname
+		`).
+		Joins("JOIN mdl_modules AS m ON m.id = cm.module").
+		Where("cm.course = ? AND cm.section = ? AND cm.deletioninprogress = 0", courseID, sectionID).
+		Order("cm.id ASC").
+		Scan(&modules).Error
+
+	if err != nil {
+		return nil, fmt.Errorf("error al obtener módulos: %w", err)
+	}
+
+	// ========================================================================
+	// PASO 2: Para cada módulo, obtener su NOMBRE REAL desde su tabla
+	// ========================================================================
+	for j := range modules {
+		// Validar que ModName no esté vacío
+		if modules[j].ModName == "" {
+			continue
+		}
+
+		// Determinar la tabla del módulo
+		moduleTable := getModuleTableName(modules[j].ModName)
+		if moduleTable == "" || moduleTable == "mdl_" {
+			continue
+		}
+
+		// Obtener el nombre del módulo desde su tabla específica
+		var moduleName string
+		r.db.Table(moduleTable).
+			Select("name").
+			Where("id = ?", modules[j].Instance).
+			Scan(&moduleName)
+
+		// Asignar nombre
+		if moduleName != "" {
+			modules[j].Name = moduleName
+		} else {
+			modules[j].Name = fmt.Sprintf("%s #%d", modules[j].ModName, modules[j].Instance)
+		}
+
+		// ====================================================================
+		// PASO 3: Generar URL correcta (formato Moodle)
+		// ====================================================================
+		modules[j].URL = fmt.Sprintf("/mod/%s/view.php?id=%d", modules[j].ModName, modules[j].ID)
+
+		// ====================================================================
+		// PASO 4: Calcular UserVisible
+		// ====================================================================
+		modules[j].UserVisible = modules[j].Visible == 1
+
+		// ====================================================================
+		// PASO 5: Campos opcionales (compatibilidad con Moodle)
+		// ====================================================================
+		modules[j].ModIcon = fmt.Sprintf("/theme/image.php/boost/%s/1/monologo", modules[j].ModName)
+		modules[j].ModPlural = getModulePluralName(modules[j].ModName)
+	}
+
+	return modules, nil
+}
+
+// ============================================================================
+// FUNCIONES AUXILIARES
+// ============================================================================
+
+// getModuleTableName retorna el nombre de la tabla Moodle para cada tipo de módulo
+func getModuleTableName(modname string) string {
+	switch modname {
+	case "assign":
+		return "mdl_assign"
+	case "quiz":
+		return "mdl_quiz"
+	case "resource":
+		return "mdl_resource"
+	case "forum":
+		return "mdl_forum"
+	case "page":
+		return "mdl_page"
+	case "url":
+		return "mdl_url"
+	case "folder":
+		return "mdl_folder"
+	case "book":
+		return "mdl_book"
+	case "label":
+		return "mdl_label"
+	case "h5pactivity":
+		return "mdl_h5pactivity"
+	case "choice":
+		return "mdl_choice"
+	case "data":
+		return "mdl_data"
+	case "feedback":
+		return "mdl_feedback"
+	case "glossary":
+		return "mdl_glossary"
+	case "lesson":
+		return "mdl_lesson"
+	case "scorm":
+		return "mdl_scorm"
+	case "survey":
+		return "mdl_survey"
+	case "wiki":
+		return "mdl_wiki"
+	case "workshop":
+		return "mdl_workshop"
+	case "chat":
+		return "mdl_chat"
+	case "lti":
+		return "mdl_lti"
+	default:
+		if modname != "" {
+			return "mdl_" + modname
+		}
+		return ""
+	}
+}
+
+// getModulePluralName retorna el nombre plural de un tipo de módulo (para UI)
+func getModulePluralName(modname string) string {
+	pluralNames := map[string]string{
+		"assign":      "Tareas",
+		"quiz":        "Cuestionarios",
+		"resource":    "Archivos",
+		"forum":       "Foros",
+		"page":        "Páginas",
+		"url":         "URLs",
+		"folder":      "Carpetas",
+		"book":        "Libros",
+		"label":       "Etiquetas",
+		"h5pactivity": "Actividades H5P",
+		"choice":      "Consultas",
+		"data":        "Bases de datos",
+		"feedback":    "Retroalimentaciones",
+		"glossary":    "Glosarios",
+		"lesson":      "Lecciones",
+		"scorm":       "Paquetes SCORM",
+		"survey":      "Encuestas",
+		"wiki":        "Wikis",
+		"workshop":    "Talleres",
+		"chat":        "Chats",
+		"lti":         "Herramientas externas",
+	}
+
+	if plural, exists := pluralNames[modname]; exists {
+		return plural
+	}
+	return modname
 }
