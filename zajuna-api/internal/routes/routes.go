@@ -128,6 +128,9 @@ func RegisterRoutes(router *gin.Engine, db *gorm.DB) {
 		middleware.RequireCapability(permService, "moodle/user:update"),
 		userHandler.ToggleUserStatus)
 
+	// Obtener usuario actual autenticado (similar a Moodle user_menu)
+	api.GET("/me", userHandler.GetMe)
+
 	// --- Rutas de búsqueda de cursos (comentado - implementar cuando esté listo) ---
 	// api.GET("/courses/search",
 	//	 middleware.RequireCapability(permService, "moodle/course:view"),

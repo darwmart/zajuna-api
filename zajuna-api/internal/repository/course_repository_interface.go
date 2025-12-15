@@ -12,6 +12,7 @@ type CourseRepositoryInterface interface {
 	GetCourseByID(id uint) (*models.Course, error)
 	GetCourseByIDNumber(idnumber string) (*models.Course, error)
 	GetCourseDetails(idnumber string) (*CourseDetails, error)
+	GetCourseDetailsByID(id int) (*CourseDetails, error)
 	DeleteCourses(courseIDs []int) ([]models.Warning, error)
 	UpdateCourse(id int, updates map[string]interface{}) error
 	UpdateCourseFormatOptions(courseID int, options []request.CourseFormatOption) error

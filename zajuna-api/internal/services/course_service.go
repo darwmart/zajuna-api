@@ -36,6 +36,10 @@ func (s *CourseService) GetCourseDetails(idnumber string) (*repository.CourseDet
 	return s.repo.GetCourseDetails(idnumber)
 }
 
+func (s *CourseService) GetCourseDetailsByID(id int) (*repository.CourseDetails, error) {
+	return s.repo.GetCourseDetailsByID(id)
+}
+
 func (s *CourseService) DeleteCourses(courseIDs []int) (*models.DeleteCoursesResponse, error) {
 	warnings, err := s.repo.DeleteCourses(courseIDs)
 	if err != nil {

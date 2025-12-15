@@ -12,4 +12,5 @@ type UserServiceInterface interface {
 	UpdateUsers(users []models.User) (int64, error)
 	ToggleUserStatus(userID uint) (int, error)
 	GetEnrolledUsers(courseID int, options map[string]interface{}) ([]response.EnrolledUserResponse, int, error)
+	GetUserByID(userID uint) (*models.User, error)
 }

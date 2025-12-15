@@ -69,3 +69,8 @@ func (s *UserService) GetEnrolledUsers(courseID int, options map[string]interfac
 
 	return responses, total, nil
 }
+
+// GetUserByID obtiene un usuario por su ID (solo usuarios activos y no eliminados)
+func (s *UserService) GetUserByID(userID uint) (*models.User, error) {
+	return s.repo.FindByID(userID)
+}

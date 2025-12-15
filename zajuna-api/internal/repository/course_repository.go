@@ -84,6 +84,17 @@ func (r *CourseRepository) GetCourseByIDNumber(idnumber string) (*models.Course,
 	return &course, nil
 }
 
+// GetCourseDetailsByID obtiene los detalles completos de un curso por su ID
+func (r *CourseRepository) GetCourseDetailsByID(id int) (*CourseDetails, error) {
+	// Buscar curso por ID
+	course, err := r.GetCourseByID(uint(id))
+	if err != nil {
+		return nil, err
+	}
+
+	return r.buildCourseDetails(course)
+}
+
 // GetRoleAssignments obtiene el número de usuarios por rol en un curso.
 func (r *CourseRepository) GetCourseDetails(idnumber string) (*CourseDetails, error) {
 	// Buscar curso por idnumber
@@ -92,6 +103,11 @@ func (r *CourseRepository) GetCourseDetails(idnumber string) (*CourseDetails, er
 		return nil, err
 	}
 
+	return r.buildCourseDetails(course)
+}
+
+// buildCourseDetails construye los detalles completos de un curso
+func (r *CourseRepository) buildCourseDetails(course *models.Course) (*CourseDetails, error) {
 	courseID := int(course.ID)
 
 	// Creamos el struct base de detalles

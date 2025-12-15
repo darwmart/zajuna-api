@@ -295,3 +295,21 @@ func (r *UserRepository) GetUserEnrolledCourses(userID int) ([]map[string]interf
 	return courses, err
 }
 
+// FindByID obtiene un usuario por su ID (solo activos y no eliminados, igual que Moodle)
+func (r *UserRepository) FindByID(userID uint) (*models.User, error) {
+	var user models.User
+
+	// Buscar usuario con las mismas condiciones que Moodle:
+	// - deleted = 0 (no eliminado)
+	// - suspended = 0 (no suspendido)
+	// - confirmed = 1 (email confirmado)
+	err := r.DB.Where("id = ? AND deleted = 0 AND suspended = 0 AND confirmed = 1", userID).
+		First(&user).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &user, nil
+}
+

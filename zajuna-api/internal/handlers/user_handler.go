@@ -380,3 +380,54 @@ func (h *UserHandler) GetEnrolledUsers(c *gin.Context) {
 		Total: total,
 	})
 }
+
+// GetMe obtiene la información del usuario autenticado (similar a Moodle user_menu)
+// @Summary      Obtener usuario actual
+// @Description  Obtiene la información completa del usuario autenticado (nombre completo, avatar, email)
+// @Tags         users
+// @Produce      json
+// @Success      200  {object}  response.UserResponse
+// @Failure      401  {object}  response.ErrorResponse
+// @Failure      404  {object}  response.ErrorResponse
+// @Failure      500  {object}  response.ErrorResponse
+// @Router       /me [get]
+func (h *UserHandler) GetMe(c *gin.Context) {
+	// 1. Obtener userID del contexto (inyectado por AuthMiddleware)
+	userID, exists := c.Get("userID")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, response.NewErrorResponse(
+			"UNAUTHORIZED",
+			"No hay usuario autenticado",
+			nil,
+		))
+		return
+	}
+
+	// Convertir a int (el AuthMiddleware guarda como int)
+	uid, ok := userID.(int)
+	if !ok {
+		c.JSON(http.StatusInternalServerError, response.NewErrorResponse(
+			"INVALID_USER_ID",
+			"ID de usuario inválido en el contexto",
+			nil,
+		))
+		return
+	}
+
+	// 2. Obtener usuario del servicio
+	user, err := h.service.GetUserByID(uint(uid))
+	if err != nil {
+		c.JSON(http.StatusNotFound, response.NewErrorResponse(
+			"USER_NOT_FOUND",
+			"Usuario no encontrado o inactivo",
+			err.Error(),
+		))
+		return
+	}
+
+	// 3. Convertir a response DTO
+	userResponse := mapper.UserToResponse(user)
+
+	// 4. Responder
+	c.JSON(http.StatusOK, userResponse)
+}
