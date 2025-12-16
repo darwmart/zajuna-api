@@ -2,6 +2,7 @@ package request
 
 // GetUsersRequest representa los parámetros de búsqueda de usuarios
 type GetUsersRequest struct {
+	Q         string `form:"q" binding:"omitempty,min=1,max=100"` // Búsqueda global (firstname, lastname, username, email)
 	Firstname string `form:"firstname" binding:"omitempty,min=2,max=100"`
 	Lastname  string `form:"lastname" binding:"omitempty,min=2,max=100"`
 	Username  string `form:"username" binding:"omitempty,min=2,max=100"`
@@ -24,6 +25,14 @@ func (r *GetUsersRequest) SetDefaults() {
 func (r *GetUsersRequest) ToFilterMap() map[string]string {
 	filters := make(map[string]string)
 
+	// Si hay búsqueda global (q), ignorar los demás filtros
+	// La búsqueda global tiene prioridad sobre filtros individuales
+	if r.Q != "" {
+		filters["q"] = r.Q
+		return filters
+	}
+
+	// Si no hay búsqueda global, aplicar filtros individuales
 	if r.Firstname != "" {
 		filters["firstname"] = r.Firstname
 	}
