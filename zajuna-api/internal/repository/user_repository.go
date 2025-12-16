@@ -21,18 +21,34 @@ func (r *UserRepository) FindByFilters(filters map[string]string, page, limit in
 
 	query := r.DB.Model(&models.User{})
 
-	// Aplicar filtros solo si vienen con datos
-	if firstname := filters["firstname"]; firstname != "" {
-		query = query.Where("firstname ILIKE ?", "%"+firstname+"%")
-	}
-	if lastname := filters["lastname"]; lastname != "" {
-		query = query.Where("lastname ILIKE ?", "%"+lastname+"%")
-	}
-	if username := filters["username"]; username != "" {
-		query = query.Where("username ILIKE ?", "%"+username+"%")
-	}
-	if email := filters["email"]; email != "" {
-		query = query.Where("email ILIKE ?", "%"+email+"%")
+	// Búsqueda global (q) - Busca en todos los campos como Moodle
+	if q := filters["q"]; q != "" {
+		searchPattern := "%" + q + "%"
+		query = query.Where(`
+			firstname ILIKE ?
+			OR lastname ILIKE ?
+			OR username ILIKE ?
+			OR email ILIKE ?
+		`,
+			searchPattern,
+			searchPattern,
+			searchPattern,
+			searchPattern,
+		)
+	} else {
+		// Aplicar filtros individuales solo si NO hay búsqueda global
+		if firstname := filters["firstname"]; firstname != "" {
+			query = query.Where("firstname ILIKE ?", "%"+firstname+"%")
+		}
+		if lastname := filters["lastname"]; lastname != "" {
+			query = query.Where("lastname ILIKE ?", "%"+lastname+"%")
+		}
+		if username := filters["username"]; username != "" {
+			query = query.Where("username ILIKE ?", "%"+username+"%")
+		}
+		if email := filters["email"]; email != "" {
+			query = query.Where("email ILIKE ?", "%"+email+"%")
+		}
 	}
 
 	// Contar total antes de paginar
