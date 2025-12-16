@@ -8,6 +8,7 @@ import (
 	"zajunaApi/internal/dto/request"
 	"zajunaApi/internal/dto/response"
 	"zajunaApi/internal/models"
+	"zajunaApi/internal/repository"
 	"zajunaApi/internal/services"
 
 	"github.com/gin-gonic/gin"
@@ -372,17 +373,16 @@ func (h *CourseHandler) GetMyCourses(c *gin.Context) {
 
 // GetCourseContent godoc
 // @Summary      Obtener contenido del curso (secciones y módulos)
-// @Description  Obtiene todas las secciones y actividades de un curso por su ID (planas con campo parent). Compatible con core_course_get_contents de Moodle
+// @Description  Obtiene todas las secciones y actividades de un curso (planas con campo parent). Compatible con core_course_get_contents de Moodle
 // @Tags         courses
 // @Security     BearerAuth
 // @Produce      json
-// @Param        idnumber path int true "ID del curso (numérico)"
-// @Success      200 {object} object
+// @Param        id path int true "ID del curso"
+// @Success      200 {array} repository.CourseSection
 // @Failure      400 {object} response.ErrorResponse
 // @Failure      401 {object} response.ErrorResponse
-// @Failure      404 {object} response.ErrorResponse
 // @Failure      500 {object} response.ErrorResponse
-// @Router       /courses/{idnumber}/content [get]
+// @Router       /courses/{id}/content [get]
 func (h *CourseHandler) GetCourseContent(c *gin.Context) {
 	// 1. Obtener userID del contexto (establecido por AuthMiddleware)
 	userID, exists := c.Get("userID")
@@ -406,37 +406,38 @@ func (h *CourseHandler) GetCourseContent(c *gin.Context) {
 		return
 	}
 
-	// 2. Obtener ID del curso del path parameter
-	idParam := c.Param("idnumber")
-	if idParam == "" {
+	// 2. Obtener idnumber del path parameter
+	idnumber := c.Param("idnumber")
+	if idnumber == "" {
 		c.JSON(http.StatusBadRequest, response.NewErrorResponse(
-			"INVALID_PARAM",
-			"ID de curso no proporcionado",
+			"INVALID_IDNUMBER",
+			"Idnumber de curso inválido",
 			"",
 		))
 		return
 	}
 
-	// 3. Parsear el ID como número
-	courseID, err := strconv.Atoi(idParam)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, response.NewErrorResponse(
-			"INVALID_COURSE_ID",
-			"El ID del curso debe ser un número válido",
-			err.Error(),
-		))
-		return
-	}
+	// 3. Buscar el curso por idnumber o por ID
+	var courseDetails *repository.CourseDetails
 
-	// 4. Buscar el curso por ID
-	courseDetails, err := h.service.GetCourseDetailsByID(courseID)
+	// Primero intentar por idnumber
+	courseDetails, err := h.service.GetCourseDetails(idnumber)
 	if err != nil {
-		c.JSON(http.StatusNotFound, response.NewErrorResponse(
-			"COURSE_NOT_FOUND",
-			fmt.Sprintf("Curso no encontrado con ID %d", courseID),
-			err.Error(),
-		))
-		return
+		// Si falla y el parámetro es numérico, usarlo directamente como ID
+		if courseID, parseErr := strconv.Atoi(idnumber); parseErr == nil {
+			// Es un número válido, usar directamente como courseID
+			// Crear un CourseDetails mínimo solo con el ID
+			courseDetails = &repository.CourseDetails{
+				ID: int64(courseID),
+			}
+		} else {
+			c.JSON(http.StatusNotFound, response.NewErrorResponse(
+				"COURSE_NOT_FOUND",
+				fmt.Sprintf("Curso no encontrado con idnumber '%s'", idnumber),
+				"Verifica que el curso exista y tenga un idnumber asignado",
+			))
+			return
+		}
 	}
 
 	// 4. Obtener contenido del curso desde el servicio (filtrado por permisos)
