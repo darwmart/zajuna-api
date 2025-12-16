@@ -7,7 +7,7 @@ type GetUsersRequest struct {
 	Username  string `form:"username" binding:"omitempty,min=2,max=100"`
 	Email     string `form:"email" binding:"omitempty,email"`
 	Page      int    `form:"page" binding:"omitempty,min=1"`
-	Limit     int    `form:"limit" binding:"omitempty,min=1,max=100"`
+	Limit     int    `form:"limit" binding:"omitempty,min=1,max=1000"`
 }
 
 // SetDefaults establece valores por defecto para la paginación
@@ -42,7 +42,7 @@ func (r *GetUsersRequest) ToFilterMap() map[string]string {
 
 // UpdateUserRequest representa la solicitud de actualización de un usuario
 type UpdateUserRequest struct {
-	ID        uint   `json:"id" binding:"required,min=1"`
+	ID        uint    `json:"id" binding:"required,min=1"`
 	FirstName *string `json:"firstname" binding:"omitempty,min=2,max=100"`
 	LastName  *string `json:"lastname" binding:"omitempty,min=2,max=100"`
 	Email     *string `json:"email" binding:"omitempty,email"`
