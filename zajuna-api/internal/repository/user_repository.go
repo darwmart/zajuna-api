@@ -1,8 +1,10 @@
 package repository
 
 import (
+	"time"
 	"zajunaApi/internal/models"
 
+	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
@@ -327,5 +329,138 @@ func (r *UserRepository) FindByID(userID uint) (*models.User, error) {
 	}
 
 	return &user, nil
+}
+
+// CreateUser crea un nuevo usuario en la base de datos
+func (r *UserRepository) CreateUser(user *models.User, password string) error {
+	// Hash del password usando bcrypt (como Moodle)
+	hashedPassword, err := hashPassword(password)
+	if err != nil {
+		return err
+	}
+
+	// Establecer valores por defecto compatibles con Moodle
+	now := timeNow().Unix()
+	user.Auth = "manual"
+	user.Confirmed = 1
+	user.MNetHostID = 1
+	user.Deleted = 0
+	user.Suspended = 0
+	user.MailFormat = 1
+	user.MailDigest = 0
+	user.MailDisplay = 2
+	user.AutoSubscribe = 1
+	user.TrackForums = 0
+	user.TimeCreated = now
+	user.TimeModified = now
+	user.FirstAccess = 0
+	user.LastAccess = 0
+	user.LastLogin = 0
+	user.CurrentLogin = 0
+	user.CalendarType = "gregorian"
+
+	// Establecer valores por defecto si están vacíos
+	if user.Lang == "" {
+		user.Lang = "es"
+	}
+	if user.Timezone == "" {
+		user.Timezone = "America/Bogota"
+	}
+	if user.Country == "" {
+		user.Country = "CO"
+	}
+
+	// Crear un mapa con todos los campos del usuario + password
+	userData := map[string]interface{}{
+		"username":       user.Username,
+		"password":       hashedPassword,
+		"firstname":      user.FirstName,
+		"lastname":       user.LastName,
+		"email":          user.Email,
+		"auth":           user.Auth,
+		"confirmed":      user.Confirmed,
+		"mnethostid":     user.MNetHostID,
+		"deleted":        user.Deleted,
+		"suspended":      user.Suspended,
+		"mailformat":     user.MailFormat,
+		"maildigest":     user.MailDigest,
+		"maildisplay":    user.MailDisplay,
+		"autosubscribe":  user.AutoSubscribe,
+		"trackforums":    user.TrackForums,
+		"timecreated":    user.TimeCreated,
+		"timemodified":   user.TimeModified,
+		"firstaccess":    user.FirstAccess,
+		"lastaccess":     user.LastAccess,
+		"lastlogin":      user.LastLogin,
+		"currentlogin":   user.CurrentLogin,
+		"calendartype":   user.CalendarType,
+		"lang":           user.Lang,
+		"timezone":       user.Timezone,
+		"city":           user.City,
+		"country":        user.Country,
+	}
+
+	// Agregar campos opcionales solo si no están vacíos
+	if user.Phone1 != "" {
+		userData["phone1"] = user.Phone1
+	}
+	if user.Phone2 != "" {
+		userData["phone2"] = user.Phone2
+	}
+	if user.Institution != "" {
+		userData["institution"] = user.Institution
+	}
+	if user.Department != "" {
+		userData["department"] = user.Department
+	}
+	if user.Address != "" {
+		userData["address"] = user.Address
+	}
+	if user.IDNumber != "" {
+		userData["idnumber"] = user.IDNumber
+	}
+	if user.Description != "" {
+		userData["description"] = user.Description
+	}
+	if user.Theme != "" {
+		userData["theme"] = user.Theme
+	}
+	if user.Interests != "" {
+		userData["interests"] = user.Interests
+	}
+
+	// Insertar el usuario
+	result := r.DB.Table("mdl_user").Create(userData)
+	if result.Error != nil {
+		return result.Error
+	}
+
+	// Obtener el ID del usuario recién creado
+	var createdUser models.User
+	if err := r.DB.Table("mdl_user").
+		Where("username = ?", user.Username).
+		First(&createdUser).Error; err != nil {
+		return err
+	}
+
+	// Actualizar el user original con el ID generado
+	user.ID = createdUser.ID
+
+	return nil
+}
+
+// hashPassword hashea una contraseña usando bcrypt (compatible con Moodle)
+func hashPassword(password string) (string, error) {
+	// Moodle usa bcrypt con cost 10
+	hashedBytes, err := bcrypt.GenerateFromPassword([]byte(password), 10)
+	if err != nil {
+		return "", err
+	}
+	return string(hashedBytes), nil
+}
+
+// timeNow retorna el tiempo actual (puede ser mockeado en tests)
+func timeNow() time.Time {
+	return time.Now()
 }
 

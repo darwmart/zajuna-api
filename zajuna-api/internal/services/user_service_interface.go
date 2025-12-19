@@ -8,6 +8,10 @@ import (
 // UserServiceInterface define los metodos que debe implementar un servicio de usuarios
 type UserServiceInterface interface {
 	GetUsers(filters map[string]string, page, limit int) ([]models.User, int64, error)
+	CreateUsers(usersData []struct {
+		User     *models.User
+		Password string
+	}) ([]response.CreateUserResponse, error)
 	DeleteUsers(userIDs []int) error
 	UpdateUsers(users []models.User) (int64, error)
 	ToggleUserStatus(userID uint) (int, error)

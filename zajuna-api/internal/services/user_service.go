@@ -1,6 +1,8 @@
 package services
 
 import (
+	"fmt"
+
 	"zajunaApi/internal/dto/mapper"
 	"zajunaApi/internal/dto/response"
 	"zajunaApi/internal/models"
@@ -73,4 +75,39 @@ func (s *UserService) GetEnrolledUsers(courseID int, options map[string]interfac
 // GetUserByID obtiene un usuario por su ID (solo usuarios activos y no eliminados)
 func (s *UserService) GetUserByID(userID uint) (*models.User, error) {
 	return s.repo.FindByID(userID)
+}
+
+// CreateUsers crea múltiples usuarios (compatible con Moodle 4.3 core_user_create_users)
+func (s *UserService) CreateUsers(usersData []struct {
+	User     *models.User
+	Password string
+}) ([]response.CreateUserResponse, error) {
+	var createdUsers []response.CreateUserResponse
+
+	for _, userData := range usersData {
+		// Validar que el username no exista
+		existingUsers, _, err := s.repo.FindByFilters(map[string]string{"username": userData.User.Username}, 1, 1)
+		if err == nil && len(existingUsers) > 0 {
+			return nil, fmt.Errorf("username '%s' ya existe", userData.User.Username)
+		}
+
+		// Validar que el email no exista
+		existingUsers, _, err = s.repo.FindByFilters(map[string]string{"email": userData.User.Email}, 1, 1)
+		if err == nil && len(existingUsers) > 0 {
+			return nil, fmt.Errorf("email '%s' ya está en uso", userData.User.Email)
+		}
+
+		// Crear el usuario
+		err = s.repo.CreateUser(userData.User, userData.Password)
+		if err != nil {
+			return nil, fmt.Errorf("error al crear usuario '%s': %v", userData.User.Username, err)
+		}
+
+		createdUsers = append(createdUsers, response.CreateUserResponse{
+			ID:       userData.User.ID,
+			Username: userData.User.Username,
+		})
+	}
+
+	return createdUsers, nil
 }

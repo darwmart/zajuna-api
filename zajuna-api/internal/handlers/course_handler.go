@@ -417,24 +417,30 @@ func (h *CourseHandler) GetCourseContent(c *gin.Context) {
 		return
 	}
 
-	// 3. Buscar el curso por idnumber o por ID
+	// 3. Buscar el curso - PRIMERO por idnumber (como Moodle), luego por ID si falla
 	var courseDetails *repository.CourseDetails
+	var err error
 
-	// Primero intentar por idnumber
-	courseDetails, err := h.service.GetCourseDetails(idnumber)
+	// Intentar primero por idnumber (comportamiento compatible con Moodle)
+	courseDetails, err = h.service.GetCourseDetails(idnumber)
 	if err != nil {
-		// Si falla y el parámetro es numérico, usarlo directamente como ID
+		// Si falla y el parámetro es numérico, intentar por ID como fallback
 		if courseID, parseErr := strconv.Atoi(idnumber); parseErr == nil {
-			// Es un número válido, usar directamente como courseID
-			// Crear un CourseDetails mínimo solo con el ID
-			courseDetails = &repository.CourseDetails{
-				ID: int64(courseID),
+			courseDetails, err = h.service.GetCourseDetailsByID(courseID)
+			if err != nil {
+				c.JSON(http.StatusNotFound, response.NewErrorResponse(
+					"COURSE_NOT_FOUND",
+					fmt.Sprintf("Curso no encontrado con idnumber o ID '%s'", idnumber),
+					err.Error(),
+				))
+				return
 			}
 		} else {
+			// No es numérico y no se encontró por idnumber
 			c.JSON(http.StatusNotFound, response.NewErrorResponse(
 				"COURSE_NOT_FOUND",
 				fmt.Sprintf("Curso no encontrado con idnumber '%s'", idnumber),
-				"Verifica que el curso exista y tenga un idnumber asignado",
+				err.Error(),
 			))
 			return
 		}

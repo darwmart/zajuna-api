@@ -76,3 +76,9 @@ type ToggleUserStatusResponse struct {
 	NewStatus int    `json:"new_status"`
 	StatusText string `json:"status_text"`
 }
+
+// CreateUserResponse representa la respuesta de creación de un usuario (compatible con Moodle 4.3)
+type CreateUserResponse struct {
+	ID       uint   `json:"id"`
+	Username string `json:"username"`
+}

@@ -6,6 +6,7 @@ import "zajunaApi/internal/models"
 type UserRepositoryInterface interface {
 	FindByFilters(filters map[string]string, page, limit int) ([]models.User, int64, error)
 	FindByID(userID uint) (*models.User, error)
+	CreateUser(user *models.User, password string) error
 	DeleteUsers(userIDs []int) error
 	UpdateUsers(users []models.User) (int64, error)
 	ToggleUserStatus(userID uint) (int, error)

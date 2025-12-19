@@ -113,6 +113,11 @@ func RegisterRoutes(router *gin.Engine, db *gorm.DB) {
 		middleware.RequireCapability(permService, "moodle/user:viewalldetails"),
 		userHandler.GetUsers)
 
+	// Crear usuarios (requiere ser administrador)
+	api.POST("/users",
+		middleware.RequireAdmin(permService),
+		userHandler.CreateUsers)
+
 	// Eliminar usuarios (requiere ser administrador)
 	api.DELETE("/users",
 		middleware.RequireAdmin(permService),

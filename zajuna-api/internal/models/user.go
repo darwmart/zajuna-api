@@ -32,6 +32,18 @@ type User struct {
 	ProfileImage      string            `gorm:"-" json:"profileimageurl"`
 	CustomFields      []UserCustomField `gorm:"-" json:"customfields,omitempty"`
 	Preferences       []UserPreference  `gorm:"-" json:"preferences,omitempty"`
+
+	// Campos adicionales necesarios para creación de usuarios
+	MNetHostID     int64  `gorm:"column:mnethostid" json:"mnethostid,omitempty"`
+	MailDigest     int    `gorm:"column:maildigest" json:"maildigest,omitempty"`
+	MailDisplay    int    `gorm:"column:maildisplay" json:"maildisplay,omitempty"`
+	AutoSubscribe  int    `gorm:"column:autosubscribe" json:"autosubscribe,omitempty"`
+	TrackForums    int    `gorm:"column:trackforums" json:"trackforums,omitempty"`
+	TimeCreated    int64  `gorm:"column:timecreated" json:"timecreated,omitempty"`
+	TimeModified   int64  `gorm:"column:timemodified" json:"timemodified,omitempty"`
+	LastLogin      int64  `gorm:"column:lastlogin" json:"lastlogin,omitempty"`
+	CurrentLogin   int64  `gorm:"column:currentlogin" json:"currentlogin,omitempty"`
+	CalendarType   string `gorm:"column:calendartype" json:"calendartype,omitempty"`
 }
 
 // Nombre de la tabla real en Moodle

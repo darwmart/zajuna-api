@@ -1,7 +1,11 @@
 package handlers
 
 import (
+	"bytes"
+	"fmt"
+	"io"
 	"net/http"
+
 	"zajunaApi/internal/dto/mapper"
 	"zajunaApi/internal/dto/request"
 	"zajunaApi/internal/dto/response"
@@ -430,4 +434,146 @@ func (h *UserHandler) GetMe(c *gin.Context) {
 
 	// 4. Responder
 	c.JSON(http.StatusOK, userResponse)
+}
+
+// CreateUsers crea múltiples usuarios
+// @Summary      Crear usuarios
+// @Description  Crea uno o más usuarios (compatible con Moodle 4.3 core_user_create_users)
+// @Tags         users
+// @Accept       json
+// @Produce      json
+// @Param        request body request.CreateUsersRequest true "Usuarios a crear"
+// @Success      200 {array} response.CreateUserResponse
+// @Failure      400 {object} response.ErrorResponse
+// @Failure      500 {object} response.ErrorResponse
+// @Router       /users [post]
+func (h *UserHandler) CreateUsers(c *gin.Context) {
+	// 1. Parsear request
+	var req request.CreateUsersRequest
+
+	// Debug: Ver el body raw
+	bodyBytes, _ := c.GetRawData()
+	fmt.Printf("[DEBUG] Request body: %s\n", string(bodyBytes))
+	// Restaurar el body para ShouldBindJSON
+	c.Request.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		fmt.Printf("[DEBUG] Validation error: %v\n", err)
+		c.JSON(http.StatusBadRequest, response.NewErrorResponse(
+			"INVALID_JSON",
+			"JSON inválido o campos requeridos faltantes",
+			err.Error(),
+		))
+		return
+	}
+
+	fmt.Printf("[DEBUG] Request parsed successfully: %+v\n", req)
+
+	// 2. Convertir requests a modelos
+	var usersData []struct {
+		User     *models.User
+		Password string
+	}
+
+	for _, userReq := range req.Users {
+		// Determinar password
+		var password string
+		if userReq.CreatePassword != nil && *userReq.CreatePassword == 1 {
+			// TODO: Generar password aleatorio y enviarlo por correo
+			// Por ahora usar un password temporal
+			password = "ChangeMeNow123!"
+		} else if userReq.Password != nil {
+			password = *userReq.Password
+		} else {
+			c.JSON(http.StatusBadRequest, response.NewErrorResponse(
+				"MISSING_PASSWORD",
+				"Debe proporcionar un password o activar createpassword",
+				nil,
+			))
+			return
+		}
+
+		// Crear modelo User con valores por defecto
+		user := &models.User{
+			Username:  userReq.Username,
+			FirstName: userReq.FirstName,
+			LastName:  userReq.LastName,
+			Email:     userReq.Email,
+		}
+
+		// Aplicar campos opcionales
+		if userReq.Auth != nil {
+			user.Auth = *userReq.Auth
+		}
+		if userReq.City != nil {
+			user.City = *userReq.City
+		}
+		if userReq.Country != nil {
+			user.Country = *userReq.Country
+		}
+		if userReq.Timezone != nil {
+			user.Timezone = *userReq.Timezone
+		}
+		if userReq.Description != nil {
+			user.Description = *userReq.Description
+		}
+		if userReq.IDNumber != nil {
+			user.IDNumber = *userReq.IDNumber
+		}
+		if userReq.Institution != nil {
+			user.Institution = *userReq.Institution
+		}
+		if userReq.Department != nil {
+			user.Department = *userReq.Department
+		}
+		if userReq.Phone1 != nil {
+			user.Phone1 = *userReq.Phone1
+		}
+		if userReq.Phone2 != nil {
+			user.Phone2 = *userReq.Phone2
+		}
+		if userReq.Address != nil {
+			user.Address = *userReq.Address
+		}
+		if userReq.Lang != nil {
+			user.Lang = *userReq.Lang
+		}
+		if userReq.CalendarType != nil {
+			user.CalendarType = *userReq.CalendarType
+		}
+		if userReq.Theme != nil {
+			user.Theme = *userReq.Theme
+		}
+		if userReq.MailFormat != nil {
+			user.MailFormat = *userReq.MailFormat
+		}
+		if userReq.MailDisplay != nil {
+			user.MailDisplay = *userReq.MailDisplay
+		}
+		if userReq.Interests != nil {
+			user.Interests = *userReq.Interests
+		}
+
+		usersData = append(usersData, struct {
+			User     *models.User
+			Password string
+		}{
+			User:     user,
+			Password: password,
+		})
+	}
+
+	// 3. Llamar al servicio
+	createdUsers, err := h.service.CreateUsers(usersData)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, response.NewErrorResponse(
+			"CREATE_FAILED",
+			"Error al crear usuarios",
+			err.Error(),
+		))
+		return
+	}
+
+	// 4. Responder (formato compatible con Moodle: array directo)
+	c.JSON(http.StatusOK, createdUsers)
 }
